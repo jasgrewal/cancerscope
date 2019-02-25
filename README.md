@@ -3,6 +3,12 @@ A python package that takes the whole transcriptome of a sample as input, and ou
 
 You can also train additional models and include them in the ensemble that SCOPE uses (Instructions forthcoming).  
 
+## Currently Missing  
+- [ ] Setup Tests    
+- [ ] Tutorial   
+- [ ] Licensing  
+- [ ] Link to Model files  
+
 ## Installation   
 ### Automated Install   
 SCOPE can be installed using the command `pip install cancerscope`    
