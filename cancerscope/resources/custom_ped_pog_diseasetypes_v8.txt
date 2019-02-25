@@ -1,0 +1,83 @@
+Source	Full Name	Code Name	Short Name
+Neuroblastoma	Neuroblastoma	NBL	Neuroblastoma
+Central Nervous System	Brain	MB-Adult	Adult Brain MAGIC
+Central Nervous System	Brain	MB_Adult	Adult Brain MAGIC
+Central Nervous System	Glioblastoma Multiforme	GBM	Glioblastoma
+Central Nervous System	TFRI GBM Non Cell Line	TFRI_GBM_NCL	TFRI GBM
+Central Nervous System	TFRI GBM Cell Line	TFRI_GBM_CL	TFRI GBM
+Central Nervous System	TFRI GBM Cell Line	TFRI_GBM_cell_line	TFRI GBM cell line
+Central Nervous System	Lower Grade Glioma	LGG	Glioma
+Endocrine	Papillary Thyroid Carcinoma/ Thyroid Carcinoma	THCA	Thyroid
+Hematologic	Follicular Lymphoma	FL	FL
+Hematologic	Diffuse Large B-Cell Lymphoma/ Lymphoid Neoplasm Diffuse Large B-cell Lymphoma	DLBC	DLBC
+Hematologic	Diffuse Large B-Cell Lymphoma/ Lymphoid Neoplasm Diffuse Large B-cell Lymphoma	NCI_GPH_DLBCL	DLBCL
+Hematologic	DLBCL Blood/Bone Marrow	DLBC_BM	DLBC BM
+Hematologic	DLBCL Cell lines	DLBC_CL	DLBC CL
+Hematologic	DLBCL Centroblasts	DLBC_CB	DLBC CB
+Hematologic	Thymoma	THYM	Thymoma
+Hematologic	Chronic Myelogenous Leukemia	LCML	CML
+Hematologic	Acute Myeloid Leukemia	LAML	AML
+Head and Neck	Uveal Melanoma	UVM	Uveal melanoma
+Head and Neck	Head and Neck Squamous Cell Carcinoma	HNSC	Head & Neck
+Skin	Cutaneous Melanoma	SKCM	Melanoma
+Thoracic	Mesothelioma	MESO	Mesothelioma
+Thoracic	Lung Adenocarcinoma	LUAD	Lung adeno
+Thoracic	Lung Squamous Cell Carcinoma	LUSC	Lung squamous
+Breast	Breast Invasive Carcinoma	BRCA_NL	Normal-like Breast
+Breast	Breast Invasive Carcinoma	BRCA_LA	Luminal A Breast
+Breast	Breast Invasive Carcinoma	BRCA_LB	Luminal B Breast
+Breast	Breast Invasive Carcinoma	BRCA_H2	Her2 Breast
+Breast	Breast Invasive Carcinoma	BRCA_BL	Basal-like Breast
+Breast	Breast Invasive Carcinoma	BRCA_ER_Negative_PR_Negative_HER2_Negative	Triple Negative Breast
+Breast	Breast Invasive Carcinoma	BRCA_ER_Negative_PR_Negative_HER2_Positive	ER- PR- HER2+ Breast
+Breast	Breast Invasive Carcinoma	BRCA_ER_Negative_PR_Positive_HER2_Negative	ER- PR+ HER2- Breast
+Breast	Breast Invasive Carcinoma	BRCA_ER_Negative_PR_Positive_HER2_Positive	ER- PR+ HER2+ Breast
+Breast	Breast Invasive Carcinoma	BRCA_ER_Positive_PR_Negative_HER2_Negative	ER+ PR- HER2- Breast
+Breast	Breast Invasive Carcinoma	BRCA_ER_Positive_PR_Negative_HER2_Positive	ER+ PR- HER2+ Breast
+Breast	Breast Invasive Carcinoma	BRCA_ER_Positive_PR_Positive_HER2_Negative	ER+ PR+ HER2- Breast
+Breast	Breast Invasive Carcinoma	BRCA_ER_Positive_PR_Positive_HER2_Positive	ER+ PR+ HER2+ Breast
+Breast	Breast Invasive Carcinoma	BRCA_ER_Negative	ER-
+Breast	Breast Invasive Carcinoma	BRCA_ER_Positive	ER+
+Breast	Breast Invasive Carcinoma	BRCA_PR_Negative	PR-
+Breast	Breast Invasive Carcinoma	BRCA_PR_Positive	PR+
+Breast	Breast Invasive Carcinoma	BRCA_HER2_Negative	H2-
+Breast	Breast Invasive Carcinoma	BRCA_HER2_Positive	H2+
+Breast	Breast Ductal Carcinoma	BRCA	Ductal Breast
+Endocrine	Paraganglioma & Pheochromocytoma	PCPG	Paraganglioma
+Endocrine	Adrenocortical Carcinoma	ACC	Adrenocortical
+Urologic	Clear Cell Kidney Carcinoma	KIRC	Kidney RCC
+Urologic	Papillary Kidney Carcinoma	KIRP	Kidney RPCC
+Urologic	Rhabdoid	RHBD	Rhabdoid
+Urologic	Chromophobe Renal Cell Carcinoma/ Kidney Chromophobe	KICH	Kidney CH
+Gastrointestinal	Liver Hepatocellular Carcinoma	LIHC	Liver
+Gastrointestinal	Pancreatic Ductal Adenocarcinoma	PAAD	Pancreatic
+Gastrointestinal	Stomach Adenocarcinoma	STAD	Stomach
+Gastrointestinal	Stomach Adenocarcinoma Chromosomal Instability	STAD_CIN	Stomach CIN
+Gastrointestinal	Stomach Adenocarcinoma Microsatellite	STAD_MSI	Stomach MSI
+Gastrointestinal	Stomach Adenocarcinoma Genomically Stable	STAD_GS	Stomach GS
+Gastrointestinal	Stomach Adenocarcinoma Epstein-Barr virus positive	STAD_EBV	Stomach EBV
+Gastrointestinal	Colorectal Adenocarcinoma	COADREAD	Colorectal
+Gastrointestinal	Esophageal carcinoma	ESCA	Esophageal
+Gastrointestinal	Esophageal carcinoma	ESCA_EAC	Esophageal
+Gastrointestinal	Esophageal carcinoma	ESCA_SCC	Esophageal
+Gastrointestinal	Cholangiocarcinoma	CHOL	Cholangiocarcinoma
+Urologic	Testicular Germ Cell Cancer	TGCT	Testicular
+Urologic	Urothelial Bladder Carcinoma	BLCA	Bladder
+Urologic	Prostate Adenocarcinoma	PRAD	Prostate
+Soft Tissue	Sarcoma	SARC	Sarcoma
+Soft Tissue	Dedifferentiated Liposarcoma	SARC_DDL	Sarcoma DDL
+Soft Tissue	Desmoid Tumour	SARC_desmoid	Sarcoma desmoid
+Soft Tissue	Leiomyosarcoma	SARC_LMS	Leiomyosarcoma
+Soft Tissue	Malignant Peripheral Nerve Sheath Tumors	SARC_MPNST	Sarcoma MPNST
+Soft Tissue	Myxofibrosarcoma	SARC_MFS	Sarcoma MFS
+Soft Tissue	Synovial Sarcoma	SARC_Synovial	Sarcoma Synovial
+Soft Tissue	Undifferentiated pleomorphic sarcoma	SARC_UPS	Sarcoma UPS
+Gynecologic	Ovarian Serous Cystadenocarcinoma	OV	Ovarian
+Gynecologic	Uterine Carcinosarcoma	UCS	Uterine sarcoma
+Gynecologic	Uterine Corpus Endometrial Carcinoma	UCEC	Uterine
+Gynecologic	Cervical Squamous Cell Carcinoma and Endocervical Adenocarcinoma	CESC	Cervical
+Gynecologic	Cervical Squamous Cell Carcinoma and Endocervical Adenocarcinoma	CESC_CAD	Cervical
+Gynecologic	Cervical Squamous Cell Carcinoma and Endocervical Adenocarcinoma	CESC_SCC	Cervical
+Central Nervous System	 Medulloblastoma	 MB-Infant	MAGIC Infant
+Central Nervous System	 Medulloblastoma	 MB-Pediatric	MAGIC Pediatric
+Non specific	POG Pediatric	POG_pediatric	POG Pediatric

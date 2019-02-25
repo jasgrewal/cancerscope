@@ -1,0 +1,7 @@
+setup.py
+cancerscope/__init__.py
+cancerscope.egg-info/PKG-INFO
+cancerscope.egg-info/SOURCES.txt
+cancerscope.egg-info/dependency_links.txt
+cancerscope.egg-info/not-zip-safe
+cancerscope.egg-info/top_level.txt
