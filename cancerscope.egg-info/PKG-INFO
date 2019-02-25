@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: cancerscope
-Version: 0.1
+Version: 0.15
 Summary: Pan-cancer classifier using RNA-Seq
 Home-page: http://github.com/jasgrewal/cancerscope/
 Author: Jasleen Grewal
