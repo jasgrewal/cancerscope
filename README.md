@@ -8,7 +8,12 @@ You can also train additional models and include them in the ensemble that SCOPE
 SCOPE can be installed using the command `pip install cancerscope`    
 
 ## Setup and Usage  
-### Manual Setup  
+To get started with SCOPE, launch a python instance and run::
+`>>> import cancerscope`
+`>>> cancerscope.test_setup()`
+
+
+## Folder descriptors  
 All scripts required to run SCOPE are [included](cancerscope/bin).
 
 Prior to running [the predictor](cancerscope/bin/lasagne_SCOPE_testsample.py), you will need to ensure you have the correct Python envirnoment set up. SCOPE requires Python 2.7.14.
