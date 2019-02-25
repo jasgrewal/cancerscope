@@ -8,9 +8,9 @@ You can also train additional models and include them in the ensemble that SCOPE
 SCOPE can be installed using the command `pip install cancerscope`    
 
 ## Setup and Usage  
-To get started with SCOPE, launch a python instance and run::
-`>>> import cancerscope`
-`>>> cancerscope.test_setup()`
+To get started with SCOPE, launch a python instance and run:  
+`>>> import cancerscope`  
+`>>> cancerscope.test_setup()`  
 
 
 ## Folder descriptors  
