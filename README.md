@@ -5,13 +5,19 @@ You can also train additional models and include them in the ensemble that SCOPE
 
 ## Installation  
 ### Manual Setup  
-[The files you need for launching SCOPE are at](cancerscope/bin)
-Prior to running [the predictor](cancerscope/bin/lasagne_SCOPE_testsample.py), you will need to ensure you have the following Python environment set up (version agnostic update under development):  
-Python 2.7.14  
+[All scripts required to run SCOPE are included](cancerscope/bin).  
+
+Prior to running [the predictor](cancerscope/bin/lasagne_SCOPE_testsample.py), you will need to ensure you have the correct Python envirnoment set up. SCOPE requires Python 2.7.14.    
 - You can set up a custom Conda environment with the required packages from [here](cancerscope/cancerscope/bin/conda_env.yml).  
 
 ### Automated Install  
-.. note:: Currently under development  
+<aside class="notice">
+Currently under development  
+</aside>
 
+## License  
+
+## Issues  
+If you encounter any problems, please contact the developer and provide detailed error logs and description [here](https://github.com/jasgrewal/cancerscope/issues).  
 
 
