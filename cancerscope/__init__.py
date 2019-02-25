@@ -1,6 +1,5 @@
-def test_setup(log=print):
-	log("We need to check for all dependencies first")
-	
+from tests import *
+
 def __predict__():
 	return('Currently under development')
 

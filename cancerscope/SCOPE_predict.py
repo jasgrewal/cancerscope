@@ -5,7 +5,6 @@
 # - expand training module to make it more customizable, using lasagne
 # - Add support for backtracking which features are the most important for each class
 # - Add option for getting top-n classes predicted, not just the maximum prediction class
-#TO DO
 
 from __future__ import print_function
 import os; os.environ["CUDA_VISIBLE_DEVICES"]="-1"
@@ -23,9 +22,7 @@ from sklearn.utils import shuffle
 import theano
 import theano.tensor as T  
 import glob
-## Update path to custom modules
-dependent_module_path = os.path.abspath(sys.argv[0] + "/../../dependent_modules/")  + "/"
-sys.path = [dependent_module_path] + sys.path
+
 ## Get dependent modules
 from io_modules import Unbuffered, load_data, load_txt_input
 from argtypes import restricted_float, proper_file, proper_dir, Dictionary, check_balance_type, proper_genecol, proper_delim

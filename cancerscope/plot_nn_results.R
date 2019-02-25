@@ -11,21 +11,21 @@ disease_order=c("MB-Adult","GBM","TFRI_GBM_NCL","LGG","THCA","FL","DLBC","NCI_GP
 
 #Get input file with confidence per class, predicted from NN. Passed as input.
 args = commandArgs(trailingOnly=TRUE)
-if (length(args)!=6){
-	stop("Six arguments needed - trained models list, dir with prediction sets for all models, pattern to subset dirs by, output dir for plots (main), prefix for plots, and the set of core functions for plotting (ensemble_nn_tcga_withwithoutpog_functions.R)", call.=FALSE)
+if (length(args)!=5){
+	stop("Five arguments needed - trained models list, dir with prediction sets for all models, pattern to subset dirs by, output dir for plots (main), prefix for plots", call.=FALSE)
 } else {
 	modelsource=args[1] 
 	indir=args[2]	
 	whichSample= args[3]
 	plotdir=args[4]
 	plotprefix=args[5]
-	base_functions=args[6]
 }
 
+base_functions="stats_plot.R"
 source(base_functions)
 
 #Define default files for disease list (used to plot graph)
-diseaselist_file = "/projects/tumour_char/analysis_scripts/TCGA_correlation/resources/metadata/v0.8.0/custom_ped_pog_diseasetypes_v8.txt"
+diseaselist_file = "cancerscope/resources/custom_ped_pog_diseasetypes_v8.txt"
 if ( !(file.exists(plotdir))) {
     dir.create(file.path(plotdir))
     cat("Generating Plots in Directory: ", plotdir)
