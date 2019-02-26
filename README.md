@@ -20,10 +20,10 @@ To get started with SCOPE, launch a python instance and run:
 
 
 ## Folder descriptors  
-All scripts required to run SCOPE are [included](cancerscope/bin).
+All scripts required to run SCOPE are [included](cancerscope).
 
-Prior to running [the predictor](cancerscope/bin/lasagne_SCOPE_testsample.py), you will need to ensure you have the correct Python envirnoment set up. SCOPE requires Python 2.7.14.
-- You can set up a custom Conda environment with the required packages from [here](cancerscope/cancerscope/bin/conda_env.yml).
+Prior to running [the predictor](cancerscope/SCOPE_predict.py), you will need to ensure you have the correct Python envirnoment set up. SCOPE requires Python 2.7.14.
+- You can set up a custom Conda environment with the required packages from [here](cancerscope/cancerscope/conda_env.yml).
 
 ## License  
 
