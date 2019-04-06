@@ -7,7 +7,7 @@ Cancerscope for SCOPE
 
 [![build_status](https://travis-ci.org/jasgrewal/cancerscope.svg?branch=master)](https://travis-ci.org/jasgrewal/cancerscope)
 
-[![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://ansicolortags.readthedocs.io/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/cancerscope/badge/?version=latest)](http://cancerscope.readthedocs.io/?badge=latest)
 
 [![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)    
 
