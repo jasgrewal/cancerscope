@@ -1,15 +1,8 @@
 langauge: python
 
-matrix:
-   include:
-      - os: linux
-        sudo: required
-        python: 2.7.14
-        env: TOXENV=py27
-      - os: linux
-        sudo: required
-        python: 3.3
-        env: TOXENV=py33
+python:
+ - "2.7.14"
+ - "3.3"
 
 install:
  - pip install --user --upgrade https://github.com/Theano/Theano/archive/master.zip
@@ -18,10 +11,11 @@ install:
  - pip install --user .
  - pip install --user nose coverage
  - pip install --user coveralls
+
 script:
  - python setup.py nosetests --with-coverage
 
 after_success:
- -  coveralls
+ - coveralls
 
 
