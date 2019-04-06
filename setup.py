@@ -20,10 +20,6 @@ with open(os.path.join(pckg_dir, 'README.rst'), 'r') as f:
 """ Post-setup script to download models 
 As per answer posted at https://stackoverflow.com/questions/20288711/post-install-script-with-python-setuptools
 """ 
-#class my_install(install_data):
-#	def run(self):
-#		install_data.run(self)
-#		post_install()
 
 """ Setup instructions """ 
 def package_files(directory):
@@ -43,16 +39,14 @@ setup(name='cancerscope',
 	url='https://pypi.org/project/cancerscope/', 
 	packages=find_packages(exclude=['tests*']), 
 	license='MIT', 
-	# NOT GOOD practise to use this variable: data_files = [('reference', ['cancerscope/resources/custom_ped_pog_diseasetypes_v8.txt', 'cancerscope/resources/gene_mapping_and_hugo_ids.txt'])],
-	python_requires='>=2.6, !=3.*',
+	#dependency_links=['https://github.com/Lasagne/Lasagne/tarball/master#egg=lasagne-0.2.dev1', 'https://github.com/Theano/Theano/tarball/master#egg=theano-0.8'],
+	python_requires='>=2.6, <=3.5',
 	install_requires=requirements, 
 	include_package_data=True, zip_safe=False, 
 	test_suite='nose.collector', tests_require=['nose'], 
 	classifiers = ['Programming Language :: Python :: 2.7', 'Topic :: Scientific/Engineering :: Artificial Intelligence', 'Development Status :: 5 - Production/Stable', 'Intended Audience :: Healthcare Industry', 'Topic :: Scientific/Engineering :: Medical Science Apps.', 'Topic :: Scientific/Engineering :: Bio-Informatics'], 
-	#scripts=['bin/'],
-	#cmdclass={'install_data': my_install},
 	package_data = {'cancerscope': ['cancerscope/resources/*.txt', '*.rst']}, #, '': extra_files},
-	entry_points = {'console_scripts': ['cancerscope_setup=cancerscope.command_line:main']},
+	#entry_points = {'console_scripts': ['cancerscope_setup=cancerscope.command_line:main']},
 	project_urls={
 		'Documentation': 'https://github.com/jasgrewal/cancerscope',
 		'Source': 'https://github.com/jasgrewal/cancerscope/tree/master/cancerscope',

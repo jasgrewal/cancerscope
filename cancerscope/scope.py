@@ -6,7 +6,7 @@ import os, sys
 if os.path.isdir(SCOPEMODELS_DATADIR) is False:
 	"""If not already downloaded to pckg site, retrieve the models"""
 	print("Thankyou for using cancerscope. The initial run requires download of dependent model files. Proceeding with download now...\n\tModels will be downloaded to {0}".format(SCOPEMODELS_DATADIR))
-	cs.getmodel(targetdir=SCOPEMODELS_DATADIR)
+	cs.downloadmodel(targetdir=SCOPEMODELS_DATADIR)
 
 ### Collate the directories of all the models
 modeldirs_dict = cs.getmodel()

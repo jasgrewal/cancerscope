@@ -58,7 +58,7 @@ def downloadmodel(model_label=None, targetdir=None):
 	
 	if model_label is None:
 		for m, _ in modelOptions.items():
-			getmodel(m, tempDir)
+			downloadmodel(m, tempDir)
 	else:
 		assert model_label in modelOptions.keys(), "%s is not a valid option in %s" % (model_label, modelOptions.keys())
 		print("Downloading model files for {0} \n\tData Downloaded at: {1}".format(model_label, tempDir))
@@ -77,4 +77,3 @@ def downloadmodel(model_label=None, targetdir=None):
 			f.write("\t".join([model_label, url, mainDir]))
 		return(mainDir)
 
-def 

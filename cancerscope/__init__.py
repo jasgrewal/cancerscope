@@ -12,7 +12,7 @@ SCOPEMODELS_LIST = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'sco
 from cancerscope.scopemodel import scopemodel
 from cancerscope.utils import *
 ### Data sources
-from cancerscope.get_models import getmodel, findmodel
+from cancerscope.get_models import getmodel, findmodel, downloadmodel
 
 ### General Functions  
 #from cancerscope.predict import *
