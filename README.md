@@ -1,6 +1,7 @@
 #SCOPE - Supervised Cancer Origin Prediction using Expression  
 
 |pypi| |build-status| || |docs| |license|
+pypi | build-status | docs | license
 
 .. |pypi| image:: https://badge.fury.io/py/cancerscope.svg
    :target: https://pypi.python.org/pypi/cancerscope
