@@ -1,1 +1,0 @@
-v1_rm500dropout	https://zenodo.org/record/2616831/files/v1_rm500dropout.tar.gz	/Users/jgrewal/mygits/cancerscope/cancerscope/data

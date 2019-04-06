@@ -4,9 +4,10 @@ import lasagne
 import theano
 import theano.tensor as T
 #from lasagna_mlp_definitions import build_custom_mlp
-from scope_io_modules import *
+#from scope_io_modules import *
 from scope_normalization_functions import *
 import heapq
+
 
 def build_custom_mlp(n_out, num_features, depth, width, drop_input, drop_hidden, input_var=None, is_image=False):
         if is_image:

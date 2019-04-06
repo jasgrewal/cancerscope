@@ -1,1 +1,0 @@
-v1_rm500	https://zenodo.org/record/2616831/files/v1_rm500.tar.gz	/var/folders/9t/dcrd9f413tqctpdz434y7d3r0000gn/T/tmpqdXcBF
