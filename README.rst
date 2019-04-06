@@ -1,14 +1,9 @@
 SCOPE - Supervised Cancer Origin Prediction using Expression
 ============================================================
 
-This is cancerscope, the python distribution for SCOPE.  
+This is <span style="color: #f2cf4a; font-family: Babas; font-size: 2em;">cancerscope</span>, the python distribution for SCOPE.  
  
-[![pypi](https://badge.fury.io/py/cancerscope.svg)](https://pypi.python.org/pypi/cancerscope)   
-
-[![build_status](https://travis-ci.org/jasgrewal/cancerscope.svg?branch=master)](https://travis-ci.org/jasgrewal/cancerscope)  
-
-[![license](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)   
-
+[![pypi](https://badge.fury.io/py/cancerscope.svg)](https://pypi.python.org/pypi/cancerscope) | [![build_status](https://travis-ci.org/jasgrewal/cancerscope.svg?branch=master)](https://travis-ci.org/jasgrewal/cancerscope) | [![license](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)     
 
 **cancerscope** is a python package that takes the whole transcriptome of a sample as input, and outputs a set of probabilities across 66 different categories (40 tumor types and 26 healthy tissues) that sum to 1.  
 
