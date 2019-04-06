@@ -1,4 +1,24 @@
-# SCOPE - Supervised Cancer Origin Prediction using Expression  
+#SCOPE - Supervised Cancer Origin Prediction using Expression  
+
+|pypi| |build-status| || |docs| |license|
+
+.. |pypi| image:: https://badge.fury.io/py/cancerscope.svg
+   :target: https://pypi.python.org/pypi/cancerscope
+   :alt: PyPI Release
+   
+.. |build-status| image:: https://travis-ci.org/jasgrewal/cancerscope.svg?branch=master
+   :target: https://travis-ci.org/jasgrewal/cancerscope
+   :alt: Travis CI status
+
+.. |code-health| image:: 
+   :target: 
+   :alt: Landscape Code Health 
+ 
+.. |license| image:: https://img.shields.io/badge/License-MIT-blue.svg
+   :target: https://opensource.org/licenses/MIT
+   :alt: MIT license
+
+
 A python package that takes the whole transcriptome of a sample as input, and outputs a set of probabilities across 66 different categories (40 tumor types and 26 healthy tissues) that sum to 1.  
 
 You can also train additional models and include them in the ensemble that SCOPE uses (Instructions forthcoming).  
@@ -12,6 +32,10 @@ You can also train additional models and include them in the ensemble that SCOPE
 ## Installation   
 ### Automated Install   
 SCOPE can be installed using the command `pip install cancerscope`    
+
+### Installing Python Dependencies  
+If you have Anaconda installed, you can set up the environment using  
+`>>> conda create --name cscope --file conda_specs-file.txt`  
 
 ## Setup and Usage  
 To get started with SCOPE, launch a python instance and run:  
