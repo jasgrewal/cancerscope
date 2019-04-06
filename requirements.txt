@@ -10,4 +10,4 @@ pysocks==1.6.8
 htseq==0.6.1
 theano
 lasagne
-
+requests[security]
