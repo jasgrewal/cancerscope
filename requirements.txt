@@ -8,5 +8,4 @@ matplotlib<=2.2.2
 pandas
 pydot==1.1.0
 pysocks==1.6.8
-requests[security]
 
