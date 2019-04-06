@@ -1,0 +1,22 @@
+# Compiled python modules.
+*.pyc
+
+# Setuptools distribution folder.
+/dist/
+
+# Python egg metadata, regenerated from source files by setuptools.
+/*.egg-info
+/*.egg
+cancerscope/.eggs
+cancerscope/.eggs.*
+.eggs/*
+.eggs
+
+## Other local files and directories to ignore
+cancerscope/data/*
+cancerscome/model.*
+cancerscope/models
+cancerscope/data
+.*DS_Store
+cancerscope/todel.*
+
