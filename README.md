@@ -1,10 +1,7 @@
-# SCOPE - Supervised Cancer Origin Prediction using Expression    
+# Cancerscope for SCOPE
+[![pypi](https://badge.fury.io/py/cancerscope.svg)](https://pypi.python.org/pypi/cancerscope)  [![build_status](https://travis-ci.org/jasgrewal/cancerscope.svg?branch=master)](https://travis-ci.org/jasgrewal/cancerscope) [![license](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)     
 
-This is <span style="color: #f2cf4a; font-family: Babas; font-size: 2em;">cancerscope</span>, the python distribution for SCOPE.  
- 
-[![pypi](https://badge.fury.io/py/cancerscope.svg)](https://pypi.python.org/pypi/cancerscope) | [![build_status](https://travis-ci.org/jasgrewal/cancerscope.svg?branch=master)](https://travis-ci.org/jasgrewal/cancerscope) | [![license](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)     
-
-**cancerscope** is a python package that takes the whole transcriptome of a sample as input, and outputs a set of probabilities across 66 different categories (40 tumor types and 26 healthy tissues) that sum to 1.  
+SCOPE, Supervised Cancer Origin Prediction using Expression, is a method for predicting the tumor type (or matching normal) of an RNA-Seq sample. The provided python package, ![#f03c15](https://placehold.it/15/f03c15/000000?text=cancerscope), allows users to pass the RPKM values with matching Gene IDs and receive a set of probabilities across 66 different categories (40 tumor types and 26 healthy tissues), that sum to 1.  
 
 As cancerscope is an ensemble-based approach, it is possible to train additional models and include them in the ensemble that SCOPE uses (Instructions forthcoming).  
 
@@ -14,10 +11,9 @@ As cancerscope is an ensemble-based approach, it is possible to train additional
 - [x] License   
 - [x] Model files setup   
 - [ ] Landscape Code Health
+
 ## Installation   
-Before installing cancerscope, you will need to install the correct version of the packages []() and []().  
-`pip install 'theano==0.10.0b1'`
-`pip install 'lasagne==0.1'`
+Before installing cancerscope, you will need to install the correct version of the packages [lasagne](https://lasagne.readthedocs.io/en/latest/) and [theano](https://pypi.org/project/Theano/).  
 `pip install --upgrade https://github.com/Theano/Theano/archive/master.zip`
 `pip install --upgrade https://github.com/Lasagne/Lasagne/archive/master.zip`
 
