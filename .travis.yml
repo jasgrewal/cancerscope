@@ -4,7 +4,7 @@ matrix:
    include:
       - os: linux
         sudo: required
-        python: 2.7
+        python: 2.7.14
         env: TOXENV=py27
       - os: linux
         sudo: required
@@ -12,12 +12,12 @@ matrix:
         env: TOXENV=py33
 
 install:
- - pip install --upgrade https://github.com/Theano/Theano/archive/master.zip
- - pip install --upgrade https://github.com/Lasagne/Lasagne/archive/master.zip
- - pip install -U scikit-learn
- - pip install .
- - pip install nose coverage
- - pip install coveralls
+ - pip install --user --upgrade https://github.com/Theano/Theano/archive/master.zip
+ - pip install --user --upgrade https://github.com/Lasagne/Lasagne/archive/master.zip
+ - pip install --user -U scikit-learn
+ - pip install --user .
+ - pip install --user nose coverage
+ - pip install --user coveralls
 script:
  - python setup.py nosetests --with-coverage
 
