@@ -1,6 +1,6 @@
 # Cancerscope for SCOPE
-[![coverage](https://coveralls.io/github/jasgrewal/cancerscope)](https://img.shields.io/coveralls/github/jasgrewal/cancerscope.svg)
 [![pypi](https://badge.fury.io/py/cancerscope.svg)](https://pypi.python.org/pypi/cancerscope)
+[![Coverage Status](https://coveralls.io/repos/github/jasgrewal/cancerscope/badge.svg?branch=master)](https://coveralls.io/github/jasgrewal/cancerscope?branch=master)
 [![build_status](https://travis-ci.org/jasgrewal/cancerscope.svg?branch=master)](https://travis-ci.org/jasgrewal/cancerscope)
 [![license](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)    
  
