@@ -9,16 +9,6 @@ def norm_minmax(x, min=0, max=1):
         x_minmax = min_max_scaler.fit_transform(x) #Does it across each feature (i.e. column)
         return [x_minmax, min_max_scaler]
 
-def norm_scale(x):
-        ##print("....by scaling, mean 0 std 1")
-        scalerfunc = preprocessing.StandardScaler().fit(x)
-        return[scalerfunc.transform(x), scalerfunc]
-
-def norm_unitscale(x):
-        ##print("....by normalizing each sample to have unit (l2) norm")
-        scalerfunc = preprocessing.Normalizer().fit(x)
-        return[scalerfunc.transform(x), scalerfunc]
-
 def norm_scaler_reapply(scaler_func, x):
         x_transformed = scaler_func.transform(x)
         return x_transformed
@@ -39,47 +29,11 @@ def apply_norm_func(norm_func, xdat, bysamples=0):
         #If bysamples is 0, xdat[0] must be train_x, and xdat[1] must be test_x
 	#If bysamples is 1, xdat is #samples x #features (not feat x samples, #Edit 03 Feb, 2017 | jgrewal)
 	result = []
-	if norm_func not in ["minmax", "scale", "normscale", "none", "rasterize", "rastminmax"]:
+	if norm_func not in ["none", "rastminmax"]:
 		raise ValueError('Incorrect normalization function, {0} passed'.format(norm_func))
-        if norm_func=="minmax":
-                if bysamples==0:
-                        [train_x_norm, scalefunc] = norm_minmax(x=xdat[0])
-                        test_x_norm = norm_scaler_reapply(scalefunc, xdat[1])
-                        valid_x_norm = norm_scaler_reapply(scalefunc, xdat[2])
-                        result= [train_x_norm, test_x_norm, valid_x_norm]
-                else:
-			x_norm = norm_minmax(x=xdat)[0]
-                        result = x_norm
-
-        if norm_func=="scale":
-                if bysamples==0:
-                        [train_x_norm, scalefunc] = norm_scale(x=xdat[0])
-                        test_x_norm = norm_scaler_reapply(scalefunc, xdat[1])
-                        valid_x_norm = norm_scaler_reapply(scalefunc, xdat[2])
-                        result= [train_x_norm, test_x_norm, valid_x_norm]
-                else:
-                        result = norm_scale(x=xdat)[0]
-
-        if norm_func=="normscale":
-                if bysamples==1:
-                        result = norm_unitscale(x=xdat)[0]
-                else:
-                        print("ERROR-l2 normalization is only done per sample")
-                        result = 0
-
 	if norm_func=="none":
 		result=xdat
 
-	if norm_func=="rasterize":
-		if(type(xdat)==list):
-			result=[]
-			for xtype in xdat:
-				temp = np.transpose(map(norm_rasterize,np.transpose(xtype)))
-				result.append(temp)
-		else:
-			print("Rasterized {0}".format(xdat.shape))
-			result = np.transpose(map(norm_rasterize,np.transpose(xdat)))
-		
 	if norm_func=="rastminmax":
 		temprast=[]
 		#First rasterize
