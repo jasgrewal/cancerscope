@@ -2,7 +2,7 @@ import os
 import cancerscope
 import tempfile
 import unittest
-
+import gc
 import numpy as np
 from numbers import Number
 
@@ -32,6 +32,9 @@ class testEnsemble(unittest.TestCase):
 			lmodel = cancerscope.scopemodel(modelname_address_pair[k_model])
 			lmodel.fit()
 			self.assertEqual(len(lmodel.features), 17688)
+			del lmodel; lmodel=None
+			for i in range(3):
+				gc.collect()
 	
 	def test_singleModel(self):
 		"""Test if all models can be downloaded correctly"""

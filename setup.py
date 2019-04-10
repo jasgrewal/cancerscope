@@ -46,12 +46,6 @@ setup(name='cancerscope',
 	test_suite='nose.collector', tests_require=['nose'], 
 	classifiers = ['Programming Language :: Python :: 2.7', 'Topic :: Scientific/Engineering :: Artificial Intelligence', 'Development Status :: 5 - Production/Stable', 'Intended Audience :: Healthcare Industry', 'Topic :: Scientific/Engineering :: Medical Science Apps.', 'Topic :: Scientific/Engineering :: Bio-Informatics'], 
 	package_data = {'cancerscope': ['cancerscope/resources/*.txt', '*.rst']}, #, '': extra_files},
-	#entry_points = {'console_scripts': ['cancerscope_setup=cancerscope.command_line:main']},
-	project_urls={
-		'Documentation': 'https://github.com/jasgrewal/cancerscope',
-		'Source': 'https://github.com/jasgrewal/cancerscope/tree/master/cancerscope',
-		'PyPi URL': 'https://pypi.org/project/cancerscope/'
-	},
 	
 )
 
