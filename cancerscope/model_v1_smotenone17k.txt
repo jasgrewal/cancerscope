@@ -1,0 +1,1 @@
+v1_smotenone17k	https://zenodo.org/record/2616831/files/v1_smotenone17k.tar.gz	/Users/jgrewal/mygits/cancerscope/cancerscope/data

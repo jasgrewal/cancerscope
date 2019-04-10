@@ -6,26 +6,33 @@ import unittest
 import numpy as np
 from numbers import Number
 
+testsuite_dir = os.path.abspath(os.path.dirname(__file__))
+SCOPEMODELS_LIST = os.path.join(testsuite_dir, "../cancerscope/scope_files.txt")
+
 class testEnsemble(unittest.TestCase):
-	def test_listModel(self):
-		"""Test if the models web-address file is read properly"""
+	def test_downloadAllModels(self):
+		"""Test if all models are downloaded locally properly"""
 		modelOptions = {}
-		with open(os.path.join(os.path.dirname(cancerscope.get_models.__file__), 'scope_files.txt'), 'r') as f:
+		with open(SCOPEMODELS_LIST, 'r') as f:
 			for line in f:
 				if line.strip()!= '':
 					modelname, url, expectedFile, expectedmd5 = line.strip().split('\t')
 					modelOptions[modelname] = (url, expectedFile, expectedmd5)
 	
 		assert len(modelOptions.keys()) == 5
-	
-	def test_downloadAllModels(self):
-		"""Test if all models can be downloaded correctly"""
-		modelOptions={}
-		with open(os.path.join(os.path.dirname(cancerscope.get_models.__file__), 'scope_files.txt'), 'r') as f:
-			for line in f:
-				if line.strip()!= '':
-					modelname, url, expectedFile, expectedmd5 = line.strip().split('\t')
 		
+		my_downloaded_models = cancerscope.get_models.getmodel() ## This should retrieve all models
+		print(my_downloaded_models)
+		assert len(my_downloaded_models.keys()) == 5
+		for k_model in my_downloaded_models.keys():
+			modelname_address_pair = my_downloaded_models[k_model]
+			"""For each model, test if model dir exists, then set up the model once"""
+			self.assertTrue(os.path.isdir(modelname_address_pair[k_model]))
+			self.assertTrue(os.path.exists("".join([modelname_address_pair[k_model], "/lasagne_bestparams.npz"])))
+			lmodel = cancerscope.scopemodel(modelname_address_pair[k_model])
+			lmodel.fit()
+			self.assertEqual(len(lmodel.features), 17688)
+	
 	def test_singleModel(self):
 		"""Test if all models can be downloaded correctly"""
 		model_in = ""
@@ -36,10 +43,10 @@ class testEnsemble(unittest.TestCase):
 			model_in = cancerscope.get_models.downloadmodel(model_label="v1_rm500")
 		
 		self.assertTrue(os.path.isdir(model_in))
-		self.assertTrue(os.path.exists("".join([model_in, "/rm500/lasagne_bestparams.npz"])))
+		self.assertTrue(os.path.exists("".join([model_in, "/lasagne_bestparams.npz"])))
 		
 		"""Test if model can be setup correctly"""
-		lmodel = cancerscope.scopemodel(model_in + "/rm500/")
+		lmodel = cancerscope.scopemodel(model_in)
 		lmodel.fit()
 	
 		self.assertEqual(len(lmodel.features), 17688)
@@ -52,7 +59,7 @@ class testEnsemble(unittest.TestCase):
 			model_in = query_localdirs["v1_rm500"]
 		else:
 			model_in = cancerscope.get_models.downloadmodel(model_label="v1_rm500")
-		lmodel = cancerscope.scopemodel(model_in + "/rm500/")
+		lmodel = cancerscope.scopemodel(model_in)
 		lmodel.fit()
 		#print(x_test[0:17688, 1].reshape(17688,1))
 		random_sample = np.nan_to_num(x_test[0:17688, 1].reshape(1,17688))
@@ -71,7 +78,7 @@ class testEnsemble(unittest.TestCase):
 		p4 = lmodel.get_normalized_input(random_sample)[0]
 		self.assertEqual(p4[0],0.60640558591378269)	
 		
-
+		
 if __name__ == '__main__':
 	unittest.main()
 #	x_test = np.genfromtxt("tests/data/ensg_input.txt", delimiter="\t")
