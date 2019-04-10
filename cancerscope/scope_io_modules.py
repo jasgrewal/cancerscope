@@ -22,6 +22,9 @@ import copy
 #Definitions
 import logging, sys
 
+#Change default theano GC for memory optimization
+theano.config.allow_gc = True
+
 def subset_features_x(x, fullfeatures_named, subsetfeatures_named, fillzero=False):
         #Used to select a set of input features in a specific order
         #Format of input is samples x features

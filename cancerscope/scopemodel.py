@@ -7,6 +7,9 @@ import theano.tensor as T
 from scope_normalization_functions import *
 import heapq
 
+#Change default theano GC for memory optimization
+theano.config.allow_gc = True
+theano.config.allow_pre_alloc = False
 
 def build_custom_mlp(n_out, num_features, depth, width, drop_input, drop_hidden, input_var=None, is_image=False):
         if is_image:
