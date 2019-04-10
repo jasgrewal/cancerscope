@@ -67,7 +67,7 @@ class testModel(unittest.TestCase):
 		class0_highestjacobian = np.amax(jacobian_test[0,:])
 		self.assertEqual(jacobian_test.shape[0], 66) ## Num rows = classes
 		self.assertEqual(jacobian_test.shape[1], 17688) ## Num columns = genes
-		self.assertEqual(class0_highestjacobian, 0.00012377805544765868)
+		self.assertEqual(class0_highestjacobian, 0.0001237780554476585)
 
 if __name__ == '__main__':
 	unittest.main()
