@@ -27,7 +27,7 @@ def _downloadFile(url, filename, timeout=180):
 			fh.write(chunk)
 
 def _downloadFiles(files, downloadDir):
-	if not os.path.isdir(downloadDir):
+	if not os.path.exists(downloadDir):
 		os.mkdir(downloadDir)
 	
 	for url, shortName, expectedMD5 in files:
