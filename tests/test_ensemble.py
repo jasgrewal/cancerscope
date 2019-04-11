@@ -12,23 +12,19 @@ SCOPEMODELS_LIST = os.path.join(testsuite_dir, "../cancerscope/scope_files.txt")
 class testEnsemble(unittest.TestCase):
 	def test_downloadAllModels(self):
 		"""Test if all models are downloaded locally properly"""
-		modelOptions = {}
-		with open(SCOPEMODELS_LIST, 'r') as f:
-			for line in f:
-				if line.strip()!= '':
-					modelname, url, expectedFile, expectedmd5 = line.strip().split('\t')
-					modelOptions[modelname] = (url, expectedFile, expectedmd5)
-	
+		modelOptions = cancerscope.getmodelsdict()
 		assert len(modelOptions.keys()) == 5
 		
-		my_downloaded_models = cancerscope.get_models.getmodel() ## This should retrieve all models
-		print(my_downloaded_models)
+		scope_ensemble_obj = cancerscope.scope()
+		#my_downloaded_models = cancerscope.get_models.getmodel() ## This should retrieve all models
+		#print(my_downloaded_models)
+		my_downloaded_models = scope_ensemble_obj.downloaded_models_dict
 		assert len(my_downloaded_models.keys()) == 5
 		for k_model in my_downloaded_models.keys():
-			modelname_address_pair = my_downloaded_models[k_model]
+			modelname_address = my_downloaded_models[k_model]
 			"""For each model, test if model dir exists, then set up the model once"""
-			self.assertTrue(os.path.isdir(modelname_address_pair[k_model]))
-			self.assertTrue(os.path.exists("".join([modelname_address_pair[k_model], "/lasagne_bestparams.npz"])))
+			self.assertTrue(os.path.isdir(modelname_address))
+			self.assertTrue(os.path.exists("".join([modelname_address, "/lasagne_bestparams.npz"])))
 			"""TO BE FIXED: THEN SET UP MODEL (memory issues in travis (3 GB RAM there)"""
 			#lmodel = cancerscope.scopemodel(modelname_address_pair[k_model])
 			#lmodel.fit()
