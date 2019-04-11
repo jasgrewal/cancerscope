@@ -47,11 +47,7 @@ def _downloadFiles(files, downloadDir):
 			downloadedMD5 = _calcMD5(downloadedPath)
 			assert downloadedMD5 == expectedMD5, "MD5 checksum mismatch with downloaded file: %s" % shortName
 			
-			if downloadedPath.endswith('.zip'):
-				zip_ref = zipfile.Zipfile(downloadedPath, 'r')
-				zip_ref.extractall(path=downloadDir)
-				zip_ref.close()
-			elif downloadedPath.endswith('tar.gz'):
+			if downloadedPath.endswith('tar.gz'):
 				tar = tarfile.open(downloadedPath, 'r:gz')
 				tar.extractall(path=downloadDir)
 				tar.close()

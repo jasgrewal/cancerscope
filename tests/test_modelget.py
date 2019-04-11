@@ -36,14 +36,25 @@ class testModel(unittest.TestCase):
 	
 		self.assertEqual(len(lmodel.features), 17688)
 
+	def test_incorrect_pckgdir(self):
+		this_returns_none = cancerscope.get_models.findmodel(expected_pckgdir="/this/doesnt/exist/", model_label="model_doesnt_exist")
+		self.assertEqual(this_returns_none, None)
+		
 	def test_predict(self):
 		"""Test if prediction works"""
+		MY_TEST_MODEL = "v1_rm500"
 		x_test = np.genfromtxt("tests/data/ensg_input.txt",delimiter="\t")
-		query_localdirs = cancerscope.get_models.findmodel(os.path.dirname(cancerscope.__file__), "v1_rm500")
+		query_localdirs = cancerscope.get_models.findmodel(os.path.dirname(cancerscope.__file__),MY_TEST_MODEL)
 		if query_localdirs is not None:
-			model_in = query_localdirs["v1_rm500"]
+			model_in = query_localdirs[MY_TEST_MODEL]
 		else:
-			model_in = cancerscope.get_models.downloadmodel(model_label="v1_rm500")
+			model_in = cancerscope.get_models.downloadmodel(model_label=MY_TEST_MODEL)
+		
+		"""Compare results with what you get from 'getmodel()'"""
+		modeldir_v1_rm500 = cancerscope.get_models.getmodel(model_label = MY_TEST_MODEL)
+		self.assertEqual(modeldir_v1_rm500[MY_TEST_MODEL][MY_TEST_MODEL], model_in)
+		
+		"""Test prediction"""
 		lmodel = cancerscope.scopemodel(model_in)
 		lmodel.fit()
 		random_sample = np.nan_to_num(x_test[0:17688, 1].reshape(1,17688))

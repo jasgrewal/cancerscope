@@ -20,7 +20,7 @@ def findmodel(expected_pckgdir, model_label, expected_targetdir=None):
 	"""First check if the model details file exists in the main cancerscope directory (proof that model download attempt was completed atleast"""
 	if os.path.exists(expected_pckgdir + "/" + expectedFilename):
 		with open(expected_pckgdir + "/" + expectedFilename) as f:
-			sys.stdout.write("Reading model url and naming criterion")
+			sys.stdout.write("Reading model url and naming criterion...")
 			for line in f:
 				if line.strip()!= '':
 					modelname_, url_, modeldir = line.strip().split('\t')
@@ -33,26 +33,26 @@ def findmodel(expected_pckgdir, model_label, expected_targetdir=None):
 			dnld_dir = downloadmodel(model_label = model_label, targetdir=expected_targetdir)
 			modelOptions_local[model_label] = dnld_dir + "/" + model_label.split("_")[-1]
 		else:
-			sys.stdout.write("Expected model directory {0} does not exist".format(expected_targetdir))
+			sys.stdout.write("Expected model directory {0} does not exist...".format(expected_targetdir))
 			return None
 	
 	if bool(modelOptions_local) is True:
 		if os.path.exists(modelOptions_local[model_label] + "/lasagne_bestparams.npz") is True:
-			sys.stdout.write("Model file found, returning to user")
+			sys.stdout.write("Model file found, returning to user...")
 			return modelOptions_local
 		else:
 			if not os.path.exists(modelOptions_local[model_label]):
 				"""The model directory does not exist in cancerscope/data, so need to re-download"""
-				sys.stdout.write("Model download directory does not exist")
+				sys.stdout.write("Model download directory does not exist...")
 				if expected_targetdir is not None:
 					sys.stdout.write("Downloading model {0}".format(model_label))
 					dnld_dir = downloadmodel(model_label = model_label, targetdir=expected_targetdir)
 					modelOptions_local[model_label] = dnld_dir + "/" + model_label.split("_")[-1]
 				else:
-					sys.stdout.write("Model directory does not exist, but no target directory provided in case of missing model files. Return None")
+					sys.stdout.write("Model directory does not exist, but no target directory provided in case of missing model files. Return None...")
 					return None
 	else:
-		sys.stdout.write("No model details file found")
+		sys.stdout.write("No model details file found...")
 		return None
 	
 def getmodel(model_label=None):
@@ -64,9 +64,9 @@ def getmodel(model_label=None):
 			if m_dirtemp is not None:
 				model_dirs[m] = m_dirtemp
 			else:
-				m_dirtemp = findmodel(expectedDir = expectedDir, model_label = model_label)
+				m_dirtemp = findmodel(expected_pckgdir = SCOPEMODELS_FILELIST_DIR, model_label = m)
 	else:
-		m_dirtemp = findmodel(expectedDir = expectedDir, model_label = model_label)
+		m_dirtemp = findmodel(expected_pckgdir = SCOPEMODELS_FILELIST_DIR, model_label = model_label)
 		model_dirs[model_label] = m_dirtemp
 	return model_dirs
 

@@ -9,9 +9,9 @@ def norm_minmax(x, min=0, max=1):
         x_minmax = min_max_scaler.fit_transform(x) #Does it across each feature (i.e. column)
         return [x_minmax, min_max_scaler]
 
-def norm_scaler_reapply(scaler_func, x):
-        x_transformed = scaler_func.transform(x)
-        return x_transformed
+#def norm_scaler_reapply(scaler_func, x):
+#        x_transformed = scaler_func.transform(x)
+#        return x_transformed
 
 def norm_rasterize(x_sample):
 	#x_sample is an ndarray, of dimension (#features x 1)
@@ -25,7 +25,7 @@ def norm_rasterize(x_sample):
 	#print(len(ycopy))
 	return ycopy
 
-def apply_norm_func(norm_func, xdat, bysamples=0):
+def apply_norm_func(norm_func, xdat, bysamples=1):
         #If bysamples is 0, xdat[0] must be train_x, and xdat[1] must be test_x
 	#If bysamples is 1, xdat is #samples x #features (not feat x samples, #Edit 03 Feb, 2017 | jgrewal)
 	result = []
@@ -49,12 +49,13 @@ def apply_norm_func(norm_func, xdat, bysamples=0):
 			temprast = (map(norm_rasterize,xdat))
 			
 		#Then minmax per sample (if bysamples==1) or by features (if bysamples==0)
-		if bysamples==0:
-			[train_x_norm, scalefunc] = norm_minmax(x=temprast[0])
-			test_x_norm=norm_scaler_reapply(scalefunc, temprast[1])
-			valid_x_norm=norm_scaler_reapply(scalefunc, temprast[2])
-			result=[train_x_norm, test_x_norm, valid_x_norm]
-		else:
+		#if bysamples==0:
+		#	[train_x_norm, scalefunc] = norm_minmax(x=temprast[0])
+		#	test_x_norm=norm_scaler_reapply(scalefunc, temprast[1])
+		#	valid_x_norm=norm_scaler_reapply(scalefunc, temprast[2])
+		#	result=[train_x_norm, test_x_norm, valid_x_norm]
+		#else:
+		if bysamples==1:
 			temprast = np.asarray(temprast)
 			temprast = np.transpose(temprast)
 			##print("Minmax'ing across each column {0}".format(temprast.shape))
