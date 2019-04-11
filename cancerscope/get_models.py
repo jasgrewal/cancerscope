@@ -28,7 +28,7 @@ def findmodel(expected_pckgdir, model_label, expected_targetdir=None):
 	
 	else:
 		"""Otherwise, it would appear model wasnt even attempted to be downloaded"""
-		if expected_targetdir is not None:
+		if os.path.isdir(expected_targetdir):
 			sys.stdout.write("Model file {0} proceeding with download...".format(model_label))
 			dnld_dir = downloadmodel(model_label = model_label, targetdir=expected_targetdir)
 			modelOptions_local[model_label] = dnld_dir + "/" + model_label.split("_")[-1]
@@ -90,7 +90,9 @@ def downloadmodel(model_label=None, targetdir=None):
 		url, expectedFile, expectedmd5 = modelOptions[model_label]
 		filesToDownload = [(url, expectedFile, expectedmd5)]
 		expectedDir = expectedFile.replace(".tar.gz", "")
-	
+		
+		if not os.path.isdir(tempDir):
+			os.makedirs(tempDir)
 		try:
 			cancerscope.utils._downloadFiles(filesToDownload, tempDir)
 		except Exception as e:
