@@ -28,7 +28,7 @@ def findmodel(expected_pckgdir, model_label, expected_targetdir=None):
 	
 	else:
 		"""Otherwise, it would appear model wasnt even attempted to be downloaded"""
-		if os.path.isdir(expected_targetdir):
+		if expected_targetdir is not None:
 			sys.stdout.write("Model file {0} proceeding with download...".format(model_label))
 			dnld_dir = downloadmodel(model_label = model_label, targetdir=expected_targetdir)
 			modelOptions_local[model_label] = dnld_dir + "/" + model_label.split("_")[-1]
