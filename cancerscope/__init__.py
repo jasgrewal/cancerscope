@@ -5,14 +5,15 @@ import os, sys
 from tests import *
 
 ### Global opts
-from config import SCOPEMODELS_DATADIR, SCOPEMODELS_LIST, SCOPEMODELS_FILELIST_DIR
+from config import SCOPEMODELS_DATADIR, SCOPEMODELS_LIST, SCOPEMODELS_FILELIST_DIR, getmodelsdict
 from cancerscope.utils import *
+
 ### Data sources
 from cancerscope.get_models import getmodel, findmodel, downloadmodel
 from cancerscope.get_models import *
 
 ### Dependent data
-from cancerscope.scope_ensemble import scopemodel, scope, getmodelsdict
+from cancerscope.scope_ensemble import scopemodel, scope
 
 ### General Functions  
 #from cancerscope.predict import *

@@ -5,6 +5,7 @@ import lasagne
 import theano
 import theano.tensor as T
 #from scope_io_modules import *
+from scope_io_modules import read_input, map_train_test_features_x, map_gene_names
 from scope_normalization_functions import *
 import cancerscope
 from config import SCOPEMODELS_DATADIR, SCOPEMODELS_LIST, SCOPEMODELS_FILELIST_DIR
@@ -21,7 +22,7 @@ if os.path.isdir(SCOPEMODELS_DATADIR) is False:
 	cancerscope.downloadmodel(targetdir=SCOPEMODELS_DATADIR)
 
 ### Collate the directories of all the models
-modeldirs_dict = cancerscope.get_models.getmodel()
+modeldirs_dict = cancerscope.getmodel()
 
 print("Models are downloaded at {0}".format(modeldirs_dict))
 
@@ -57,18 +58,28 @@ class scope(object):
 		self.models_dict = cancerscope.getmodelsdict()
 		self.downloaded_models_dict = {}
 		[self.downloaded_models_dict.update(m) for m in cancerscope.get_models.getmodel().values()]
-		print(self.downloaded_models_dict)
 		self.model_names = self.downloaded_models_dict.keys()
-	def preprocess_X(self, X):
-		X = "TO DO - THIS NEEDS TO BE MAPPED"	
-	def predict(self, X):
-		X = self.preprocess_X(X)
+	def load_data(self, X_file):
+		x_dat, x_samples, x_features, x_features_genecode = read_input(X_file)
+		return [x_dat, x_samples, x_features, x_features_genecode]
+	
+	def predict(self, X, x_features, x_features_genecode):
 		self.predict_dict = {}
+		## Iterating over each model in the ensemble,
 		for k_model in self.model_names:
 			lmodel = cancerscope.scopemodel(self.downloaded_models_dict[k_model])
 			lmodel.fit()
-			self.predict_dict[k_model] = lmodel.predict(X)
+			## Map training features to the genecode in the input
+			mapped_model_features = map_gene_names(lmodel.features, genecode_in = "HUGO", genecode_out = x_features_genecode)
+			feat_subset_x = map_train_test_features_x(X, mapped_model_features, x_features) ## This function will reorder the input based on the training features order, and if missing some genes, will set those to 0)
+			self.predict_dict[k_model] = lmodel.predict(feat_subset_x)
 		return self.predict_dict
+	
+	def get_predictions_from_file(self, X_file):
+		x_input, x_samples, x_features, x_features_genecode = self.load_data(X_file)
+		prediction_dict = self.predict(X=x_input, x_features = x_features, x_features_genecode = x_features_genecode)
+		return(prediction_dict)
+	
 	def plot_samples(self, plot_outdir, X=None):
 		if X is not None:
 			self.predict_dict = self.predict(X)
@@ -95,8 +106,7 @@ class scopemodel(object):
 		
 		with np.load(in_model_npz) as f: model_params = [f['arr_%d' % i] for i in range(len(f.files))]
 		self.trainingdat = myargs['input'][0]
-		with open(in_trainfeatures) as f: features = f.read().splitlines()
-		self.features = features
+		with open(in_trainfeatures) as f: self.features = f.read().splitlines()
 		n_in = model_params[0].shape[0]
 		n_class = model_params[-1].shape[0]
 		n_hiddenlayers=(len(model_params)/2)-1

@@ -2,99 +2,86 @@
 #For I/O purposes in ML model runs
 
 #Shared libs
-import six.moves.cPickle as pickle
-import gzip
-import os
-import sys
+import os, sys
 import timeit
-import glob 
-import numpy as np
+import pkgutil
 import pandas as pd
-import theano
-import theano.tensor as T
-
-import datetime
-from collections import Counter
-import random
-import itertools
 import copy
+import numpy as np
+import operator
 
-#Definitions
-import logging, sys
+def map_train_test_features_x(x_in, training_features, test_features, fillzero=True, defaultvalue=0.0):
+	print(x_in.shape)
+	x = copy.deepcopy(x_in) ## Create another persistent copy of x as we are modifying it
+	# For each training feature, get the corresponding index in the test features 
+	reorder_test = {test_features.index(i):training_features.index(i) for i in test_features if i in training_features}
+	### Get a list of indices indicating which index of the test features list corresponds to the corresponding ith' position in the training features list
+	test_keys_orderedix = [i[0] for i in sorted(reorder_test.items(), key=operator.itemgetter(1))]
+	
+	num_testfeats_mapping_to_trainingfeats = len(test_keys_orderedix)
+	assert(test_features[test_keys_orderedix[0]] == training_features[0])
+	
+	testX_values = np.apply_along_axis(lambda x: x[test_keys_orderedix], 1, x)
+	print(testX_values.shape)
+	if fillzero:
+		for i in range(0, len(training_features), 1):
+			if training_features[i] not in test_features:
+				testX_values = np.insert(testX_values, i, defaultvalue, axis=1)
+				print(testX_values.shape)
+	return(textX_values)
 
-#Change default theano GC for memory optimization
-theano.config.allow_gc = True
-
-def subset_features_x(x, fullfeatures_named, subsetfeatures_named, fillzero=False):
-        #Used to select a set of input features in a specific order
-        #Format of input is samples x features
-        #Order of features is fullfeatures_named; subsetting is subsetfeatures_named
-        subset_indices = []; missing_values=[]
-        for select_this in subsetfeatures_named:
-                subset_indices.append(fullfeatures_named.index(select_this))
-        #returned object will have the features ordered in the manner of subsetfeatures_named
-        return (np.apply_along_axis(lambda x: x[subset_indices], 1, x))
-
+def map_gene_names(features_list, genecode_in, genecode_out):
+	### Options for genecode_in and genecode_out are ENSG, HUGO, GENCODE, GAF
+	genedict = pd.read_csv("/".join([os.path.dirname(sys.modules["cancerscope"].__file__), 'resources/gene_mapping_and_hugo_ids.txt']), delimiter="\t")
+	
+	try:
+		genecode_in in genedict.columns.tolist()
+		genecode_out in genedict.columns.tolist()
+	except (TypeError, NameError,ValueError):
+		sys.stdout.write("Error: {1}\n".format(sys.exc_info()[0]))
+		sys.stdout.write("Genecode should be one of {0}\n".format(genedict.columns.tolist()))
+	else:
+		genedict = genedict.set_index(genecode_in) # GENCODE, GAF, HUGO, ENSG_HUGO
+		features_mapped = list(genedict.ix[features_list][genecode_out]) #GENCODE, GAF, HUGO, ENSG_HUGO
+	
+	try:
+		len(features_mapped) == len(features_list)
+	except:
+		sys.stdout.write("\nThe mapping could not be completed accurately")
+	else:
+		return features_mapped
+	
 def read_input(input_file, sep="\t"): 
 	"""This function reads in the set of samples to predict. By default, the input is arranged as gene_name \t Sample 1 RPKM \t Sample 2 RPKM ....
 	An alternative column separator can be passed to the function using the 'sep' attribute"""
 	try:
-		os.path.isfile(input_file):
+		os.path.isfile(input_file)
 	except:
-		print "Error: {1}".format(sys.exc_info()[0])
+		sys.stdout.write("\nError: {1}\n".format(sys.exc_info()[0]))
 	else:
-		print("Reading file {0}".format(input_file))
-		input_dat = np.loadtxt(input_file, delimiter=sep)
-		genedict = pd.read_csv(genedict_file, sep="\t")
-	
+		sys.stdout.write("\nReading file {0}\n".format(input_file))
+		genedict = pd.read_csv("/".join([os.path.dirname(sys.modules["cancerscope"].__file__), 'resources/gene_mapping_and_hugo_ids.txt']), delimiter=sep)
+		input_dat = pd.read_csv(input_file, delimiter=sep)
+		in_genecode = input_dat.columns.tolist()[0] # What is the gene naming convention for the input  - this is the 1st column
 	"""Feature subsetting"""
 	try:
-		in_genecode in ['HUGO', 'HUGO_ENSG', 'GENCODE', 'GAF']:
-	except TypeError, NameError,ValueError):
-		print "Error: {1}".format(sys.exc_info()[0])
-		print("First column's name should be one of {0}".format(genedict.columns.values.tolist()))
+		in_genecode in genedict.columns.tolist()
+	except (TypeError, NameError,ValueError):
+		sys.stdout.write("Error: {1}\n".format(sys.exc_info()[0]))
+		sys.stdout.write("First column's name should be one of {0}\n".format(genedict.columns.tolist()))
 	else:
-		if in_genecode == 'HUGO_ENSG':
-			features_test = [m.split("_ENSG", 1)[0] for m in features_test]
-			in_genecode = "HUGO"
-		
-		genedict = pd.read_csv(genedict_file, sep="\t")
-		genedict = genedict.loc[genedict['HUGO'].isin(features_train)]
-		genedict = genedict.set_index(in_genecode) # GENCODE, GAF, HUGO
-		features_test = list(genedict.ix[features_test]["HUGO"])
+		"""Separate out the input data into features (col 1), X (numeric values), and samples"""
+		features_test = input_dat[in_genecode].tolist()
+		X_data = input_dat.loc[:, input_dat.columns != in_genecode]
+		samples = X_data.columns.tolist()
+		X = X_data.to_records(index=False)
+		#sys.stdout.write("\nX shapei s {0} and features len is {1}".format(X.shape, len(features_test)))
 	
-	return X, features_test
-
-def load_data(dataset, make_shared=False):
-    ''' Loads the dataset
-
-    :type dataset: string
-    :param dataset: the path to the dataset (here MNIST)
-    '''
-
-    data_dir, data_file = os.path.split(dataset)
-    if data_dir == "" and not os.path.isfile(dataset):
-        # Check if dataset is in the data directory.
-        new_path = os.path.join(
-            os.path.split(__file__)[0],
-            "..",
-            "data",
-            dataset
-        )
-        if os.path.isfile(new_path):
-            dataset = new_path
-
-    print('... loading data from {0}'.format(dataset))
-    # Load the dataset
-    with gzip.open(dataset, 'rb') as f:
-        try:
-            train_set, valid_set, test_set = pickle.load(f, encoding='latin1')
-        except:
-            train_set, valid_set, test_set = pickle.load(f)
-    # train_set, valid_set, test_set format: tuple(input, target)
-    # input is a numpy.ndarray of 2 dimensions (a matrix)
-    # where each row corresponds to an example. target is a
-    # numpy.ndarray of 1 dimension (vector) that has the same length as
-    # the number of rows in the input. It should give the target
-    # to the example with the same index in the input.
+	#genedict = genedict.loc[genedict['HUGO'].isin(features_train)]
+	#genedict = genedict.set_index(in_genecode) # GENCODE, GAF, HUGO
+	#features_test = list(genedict.ix[features_test]["HUGO"])
+	if(len(samples) == 1):
+		## if there is only one sample, numpy array doesnt act nice, has to be reshaped
+		X = X.reshape(1, len(X))
+	return X, samples, features_test, in_genecode
 

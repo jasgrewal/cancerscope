@@ -1,4 +1,4 @@
-import os
+import os, sys
 import cancerscope
 import tempfile
 import unittest
@@ -6,10 +6,22 @@ import gc
 import numpy as np
 from numbers import Number
 
-testsuite_dir = os.path.abspath(os.path.dirname(__file__))
-SCOPEMODELS_LIST = os.path.join(testsuite_dir, "../cancerscope/scope_files.txt")
+pckg_dir = os.path.dirname(sys.modules["cancerscope"].__file__)
+SCOPEMODELS_LIST = os.path.join(pckg_dir, "/scope_files.txt")
 
 class testEnsemble(unittest.TestCase):
+	def test_samplefilereading(self):
+		my_test_file = "/".join([os.path.dirname(sys.modules["cancerscope"].__file__), "../tests/data/read_ensg_input.txt"])
+		"""Test if a testX.txt file can be read in and mapped to the correct gene names"""
+		scope_ensemble_obj = cancerscope.scope()
+		test_X = scope_ensemble_obj.load_data(my_test_file) # X, samples, features_test, in_genecode
+		self.assertEqual(test_X[-2][-1], "ENSG00000181518.3")
+		
+		## Process input file and get predictions from all 5 models
+		preds_dict = scope_ensemble_obj.get_predictions_from_file(my_test_file)
+		print(preds_dict)
+		self.assertEqual(preds_dict,0)
+		
 	def test_downloadAllModels(self):
 		"""Test if all models are downloaded locally properly"""
 		modelOptions = cancerscope.getmodelsdict()

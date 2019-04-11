@@ -7,12 +7,8 @@ import os, sys
 import tempfile
 import shutil, six
 ## Get detailed list of models and source files
-modelOptions = {}
-with open(SCOPEMODELS_LIST, 'r') as f:
-	for line in f:
-		if line.strip()!= '':
-			modelname, url, expectedFile, expectedmd5 = line.strip().split('\t')
-			modelOptions[modelname] = (url, expectedFile, expectedmd5)
+
+modelOptions = cancerscope.getmodelsdict()
 
 def findmodel(expected_pckgdir, model_label, expected_targetdir=None):
 	expectedFilename = "model_" + model_label + ".txt"
@@ -75,7 +71,6 @@ def downloadmodel(model_label=None, targetdir=None):
 	Query Zenodo and retrieve version-specific model parameter files and metadata
 	"""
 	global modelOptions
-	
 	if targetdir is not None:
 		tempDir = targetdir
 	else:
