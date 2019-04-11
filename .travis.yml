@@ -7,9 +7,8 @@ python:
 install:
  - pip install --user --upgrade https://github.com/Theano/Theano/archive/master.zip
  - pip install --user --upgrade https://github.com/Lasagne/Lasagne/archive/master.zip
- - pip install --user -U scikit-learn
  - pip install --user .
- - pip install --user nose coverage
+ - travis_wait pip install --user nose coverage
  - pip install --user coveralls
 
 script:
