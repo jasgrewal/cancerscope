@@ -18,16 +18,17 @@ class testEnsemble(unittest.TestCase):
 		self.assertEqual(test_X[-2][-1], "ZRANB1_ENSG00000019995")
 		
 		## Process input file and get predictions from all 5 models
-		toppreds_dict = scope_ensemble_obj.get_predictions_from_file(my_test_file)
-		print(toppreds_dict)
-		toppreds_numeric_dict = scope_ensemble_obj.get_predictions_from_file(my_test_file, get_numeric=True, ensemble_score=False)
-		allpreds_numeric_dict = scope_ensemble_obj.get_predictions_from_file(my_test_file, get_numeric=True, get_all_predictions=True, ensemble_score=False)
-		allpreds_dict = scope_ensemble_obj.get_predictions_from_file(my_test_file, get_numeric=False, get_all_predictions=True, ensemble_score=False)
-		print(toppreds_numeric_dict)
-		print(allpreds_numeric_dict)
-		print(allpreds_dict)
-		self.assertEqual(toppreds_dict,0)
-		
+		preds_df_from_file = scope_ensemble_obj.get_predictions_from_file(my_test_file)
+		### Compare to getting output from the x data object itself  
+		test_x, test_samples, test_features, test_genecode = scope_ensemble_obj.load_data(my_test_file) # 
+		preds_df_from_xdat = scope_ensemble_obj.predict(X = test_x, x_features = test_features, x_features_genecode = test_genecode, x_sample_names=test_samples)
+		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].label.tolist(), ['BLCA_TS', 'ESCA_EAC_TS'])
+		self.assertEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].label.tolist(), ['BLCA_TS', 'ESCA_EAC_TS'])
+		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[0], 0.26819298484099996)
+		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1], 0.562124497548)
+		self.assertEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[1], 0.562124497548)
+		self.assertEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[0], 0.26819298484099996)
+	
 	def test_downloadAllModels(self):
 		"""Test if all models are downloaded locally properly"""
 		modelOptions = cancerscope.getmodelsdict()

@@ -1,8 +1,9 @@
 import os, sys
 import glob, yaml, gzip
 import numpy as np
+import pandas as pd
 ### Set theano flag to cpu to prevent cudnn issues with other users
-os.environ['THEANO_FLAGS'] = "device=cpu" 
+os.environ['THEANO_FLAGS'] = "gpuarray.preallocate=0.2,device=cpu" 
 ###
 import lasagne
 import theano
@@ -17,6 +18,7 @@ import copy
 #Change default theano GC for memory optimization
 theano.config.allow_gc = True
 theano.config.allow_pre_alloc = False
+theano.config.scan.allow_gc = True
 
 ### Check if models have been downloaded already, and if not, do it!
 if os.path.isdir(SCOPEMODELS_DATADIR) is False:
@@ -60,7 +62,6 @@ def get_ensemble_score(dict_with_preds, ignorelabs_list=None):
 	modelnames = dict_with_preds.keys() 
 	df_temp_matrix = np.array([dict_with_preds[i] for i in modelnames])
 	df_matrix = drop_sort_class(df_temp_matrix, label_to_drop=ignorelabs_list, sortorder='numbers')
-	print(df_matrix[0,0])
 	### First get a list of predicted labels and values
 	num_models, num_samples, num_preds, num_tuples_preds = df_matrix.shape
 	flat_top_preds_values = df_matrix[:, :,0, 1].transpose().flatten() # Across all models, across all samples, the 0th ordered (top level) prediction, numeric value
@@ -81,8 +82,7 @@ def get_ensemble_score(dict_with_preds, ignorelabs_list=None):
 		df_merged.loc[df_merged.sample_ix == s, "rank_pred"] =  range(1, df_merged[df_merged.sample_ix == s].shape[0]  +1)
 	return df_merged
 
-get_ensemble_score(dict_with_preds)
-def get_plotting_df(dict_with_preds):
+def get_plotting_df(dict_with_preds, x_sample_names=None):
 	modelnames = dict_with_preds.keys()
 	df_temp_matrix = np.array([dict_with_preds[i] for i in modelnames])
 	num_models, num_samples, num_preds, num_tuples_preds = df_temp_matrix.shape
@@ -94,6 +94,8 @@ def get_plotting_df(dict_with_preds):
 			else:
 				new_data_line = pd.DataFrame(df_temp_matrix[i, j]); new_data_line["model"] = modelnames[i]; new_data_line["sample_ix"] = j
 				ret_df = ret_df.append(new_data_line)
+	if x_sample_names is not None:
+		ret_df['sample_name'] = [x_sample_names[m] for m in ret_df['sample_ix'].tolist()]
 	return ret_df
 
 def build_custom_mlp(n_out, num_features, depth, width, drop_input, drop_hidden, input_var=None, is_image=False):
@@ -134,13 +136,8 @@ class scope(object):
 		sys.stdout.write("\nRead in sample file {0}, \n\tData shape {1}\n\tNumber of samples {2}\n\tNumber of genes in input {3}, with gene code {4}".format(X_file, x_dat.shape, len(x_samples), len(x_features), x_features_genecode))
 		return [x_dat, x_samples, x_features, x_features_genecode]
 	
-	def predict(self, X, x_features, x_features_genecode, ensemble_score=True, get_all_predictions=True, get_numeric=True, outdir=None):
+	def predict(self, X, x_features, x_features_genecode, x_sample_names=None, outdir=None):
 		self.predict_dict = {}
-		if ensemble_score is True:
-			### If calculating ensemble score, need to get all predictions (numeric value and top score)
-			get_predictions_dict = True
-		else:
-			get_predictions_dict = False
 		## Iterating over each model in the ensemble,
 		for k_model in self.model_names:
 			## Set up each individual model (clas scopemodel)
@@ -149,19 +146,23 @@ class scope(object):
 			## Map training features to the genecode in the input
 			mapped_model_features = map_gene_names(lmodel.features, genecode_in = "SCOPE", genecode_out = x_features_genecode)
 			feat_subset_x = map_train_test_features_x(X, mapped_model_features, x_features) ## This function will reorder the input based on the training features order, and if missing some genes, will set those to 0)
-			self.predict_dict[k_model] = lmodel.predict(feat_subset_x, get_all_predictions=get_all_predictions, get_numeric = get_numeric, get_predictions_dict=get_predictions_dict)
+			self.predict_dict[k_model] = lmodel.predict(feat_subset_x, get_predictions_dict=True)
 			if outdir is not None:
 				sys.stdout.write("\nWriting predictions to output directory\n")
-		if ensemble_score is True:
-			## Do something to process output for ensemble score  
-			#merged_preds = get_ensemble_score(self.predict_dict)
-			return self.predict_dict
-		else:
-			return self.predict_dict
+			### GC to free up memory
+			lmodel = None
+			for i in range(0,3):
+				gc.collect()
+			
+		## Do something to process output for ensemble score  
+		ens_df = get_ensemble_score(self.predict_dict)
+		if x_sample_names is not None:
+			ens_df['sample_name'] = [x_sample_names[m] for m in ens_df['sample_ix'].tolist()]
+		return ens_df
 	
-	def get_predictions_from_file(self, X_file, ensemble_score=True, get_all_predictions=True, get_numeric=True, outdir=None):
+	def get_predictions_from_file(self, X_file, outdir=None):
 		x_input, x_samples, x_features, x_features_genecode = self.load_data(X_file)
-		prediction_dict = self.predict(X=x_input, x_features = x_features, x_features_genecode = x_features_genecode, get_all_predictions=get_all_predictions, get_numeric=get_numeric, outdir=None, ensemble_score=ensemble_score)
+		prediction_dict = self.predict(X=x_input, x_features = x_features, x_features_genecode = x_features_genecode, x_sample_names=x_samples, outdir=None)
 		return(prediction_dict)
 	
 	def plot_samples(self, plot_outdir, X=None):
