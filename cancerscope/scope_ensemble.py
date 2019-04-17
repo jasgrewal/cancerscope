@@ -1,6 +1,9 @@
-import os
+import os, sys
 import glob, yaml, gzip
 import numpy as np
+### Set theano flag to cpu to prevent cudnn issues with other users
+os.environ['THEANO_FLAGS'] = "device=cpu" 
+###
 import lasagne
 import theano
 import theano.tensor as T
@@ -10,7 +13,7 @@ from scope_normalization_functions import *
 import cancerscope
 from config import SCOPEMODELS_DATADIR, SCOPEMODELS_LIST, SCOPEMODELS_FILELIST_DIR
 import heapq
-
+import copy
 #Change default theano GC for memory optimization
 theano.config.allow_gc = True
 theano.config.allow_pre_alloc = False
@@ -25,6 +28,73 @@ if os.path.isdir(SCOPEMODELS_DATADIR) is False:
 modeldirs_dict = cancerscope.getmodel()
 
 print("Models are downloaded at {0}".format(modeldirs_dict))
+
+def drop_sort_class(matrix4d_of_preds, label_to_drop=None, sortorder="alphabets"):
+	### This function takes in a matrix form of the dictionary containing individual models (shape num_models, num_samples, num_features, feature_tuples)
+	### It will return either a matrix form of the dictionary with the specified labels to drop removed, 
+	### Or optionally can return a amtrix form of the dictionary where the tuples are ordered by either 'numbers' or 'alphabets'
+	if sortorder == 'numbers':
+		ix_in_tuple_for_order = 1
+	else:
+		ix_in_tuple_for_order = 0
+	df_matrix = copy.deepcopy(matrix4d_of_preds)
+	if label_to_drop is None:
+		for i in range(0, df_matrix.shape[0]):
+			for j in range(0, df_matrix.shape[1]):
+				sample_list_of_lab_tuples = df_matrix[i][j]
+				new_alphabet_order = sorted(sample_list_of_lab_tuples.tolist(), key=lambda x:-float(x[ix_in_tuple_for_order]))
+				df_matrix[i][j] = new_alphabet_order
+		return df_matrix
+	else:
+		if ix_in_tuple_for_order == 1:
+			# We need to order the matrix alphabetically prior to deleting any labels
+			df_matrix = drop_sort_class(matrix4d_of_preds, label_to_drop=None, sortorder='alphabets')
+		for p in label_to_drop:
+			## DO something to drop the column
+			dropsite_labelix = np.where(df_matrix[0,0,:,0]==p)[0].tolist()
+			df_matrix = np.delete(df_matrix, dropsite_labelix, axis=2)
+		return drop_sort_class(df_matrix, label_to_drop=None, sortorder=sortorder)
+
+def get_ensemble_score(dict_with_preds, ignorelabs_list=None):
+	### This function assumes the label,value tuples for each sample, for each model, are ordered by highest value (ix 0) to lowest value (ix -1) 
+	modelnames = dict_with_preds.keys() 
+	df_temp_matrix = np.array([dict_with_preds[i] for i in modelnames])
+	df_matrix = drop_sort_class(df_temp_matrix, label_to_drop=ignorelabs_list, sortorder='numbers')
+	print(df_matrix[0,0])
+	### First get a list of predicted labels and values
+	num_models, num_samples, num_preds, num_tuples_preds = df_matrix.shape
+	flat_top_preds_values = df_matrix[:, :,0, 1].transpose().flatten() # Across all models, across all samples, the 0th ordered (top level) prediction, numeric value
+	flat_top_preds_labels = df_matrix[:, :,0, 0].transpose().flatten() # Across all models, across all samples, the 0th ordered (top level) prediction, label
+	## Combine these into a sensible dataframe so as to separate each sample
+	topPreds_bymodels_df = pd.DataFrame(np.column_stack([flat_top_preds_labels, flat_top_preds_values, modelnames * num_samples]), columns=['label', 'pred', 'modelname'])
+	topPreds_bymodels_df['sample_ix'] = [np.mod(m/num_models, num_models) for m in topPreds_bymodels_df.index.tolist()]
+	topPreds_bymodels_df[['pred']] = topPreds_bymodels_df[['pred']].astype(float) # dtype conversion for confidence scores
+	## Aggregate based on the predicted labels
+	avg_per_label = topPreds_bymodels_df.groupby(['sample_ix', 'label'], as_index=False).mean()
+	modelnames_label = topPreds_bymodels_df.groupby(['sample_ix', 'label'], as_index=False)['modelname'].apply(lambda x: "%s" % ','.join(x)).reset_index().rename(columns={0:"models"})
+	modelnames_count = topPreds_bymodels_df.groupby(['sample_ix', 'label'], as_index=False)['modelname'].count().rename(columns={"modelname":"freq"})
+	joined_df_list = [avg_per_label, modelnames_count ,modelnames_label]
+	df_merged = reduce(lambda  left,right: pd.merge(left,right,on=['sample_ix','label'], how='outer'), joined_df_list)
+	df_merged.sort_values(by=['sample_ix', 'freq', 'pred'], ascending=False).sort_values('sample_ix').reset_index(drop=True)
+	df_merged["rank_pred"] = df_merged.index
+	for s in range(0, num_samples):
+		df_merged.loc[df_merged.sample_ix == s, "rank_pred"] =  range(1, df_merged[df_merged.sample_ix == s].shape[0]  +1)
+	return df_merged
+
+get_ensemble_score(dict_with_preds)
+def get_plotting_df(dict_with_preds):
+	modelnames = dict_with_preds.keys()
+	df_temp_matrix = np.array([dict_with_preds[i] for i in modelnames])
+	num_models, num_samples, num_preds, num_tuples_preds = df_temp_matrix.shape
+	flat_matrix = df_temp_matrix.flatten()
+	for i in range(0, num_models):
+		for j in range(0, num_samples):
+			if i == 0 and j == 0:
+				ret_df = pd.DataFrame(df_temp_matrix[i, j]); ret_df["model"] = modelnames[i]; ret_df["sample_ix"] = j
+			else:
+				new_data_line = pd.DataFrame(df_temp_matrix[i, j]); new_data_line["model"] = modelnames[i]; new_data_line["sample_ix"] = j
+				ret_df = ret_df.append(new_data_line)
+	return ret_df
 
 def build_custom_mlp(n_out, num_features, depth, width, drop_input, drop_hidden, input_var=None, is_image=False):
         if is_image:
@@ -61,23 +131,37 @@ class scope(object):
 		self.model_names = self.downloaded_models_dict.keys()
 	def load_data(self, X_file):
 		x_dat, x_samples, x_features, x_features_genecode = read_input(X_file)
+		sys.stdout.write("\nRead in sample file {0}, \n\tData shape {1}\n\tNumber of samples {2}\n\tNumber of genes in input {3}, with gene code {4}".format(X_file, x_dat.shape, len(x_samples), len(x_features), x_features_genecode))
 		return [x_dat, x_samples, x_features, x_features_genecode]
 	
-	def predict(self, X, x_features, x_features_genecode):
+	def predict(self, X, x_features, x_features_genecode, ensemble_score=True, get_all_predictions=True, get_numeric=True, outdir=None):
 		self.predict_dict = {}
+		if ensemble_score is True:
+			### If calculating ensemble score, need to get all predictions (numeric value and top score)
+			get_predictions_dict = True
+		else:
+			get_predictions_dict = False
 		## Iterating over each model in the ensemble,
 		for k_model in self.model_names:
+			## Set up each individual model (clas scopemodel)
 			lmodel = cancerscope.scopemodel(self.downloaded_models_dict[k_model])
 			lmodel.fit()
 			## Map training features to the genecode in the input
-			mapped_model_features = map_gene_names(lmodel.features, genecode_in = "HUGO", genecode_out = x_features_genecode)
+			mapped_model_features = map_gene_names(lmodel.features, genecode_in = "SCOPE", genecode_out = x_features_genecode)
 			feat_subset_x = map_train_test_features_x(X, mapped_model_features, x_features) ## This function will reorder the input based on the training features order, and if missing some genes, will set those to 0)
-			self.predict_dict[k_model] = lmodel.predict(feat_subset_x)
-		return self.predict_dict
+			self.predict_dict[k_model] = lmodel.predict(feat_subset_x, get_all_predictions=get_all_predictions, get_numeric = get_numeric, get_predictions_dict=get_predictions_dict)
+			if outdir is not None:
+				sys.stdout.write("\nWriting predictions to output directory\n")
+		if ensemble_score is True:
+			## Do something to process output for ensemble score  
+			#merged_preds = get_ensemble_score(self.predict_dict)
+			return self.predict_dict
+		else:
+			return self.predict_dict
 	
-	def get_predictions_from_file(self, X_file):
+	def get_predictions_from_file(self, X_file, ensemble_score=True, get_all_predictions=True, get_numeric=True, outdir=None):
 		x_input, x_samples, x_features, x_features_genecode = self.load_data(X_file)
-		prediction_dict = self.predict(X=x_input, x_features = x_features, x_features_genecode = x_features_genecode)
+		prediction_dict = self.predict(X=x_input, x_features = x_features, x_features_genecode = x_features_genecode, get_all_predictions=get_all_predictions, get_numeric=get_numeric, outdir=None, ensemble_score=ensemble_score)
 		return(prediction_dict)
 	
 	def plot_samples(self, plot_outdir, X=None):
@@ -125,20 +209,29 @@ class scopemodel(object):
 		test_max_fn = theano.function([input_var], T.argmax(lasagne.layers.get_output(network, deterministic=True), axis=1), allow_input_downcast=True)
 		return([network, test_fn, test_max_fn])	
 
-	def predict(self,X, get_all_predictions=None, get_numeric=False):
+	def predict(self,X, get_all_predictions=True, get_numeric=True, get_predictions_dict=True):
 		X_normed = self.get_normalized_input(X)
 		all_predicted = self.pred_fn(X_normed)
-		max_predicted = self.pred_max_fn(X_normed)
-		if get_all_predictions is None:
-			if get_numeric is False:
-				return([self.numtolabel[i] for i in max_predicted])
-			else:
-				return(max_predicted)
+		max_predicted_classnum = self.pred_max_fn(X_normed)
+		
+		if get_predictions_dict is True:
+			prediction_labs = [[self.numtolabel[i] for i,j in enumerate(m)] for m in all_predicted]
+			sorted_list_of_lab_preds_sublists = [sorted(m, key=lambda x:x[1], reverse=True) for m in [zip(a,b) for a,b in zip(prediction_labs, all_predicted)]]
+			#return [prediction_labs, all_predicted]
+			return(np.asarray(sorted_list_of_lab_preds_sublists))
 		else:
-			if get_numeric is False:
-				return [[self.numtolabel[i] for i,j in enumerate(m)] for m in all_predicted]
+			if get_all_predictions is False:
+				if get_numeric is False:
+					return([self.numtolabel[i] for i in max_predicted_classnum])
+				else:
+					max_predicted_index_probability = np.amax(all_predicted, axis=1)
+					return(max_predicted_index_probability)
 			else:
-				return(all_predicted)
+				if get_numeric is False:
+					return [[self.numtolabel[i] for i,j in enumerate(m)] for m in all_predicted]
+				else:
+					return(all_predicted)
+	
 	def fit(self):
 		model_loaded = self.load_model(self.in_modeldir)
 		self.network = model_loaded[0]

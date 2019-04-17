@@ -51,6 +51,9 @@ cancerscope reads in input from `.txt` files. Columns should be tab-separated, w
 All scripts required to run SCOPE are [included](cancerscope).
 
 ## Citing cancerscope  
+If you have used this package for any academic research, it would be great if you could cite the associated paper.  
+A bibtex citation is provided for your ease of use:  
+`(paper currently embargoed)`
 
 ## License  
 cancerscope is distributed under the terms of the [MIT](https://opensource.org/licenses/MIT) license.  
@@ -58,4 +61,9 @@ cancerscope is distributed under the terms of the [MIT](https://opensource.org/l
 ## Issues  
 If you encounter any problems, please contact the developer and provide detailed error logs and description [here](https://github.com/jasgrewal/cancerscope/issues).  
 
+## Common Errors  
+Theano is a bit finicky when working with the cudnn backend, and may sometimes throw errors at you due to version conflicts. Here's a common one if you are setting up **cancerscope** in GPU-friendly environment.  
+`RuntimeError: Mixed dnn version. The header is version 5110 while the library is version 7401.`  
+- Please ensure that only 1 cudnn version exists on your system.  
+- Cancerscope has been developed and tested with cudnn-7.0 (v3.0)  
 

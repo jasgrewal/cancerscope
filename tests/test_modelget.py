@@ -58,11 +58,11 @@ class testModel(unittest.TestCase):
 		lmodel = cancerscope.scopemodel(model_in)
 		lmodel.fit()
 		random_sample = np.nan_to_num(x_test[0:17688, 1].reshape(1,17688))
-		pred_testX = lmodel.predict(random_sample)[0]
+		pred_testX = lmodel.predict(random_sample)[0][0][0]
 		self.assertEqual(pred_testX, "ESCA_TS")
 		
-		allpreds_testX = lmodel.predict(random_sample, get_all_predictions=True)[0]
-		allpredsNumeric_testX = lmodel.predict(random_sample, get_all_predictions=True, get_numeric=True)[0]
+		allpreds_testX = lmodel.predict(random_sample, get_all_predictions=True, get_numeric=False,get_predictions_dict=False)[0]
+		allpredsNumeric_testX = lmodel.predict(random_sample, get_all_predictions=True, get_numeric=True, get_predictions_dict=False)[0]
 		
 		self.assertEqual(len(allpreds_testX), 66)
 		self.assertEqual(len(allpredsNumeric_testX), 66)

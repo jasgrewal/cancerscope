@@ -32,6 +32,7 @@ def package_files(directory):
 extra_files = package_files('cancerscope/bin/')
 setup(name='cancerscope', 
 	version=VERSION, 
+	setup_requires=['nose>=1.0'],
 	description='An RNA-Seq based tool for Supervised Cancer Origin Prediction using Expression',
 	long_description=longdescription, 
 	author='Jasleen Grewal', 
