@@ -81,14 +81,14 @@ This is the GENE\_IDENTIFIER used in our example.
 The default ouptut from both these functions is the top-voted class, accompanied by the average confidence score and contributing model names. This is a pandas dataframe, as shown:  
 ||`sample_ix`|`label`|`pred`|`freq`|`models`|`rank_pred`|`sample_name`|   
 |---|---|---|---|---|---|---|---|   
-|0|0|BLCA\_TS|0.268193|2|v1_none17kdropout,v1_none17k|1|avg_tcga|   
-|1|0|LUSC\_TS|0.573807|1|v1_smotenone17k|2|avg_tcga|   
-|2|0|PAAD\_TS|0.203504|1|v1_rm500|3|avg_tcga|   
-|3|0|TFRI\_GBM\_NCL\_TS|0.552021|1|v1_rm500dropout|4|avg_tcga|   
-|4|1|ESCA\_EAC\_TS|0.562124|2|v1_smotenone17k,v1_none17k|1|fake_tcga|    
-|5|1|HSNC\_TS|0.223115|1|v1_rm500|2|fake_tcga|   
-|6|1|MB-Adult\_TS|0.743373|1|v1_none17kdropout|3|fake_tcga|   
-|7|1|TFRI\_GBM\_NCL\_TS|0.777685|1|v1_rm500dropout|4|fake_tcga|   
+|0|0|BLCA\_TS|0.268193|2|v1\_none17kdropout,v1\_none17k|1|avg\_tcga|   
+|1|0|LUSC\_TS|0.573807|1|v1\_smotenone17k|2|avg\_tcga|   
+|2|0|PAAD\_TS|0.203504|1|v1\_rm500|3|avg\_tcga|   
+|3|0|TFRI\_GBM\_NCL\_TS|0.552021|1|v1\_rm500dropout|4|avg\_tcga|   
+|4|1|ESCA\_EAC\_TS|0.562124|2|v1\_smotenone17k,v1\_none17k|1|fake\_tcga|    
+|5|1|HSNC\_TS|0.223115|1|v1\_rm500|2|fake\_tcga|   
+|6|1|MB-Adult\_TS|0.743373|1|v1\_none17kdropout|3|fake\_tcga|   
+|7|1|TFRI\_GBM\_NCL\_TS|0.777685|1|v1\_rm500dropout|4|fake\_tcga|   
 
 ### Tweaking the output format  
 The output from the ensembl function cannot be modified much, unfortunately.   
