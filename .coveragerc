@@ -5,4 +5,4 @@ omit =
     */python?.?/*
     */site-packages/nose/*
     *__init__*
-
+    *functions.py
