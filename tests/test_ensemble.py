@@ -79,9 +79,9 @@ class testEnsemble(unittest.TestCase):
 		toppreds_df = lmodel.predict(x_input, get_all_predictions=True,get_numeric=False, get_predictions_dict=True)
 		self.assertEqual(len(allpreds_names[0]), 66); self.assertEqual(len(allpreds_names[1]), 66); 
 		self.assertEqual(allpreds_values.shape[1],66); 
-		self.assertEqual(round(allpreds_values[0][1], 16), round(0.0030981730794109289,16))
+		self.assertEqual(round(allpreds_values[0][1], 15), round(0.0030981730794109289,15))
 		self.assertEqual(toppreds_names[0], "PAAD_TS"); self.assertEqual(toppreds_names[1], "HNSC_TS")
-		self.assertEqual(round(toppreds_values[0],16), round(0.20350387249421389,16)); self.assertEqual(round(toppreds_values[1],16), round(0.22311548345007168,16))
+		self.assertEqual(round(toppreds_values[0],15), round(0.20350387249421389,15)); self.assertEqual(round(toppreds_values[1],15), round(0.22311548345007168,15))
 		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(round(float(toppreds_df[0][0][1]), 12), round(toppreds_values[0], 12)); 
 		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(round(float(toppreds_df[1][0][1]), 12), round(toppreds_values[1], 12))
 	

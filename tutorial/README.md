@@ -102,7 +102,7 @@ Alternatively, you can receive predictions on individual models, where the outpu
 |Name of all classes|True|False|False|        
 |Score of top-voted class|False|True|False|    
 |Score of all classes|True|True|False|    
-|Dataframe with top-voted classes in order, level 1|False|False|True|     
+|Dataframe with top-voted classes in order, level 1|True/False|True/False|True|     
 
 ### FAQs  
 What is the GENE\_IDENTIFIER?
