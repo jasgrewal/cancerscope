@@ -79,7 +79,7 @@ This is the GENE\_IDENTIFIER used in our example.
 
 ### OUTPUT
 The default ouptut from both these functions is the top-voted class, accompanied by the average confidence score and contributing model names. This is a pandas dataframe, as shown:  
-||`sample_ix`|`label`|`pred`|`freq`|`models`|`rank_pred`|`sample_name`|   
+|'ix'|`sample_ix`|`label`|`pred`|`freq`|`models`|`rank_pred`|`sample_name`|   
 |---|---|---|---|---|---|---|---|   
 |0|0|BLCA\_TS|0.268193|2|v1\_none17kdropout,v1\_none17k|1|avg\_tcga|   
 |1|0|LUSC\_TS|0.573807|1|v1\_smotenone17k|2|avg\_tcga|   
