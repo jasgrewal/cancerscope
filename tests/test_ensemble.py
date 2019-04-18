@@ -85,13 +85,13 @@ class testEnsemble(unittest.TestCase):
 		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(round(float(toppreds_df[0][0][1]), 12), round(toppreds_values[0], 12)); 
 		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(round(float(toppreds_df[1][0][1]), 12), round(toppreds_values[1], 12))
 	
-	def test_none17k(self):
+	def test_rm500dropout(self):
                 """Test if all models can be downloaded correctly"""
                 my_test_file = "/".join([os.path.dirname(sys.modules["cancerscope"].__file__), "../tests/data/test_tcga.txt"])
                 scope_ensemble_obj = cancerscope.scope()
                 test_X = scope_ensemble_obj.load_data(my_test_file) # X, samples, features_test, in_genecode
                 ## Get the model of interest
-                model_name = "v1_smotenone17k"
+                model_name = "v1_rm500dropout"
                 model_in = ""
                 query_localdirs = cancerscope.get_models.findmodel(os.path.dirname(cancerscope.__file__), model_name)
                 if query_localdirs is not None:
