@@ -5,7 +5,7 @@ import os, sys
 from tests import *
 
 ### Global opts
-from config import SCOPEMODELS_DATADIR, SCOPEMODELS_LIST, SCOPEMODELS_FILELIST_DIR, getmodelsdict
+from config import REF_LABELCOUNTS,SCOPEMODELS_DATADIR, SCOPEMODELS_LIST, SCOPEMODELS_FILELIST_DIR, REF_DISEASECODES, getmodelsdict
 from cancerscope.utils import *
 
 ### Data sources

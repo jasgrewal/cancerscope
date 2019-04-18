@@ -2,13 +2,14 @@ import matplotlib
 matplotlib.use('Agg')
 from plotnine import *
 from pandas.api.types import CategoricalDtype
+from config import REF_LABELCOUNTS, REF_DISEASECODES
 import glob
 import re
 import pandas as pd
 import os, sys
 
 #### Get class sizes  
-labelsize_df = pd.read_csv(glob.glob("/".join([os.path.dirname(sys.modules["cancerscope"].__file__), "data/rm500/dataset_train/"]) + "*/dict_labcount*txt")[0], delimiter="\t", header=None)
+labelsize_df = pd.read_csv(REF_LABELCOUNTS, delimiter="\t", header=None)
 labelsize_df.columns = ["classlabel", "class_size"]
 labelsize_df["class_size_rescaled"] = labelsize_df["class_size"].astype(float)/labelsize_df["class_size"].astype(float).max()
 labelsize_df['label_sorted'] = [re.split('_[T,N]S$', m)[0] for m in  labelsize_df.classlabel.tolist()]
@@ -17,7 +18,7 @@ labelsize_df['pred'] = labelsize_df['class_size_rescaled']
 labelsize_df['Source'] = None
 
 #### Get predictions across all cases, categories, models 
-codes_disease = pd.read_csv("/".join([os.path.dirname(sys.modules["cancerscope"].__file__), 'resources/diseasetypes_codes.txt']), delimiter="\t")
+codes_disease = pd.read_csv(REF_DISEASECODES, delimiter="\t")
 
 #### Function to make plot-ready dataframe from ensemble prediction dictionary (each model = each key, respective value is a 3d tensor)
 def get_plotting_df(dict_with_preds, x_sample_names=None):
