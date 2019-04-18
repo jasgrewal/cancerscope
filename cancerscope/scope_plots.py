@@ -6,6 +6,7 @@ from config import REF_LABELCOUNTS, REF_DISEASECODES
 import glob
 import re
 import pandas as pd
+import numpy as np
 import os, sys
 
 #### Get class sizes  
@@ -76,5 +77,5 @@ def plot_cases(ensembledf_with_samples, plot_df_with_samples, outdir, save_txt=F
 	if save_txt is True:
 		df_plt.to_csv(outdir + "SCOPE_predictions_df.txt", sep="\t")
 		ensembledf_with_samples.to_csv(outdir + "SCOPE_topPreds_df.txt", sep="\t")
-
+	return
 

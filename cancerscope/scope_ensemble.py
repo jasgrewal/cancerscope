@@ -45,10 +45,13 @@ class scope(object):
 		sys.stdout.write("\nRead in sample file {0}, \n\tData shape {1}\n\tNumber of samples {2}\n\tNumber of genes in input {3}, with gene code {4}".format(X_file, x_dat.shape, len(x_samples), len(x_features), x_features_genecode))
 		return [x_dat, x_samples, x_features, x_features_genecode]
 	
-	def predict(self, X, x_features, x_features_genecode, x_sample_names=None, outdir=None):
+	def predict(self, X, x_features, x_features_genecode, x_sample_names=None, outdir=None, modelnames=None):
 		self.predict_dict = {}
+		my_model_list = self.model_names
+		if modelnames is not None:
+			my_model_list = modelnames
 		## Iterating over each model in the ensemble,
-		for k_model in self.model_names:
+		for k_model in my_model_list:
 			## Set up each individual model (clas scopemodel)
 			lmodel = cancerscope.scopemodel(self.downloaded_models_dict[k_model])
 			lmodel.fit()
@@ -67,11 +70,15 @@ class scope(object):
 		ens_df = get_ensemble_score(self.predict_dict)
 		if x_sample_names is not None:
 			ens_df['sample_name'] = [x_sample_names[m] for m in ens_df['sample_ix'].tolist()]
+		if outdir is not None:
+			sys.stdout.write("\nOutdir provided, so writing prediction dataframe and plotting background data to files\n\tAlso generating per-sample plots at {0}".format(outdir))
+			plot_bg_df = get_plotting_df(self.predict_dict, x_sample_names = x_sample_names)
+			plot_cases(ens_df, plot_bg_df, outdir, save_txt=True)
 		return ens_df
 	
-	def get_predictions_from_file(self, X_file, outdir=None):
+	def get_predictions_from_file(self, X_file, outdir=None, modelnames=None):
 		x_input, x_samples, x_features, x_features_genecode = self.load_data(X_file)
-		prediction_dict = self.predict(X=x_input, x_features = x_features, x_features_genecode = x_features_genecode, x_sample_names=x_samples, outdir=None)
+		prediction_dict = self.predict(X=x_input, x_features = x_features, x_features_genecode = x_features_genecode, x_sample_names=x_samples, outdir=outdir, modelnames=modelnames)
 		return(prediction_dict)
 	
 	def plot_samples(self, plot_outdir, X=None):

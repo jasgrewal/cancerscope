@@ -5,11 +5,36 @@ import unittest
 import gc
 import numpy as np
 from numbers import Number
+import glob
 
 pckg_dir = os.path.dirname(sys.modules["cancerscope"].__file__)
 SCOPEMODELS_LIST = os.path.join(pckg_dir, "/scope_files.txt")
 
 class testEnsemble(unittest.TestCase):
+	def test_ensemblewith2models(self):
+		my_test_file = "/".join([os.path.dirname(sys.modules["cancerscope"].__file__), "../tests/data/test_tcga.txt"])
+		my_models = ["v1_rm500", "v1_rm500dropout"]
+		scope_ensemble_obj = cancerscope.scope()
+		test_X = scope_ensemble_obj.load_data(my_test_file) # X, samples, features_test, in_genecode
+		self.assertEqual(test_X[-2][-1], "ZRANB1_ENSG00000019995")
+		## Process input file and get predictions from the selected 2 models  
+		preds_df_from_file = scope_ensemble_obj.get_predictions_from_file(my_test_file, modelnames=my_models)
+		### Compare to getting output from the x data object itself  
+		test_x, test_samples, test_features, test_genecode = scope_ensemble_obj.load_data(my_test_file)
+		preds_df_from_xdat = scope_ensemble_obj.predict(X = test_x, x_features = test_features, x_features_genecode = test_genecode, x_sample_names=test_samples, modelnames=my_models)
+		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].label.tolist(), ['PAAD_TS', 'HNSC_TS'])
+		self.assertEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].label.tolist(), ['PAAD_TS', 'HNSC_TS'])
+		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[0], 0.203503872494)
+		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1], 0.22311548345)
+		self.assertEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[1], 0.22311548345)
+		self.assertEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[0], 0.203503872494)
+		### Plot models  
+		plotdir = tempfile.mkdtemp()
+		preds_df_plotted = scope_ensemble_obj.predict(X = test_x, x_features = test_features, x_features_genecode = test_genecode, x_sample_names=test_samples, modelnames=my_models, outdir = plotdir)
+		print(glob.glob(plotdir + "/SCOPE_predictions_df.txt"))
+		print(glob.glob(plotdir + "/SCOPE_topPreds_df.txt"))
+		print(glob.glob(plotdir + "/SCOPE_sample*"))
+		
 	def localtest_samplefilereading(self):
 		my_test_file = "/".join([os.path.dirname(sys.modules["cancerscope"].__file__), "../tests/data/test_tcga.txt"]) #read_ensg_input.txt"])
 		"""Test if a testX.txt file can be read in and mapped to the correct gene names"""
@@ -115,7 +140,7 @@ class testEnsemble(unittest.TestCase):
 		self.assertEqual(allpreds_values.shape[1],66);
 		self.assertEqual(round(allpreds_values[0][1], 15),round(0.002366576562684, 15))
 		self.assertEqual(toppreds_names[0], "TFRI_GBM_NCL_TS"); self.assertEqual(toppreds_names[1], "TFRI_GBM_NCL_TS")
-		self.assertEqual(round(toppreds_values[0], 15), round(0.552020792626742, 15)); self.assertEqual(round(toppreds_values[1],15), round(0.7776852808358907,15))
+		self.assertEqual(round(toppreds_values[0], 15), round(0.552020792626742, 15)); self.assertEqual(round(toppreds_values[1],12), round(0.7776852808358907,12))
 		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(round(float(toppreds_df[0][0][1]), 12), round(toppreds_values[0], 12));
 		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(round(float(toppreds_df[1][0][1]), 12), round(toppreds_values[1], 12))
 
