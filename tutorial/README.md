@@ -108,14 +108,13 @@ The output from the ensembl function cannot be modified much, unfortunately.
 
 Alternatively, you can receive predictions on individual models, where the output can be of the following formats depending on how you set the `get_predictions_dict`, `get_all_predictions` and `get_numeric` flags. By default, all 3 flags are set to **True**.  
 
-i) The name of the top-voted class, for each model (default output from `cancerscope.scope.get_predictions_from_file()`, and from `cancerscope.scope.predict()`).  
-ii) The probability score for the top-voted class, for each model (pass `get_numeric=True` to either of the two methods).  
-iii) The probability scores for all the classes, unordered, for each model (pass `get_all_predictions=True, get_numeric=True` to either of the two methods).  
-iv) The corresponding class labels for all the classes, corresponding to the probability scores in (iii), for each model (pass `get_all_predictions=True, get_numeric=False` to either of the two methods).  
-
-
-### 
-
+|Expected Output|`get_all_predictions`|`get_numeric`|`get_predictions_dict`|   
+|---|---|---|---|   
+|Name of top-voted class|False|False|False|   
+|Name of all classes|True|False|False|        
+|Score of top-voted class|False|True|False|    
+|Score of all classes|True|True|False|    
+|Dataframe with top-voted classes in order, level 1|False|False|True|     
 
 ### FAQs  
 What is the GENE\_IDENTIFIER?
