@@ -22,14 +22,6 @@ As per answer posted at https://stackoverflow.com/questions/20288711/post-instal
 """ 
 
 """ Setup instructions """ 
-def package_files(directory):
-	paths = []
-	for (path, dirs, fnames) in os.walk(directory):
-		for filename in fnames:
-			paths.append(os.path.join('.', path, filename))
-	return paths
-
-extra_files = package_files('cancerscope/bin/')
 setup(name='cancerscope', 
 	version=VERSION, 
 	setup_requires=['nose>=1.0'],
@@ -46,8 +38,6 @@ setup(name='cancerscope',
 	include_package_data=True, zip_safe=False, 
 	test_suite='nose.collector', tests_require=['nose'], 
 	classifiers = ['Programming Language :: Python :: 2.7', 'Topic :: Scientific/Engineering :: Artificial Intelligence', 'Development Status :: 5 - Production/Stable', 'Intended Audience :: Healthcare Industry', 'Topic :: Scientific/Engineering :: Medical Science Apps.', 'Topic :: Scientific/Engineering :: Bio-Informatics'], 
-	package_data = {'cancerscope': ['resources/*.txt', '*.rst']}, #, '': extra_files},
-	
+	package_data = {'cancerscope': ['resources/*.txt', '*.rst']} 
 )
-
 

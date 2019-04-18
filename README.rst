@@ -39,19 +39,12 @@ Before installing **cancerscope**, you will need to install the correct version 
 
 `pip install --upgrade https://github.com/Lasagne/Lasagne/archive/master.zip`  
 
-**cancerscope** also requires scikit-learn version >=0.18.  
-- If you do not have scikit-learn package in your python environment, you can skip this step.  
-- If you **do have scikit-learn pre-installed** please upgrade to a minimum version 0.18.   
-- If you have pip installed, you can check the scikit-learn version using `pip freeze | grep scikit-learn`  
-- You can update scikit-learn with `pip install -U scikit-learn`  
-
- 
 ## Automated Install
 ====================
 
-Once you have the latest lasagne, theano, and scikit-learn packages installed in your python environment, you can set up **cancerscope** using the command `pip install cancerscope`.  
+Once you have the latest lasagne and theano python packages installed, you can set up **cancerscope** using the command `pip install cancerscope`.  
 
-Cancerscope will attempt to download the models needed for prediction, when you install the package. This may take a while depending on your internet connection (3-10 minutes).  
+At initial install, cancerscope will attempt to download the models needed for prediction. This may take a while depending on your internet connection (3-10 minutes). Please ensure you have a reliable internet connection and atleast 5 GB of space before proceeding with install.   
 
 # Setup and Usage
 =================
@@ -60,12 +53,38 @@ To get started with SCOPE, launch a python instance and run:
 
 `>>> import cancerscope`  
 
-Incase the download was unsuccessful at the time of package install, the first time you import cancerscope, the package will attempt to set up a local download of the models needed for prediction. Please be patient as this will take a while (3-10 minutes).   
+Incase the download was unsuccessful at the time of package install, the first time you import cancerscope, the package will attempt to set up a local download of the models needed for prediction. Please be patient as this will take a while (3-10 minutes).    
+
+## Data import
+==============
+
+cancerscope reads in input from `.txt` files. Columns should be tab-separated, with unique sample IDs. The first column is always the Gene identifier (Official HUGO ID, Ensemble Gene ID, or Gencode). An example is shown with the first 3 rows of input.  
+
+| Gene Name | Sample 1 | Sample 2 | ... |  
+
+|---|---|---|---|
+
+|ENSG000XXXXX| 0.2341 | 9451.2 | .... | 
+
+## Prediction - Example
+=======================
+
+## Visualizing or exporting results - Example
+=============================================
 
 # Folder descriptors
 ====================
 
 All scripts required to run SCOPE are `included <cancerscope>`_.
+
+# Citing cancerscope
+====================
+
+If you have used this package for any academic research, it would be great if you could cite the associated paper.  
+
+A bibtex citation is provided for your ease of use:  
+
+`(paper currently embargoed)`
 
 # License
 =========
@@ -77,5 +96,17 @@ cancerscope is distributed under the terms of the `MIT <https://opensource.org/l
 
 If you encounter any problems, please contact the developer and provide detailed error logs and description `here <https://github.com/jasgrewal/cancerscope/issues>`_.  
 
+# Common Errors
+===============
+
+Theano is a bit finicky when working with the cudnn backend, and may sometimes throw errors at you due to version conflicts. Here's a common one if you are setting up **cancerscope** in GPU-friendly environment.  
+
+`RuntimeError: Mixed dnn version. The header is version 5110 while the library is version 7401.`  
+- Please ensure that only 1 cudnn version exists on your system.  
+- Cancerscope has been developed and tested with cudnn-7.0 (v3.0)  
+
+pkg_resources.VersionConflict: (pandas xxxx (/path/to/sitepckgs/), Requirement.parse('pandas>=0.23.4'))  
+- This error may arise because you have an older version of pandas installed, which conflicts with the plotting library we use (plotnine, this package needs pandas >=0.23.4)  
+- You can either manually install plotnine ('pip install plotnine') or update your pandas library ('pip update pandas')  
 
 

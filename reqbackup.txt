@@ -6,5 +6,6 @@ plotnine
 requests
 pyyaml
 matplotlib<=2.2.2
+pandas
 pysocks==1.6.8
 

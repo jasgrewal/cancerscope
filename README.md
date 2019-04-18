@@ -67,3 +67,7 @@ Theano is a bit finicky when working with the cudnn backend, and may sometimes t
 - Please ensure that only 1 cudnn version exists on your system.  
 - Cancerscope has been developed and tested with cudnn-7.0 (v3.0)  
 
+pkg_resources.VersionConflict: (pandas xxxx (/path/to/sitepckgs/), Requirement.parse('pandas>=0.23.4'))  
+- This error may arise because you have an older version of pandas installed, which conflicts with the plotting library we use (plotnine, this package needs pandas >=0.23.4)  
+- You can either manually install plotnine ('pip install plotnine') or update your pandas library ('pip update pandas')  
+
