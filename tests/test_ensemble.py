@@ -91,7 +91,7 @@ class testEnsemble(unittest.TestCase):
                 scope_ensemble_obj = cancerscope.scope()
                 test_X = scope_ensemble_obj.load_data(my_test_file) # X, samples, features_test, in_genecode
                 ## Get the model of interest
-                model_name = "v1_none17k"
+                model_name = "v1_rm500"
                 model_in = ""
                 query_localdirs = cancerscope.get_models.findmodel(os.path.dirname(cancerscope.__file__), model_name)
                 if query_localdirs is not None:
