@@ -118,8 +118,17 @@ class scopemodel(object):
 		test_fn = theano.function([input_var], lasagne.layers.get_output(network, deterministic=True), allow_input_downcast=True)
 		test_max_fn = theano.function([input_var], T.argmax(lasagne.layers.get_output(network, deterministic=True), axis=1), allow_input_downcast=True)
 		return([network, test_fn, test_max_fn])	
-
+	
+	def prepare_input_featorders(self, X, x_features_genecode, x_features):
+		#### Map training features to the genecode in the input
+		mapped_model_features = map_gene_names(self.features, genecode_in = "SCOPE", genecode_out = x_features_genecode)
+		feat_subset_x = map_train_test_features_x(X, mapped_model_features, x_features) ## This function will reorder the input based on the training features order, and if missing some genes, will set those to 0)
+		return feat_subset_x
+	
 	def predict(self,X, get_all_predictions=True, get_numeric=True, get_predictions_dict=True):
+		## First make sure X is filtered properly 
+		if X.shape[1] != len(self.features):
+			sys.stdout.write("\nReminder...Did you use the scopemodel.prepare_input_featorders(X, x_features_genecode, x_features) function before predict()?")
 		X_normed = self.get_normalized_input(X)
 		all_predicted = self.pred_fn(X_normed)
 		max_predicted_classnum = self.pred_max_fn(X_normed)
