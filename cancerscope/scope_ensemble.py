@@ -3,7 +3,7 @@ import glob, yaml, gzip
 import numpy as np
 import pandas as pd
 ### Set theano flag to cpu to prevent cudnn issues with other users
-os.environ['THEANO_FLAGS'] = "gpuarray.preallocate=0.2,device=cpu" 
+os.environ['THEANO_FLAGS'] = "device=cpu" 
 ###
 import lasagne
 import theano
