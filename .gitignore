@@ -15,7 +15,7 @@ cancerscope/.eggs.*
 ## Other local files and directories to ignore
 cancerscope/data/*
 cancerscome/model_.*
-cancerscope/models
+cancerscope/models*
 cancerscope/data
 .*DS_Store
 cancerscope/todel.*
