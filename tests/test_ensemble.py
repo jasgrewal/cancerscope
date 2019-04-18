@@ -81,9 +81,9 @@ class testEnsemble(unittest.TestCase):
 		self.assertEqual(allpreds_values.shape[1],66); 
 		self.assertEqual(round(allpreds_values[0][1], 16), round(0.0030981730794109289,16))
 		self.assertEqual(toppreds_names[0], "PAAD_TS"); self.assertEqual(toppreds_names[1], "HNSC_TS")
-		self.assertEqual(toppreds_values[0], 0.20350387249421389); self.assertEqual(toppreds_values[1], 0.22311548345007168)
-		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(float(toppreds_df[0][0][1]), round(toppreds_values[0], 12)); 
-		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(float(toppreds_df[1][0][1]), round(toppreds_values[1], 12))
+		self.assertEqual(round(toppreds_values[0],16), round(0.20350387249421389,16)); self.assertEqual(round(toppreds_values[1],16), round(0.22311548345007168,16))
+		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(round(float(toppreds_df[0][0][1]), 12), round(toppreds_values[0], 12)); 
+		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(round(float(toppreds_df[1][0][1]), 12), round(toppreds_values[1], 12))
 	
 	def test_none17k(self):
                 """Test if all models can be downloaded correctly"""
@@ -113,11 +113,11 @@ class testEnsemble(unittest.TestCase):
                 toppreds_df = lmodel.predict(x_input, get_all_predictions=True,get_numeric=False, get_predictions_dict=True)
                 self.assertEqual(len(allpreds_names[0]), 66); self.assertEqual(len(allpreds_names[1]), 66);
                 self.assertEqual(allpreds_values.shape[1],66);
-                self.assertEqual(allpreds_values[0][1],0.080153630471492779)
+                self.assertEqual(round(allpreds_values[0][1], 16),round(0.080153630471492779, 16))
                 self.assertEqual(toppreds_names[0], "BLCA_TS"); self.assertEqual(toppreds_names[1], "ESCA_EAC_TS")
-                self.assertEqual(toppreds_values[0], 0.27006496478527992); self.assertEqual(toppreds_values[1], 0.8281189261409615)
-                self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(float(toppreds_df[0][0][1]), round(toppreds_values[0], 12));
-                self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(float(toppreds_df[1][0][1]), round(toppreds_values[1], 12))
+                self.assertEqual(round(toppreds_values[0], 16), round(0.27006496478527992, 16)); self.assertEqual(round(toppreds_values[1],16), round(0.8281189261409615,16))
+		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(round(float(toppreds_df[0][0][1]), 12), round(toppreds_values[0], 12));
+		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(round(float(toppreds_df[1][0][1]), 12), round(toppreds_values[1], 12))
 
 if __name__ == '__main__':
 	unittest.main()
