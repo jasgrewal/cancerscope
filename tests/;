@@ -37,10 +37,13 @@ class testEnsemble(unittest.TestCase):
 		self.assertEqual(glob.glob(plotdir + "/SCOPE_predictions_df.txt")[0], plotdir + "/SCOPE_predictions_df.txt")
 		self.assertEqual(glob.glob(plotdir + "/SCOPE_topPreds_df.txt")[0], plotdir + "/SCOPE_topPreds_df.txt")
 		preds_df_from_plots = pd.read_csv(glob.glob(plotdir + "/SCOPE_topPreds_df.txt")[0], delimiter="\t")
-		self.assertTrue(preds_df_from_xdat[['sample_ix', 'label', 'freq', 'models','rank_pred','sample_name']].equals(preds_df_from_plots[['sample_ix', 'label', 'freq', 'models','rank_pred','sample_name']]))
-		self.assertTrue(preds_df_from_file[['sample_ix', 'label', 'freq', 'models','rank_pred','sample_name']].equals(preds_df_from_plots[['sample_ix', 'label', 'freq', 'models','rank_pred','sample_name']]))
+		print("\n"); print(preds_df_from_plots); print("\n"); print(preds_df_from_xdat)
+		self.assertTrue(preds_df_from_xdat.equals(preds_df_from_plots))
+		self.assertTrue(preds_df_from_file.equals(preds_df_from_plots))
 		self.assertEqual(len(glob.glob(plotdir + "/SCOPE_sample*")), 2)
 		
+		self.assertEqual(1,0)
+
 	def localtest_samplefilereading(self):
 		my_test_file = "/".join([os.path.dirname(sys.modules["cancerscope"].__file__), "../tests/data/test_tcga.txt"]) #read_ensg_input.txt"])
 		"""Test if a testX.txt file can be read in and mapped to the correct gene names"""
