@@ -19,7 +19,7 @@ from cancerscope.scope_ensemble import scopemodel, scope
 if sys.version_info < (2, 7):
 	raise ImportError("Cancerscope module requires Python 2.7 or higher")
 
-__version__ = '0.28'
+__version__ = '0.29'
 
 
 

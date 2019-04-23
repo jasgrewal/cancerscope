@@ -15,7 +15,7 @@ with open(os.path.join(pckg_dir, 'requirements.txt'), 'r') as f:
 	requirements = f.readlines()
 
 with open(os.path.join(pckg_dir, 'README.md'), 'r') as f:
-	longdescription = f.readlines()
+	longdescription = f.read()
 
 """ Post-setup script to download models 
 As per answer posted at https://stackoverflow.com/questions/20288711/post-install-script-with-python-setuptools
