@@ -14,7 +14,7 @@ with open(os.path.join(pckg_dir, 'cancerscope/__init__.py'), 'r') as f:
 with open(os.path.join(pckg_dir, 'requirements.txt'), 'r') as f:
 	requirements = f.readlines()
 
-with open(os.path.join(pckg_dir, 'README.rst'), 'r') as f:
+with open(os.path.join(pckg_dir, 'README.md'), 'r') as f:
 	longdescription = f.readlines()
 
 """ Post-setup script to download models 
@@ -27,7 +27,8 @@ setup(name='cancerscope',
 	setup_requires=['nose>=1.0'],
 	description='An RNA-Seq based tool for Supervised Cancer Origin Prediction using Expression',
 	long_description=longdescription, 
-	author='Jasleen Grewal', 
+	long_description_content_type='text/markdown',
+	author='Jasleen Grewal',
 	author_email='grewalj23@gmail.com', 
 	url='https://pypi.org/project/cancerscope/', 
 	packages=find_packages(exclude=['tests*']), 

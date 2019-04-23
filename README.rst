@@ -51,11 +51,11 @@ Incase the download was unsuccessful at the time of package install, the first t
 
 cancerscope reads in input from `.txt` files. Columns should be tab-separated, with unique sample IDs. The first column is always the Gene identifier (Official HUGO ID, Ensemble Gene ID, or Gencode). An example is shown with the first 3 rows of input.  
 
++---+---+---+
 | Gene Name | Sample 1 | Sample 2 | ... |  
-
-|---|---|---|---|
-
-|ENSG000XXXXX| 0.2341 | 9451.2 | .... | 
++===+===+===+
+| ENSG000XXXXX | 0.2341 | 9451.2 | .... | 
++---+---+---+
 
 ## Prediction - Example
 =======================
@@ -72,41 +72,37 @@ This will set up the references to the requires SCOPE models.
 
 Next, you can process the predictions straight from the input file:  
 
-`>>> predictions*from*file = scope*obj.get*predictions*from*file(filename) `    
+`>>> predictions*from*file = scope*obj.get*predictions*from*file(filename)`   
 
 ...or you can pass in the data matrix, list of sample names, list of feature names, the type of gene names (ENSG, HUGO etc), and optionally, the list of sample names.  
 
 `>>> predictions = scope_obj.predict(`  
-
-`	X = numpy*array*X, `  
-
-`	x*features = list*of_features, `
-
-`	x*features*genecode = string_genecode, `
-
-`	x*sample*names = list*of*sample_names)`  
+`...	X = numpy*array*X,`  
+`...	x*features = list*of_features,`
+`...	x*features*genecode = string_genecode,`
+`...	x*sample*names = list*of*sample_names)`  
 
 The output will look like this:  
 
-|'ix'|`sample*ix`|`label`|`pred`|`freq`|`models`|`rank*pred`|`sample_name`|
-
-|---|---|---|---|---|---|---|---|
-
-|0|0|BLCA\_TS|0.268193|2|v1\_none17kdropout,v1\_none17k|1|test1|
-
-|1|0|LUSC\_TS|0.573807|1|v1\_smotenone17k|2|test1|
-
-|2|0|PAAD\_TS|0.203504|1|v1\_rm500|3|test1|
-
-|3|0|TFRI\_GBM\_NCL\_TS|0.552021|1|v1\_rm500dropout|4|test1|
-
-|4|1|ESCA\_EAC\_TS|0.562124|2|v1\_smotenone17k,v1\_none17k|1|test2|
-
-|5|1|HSNC\_TS|0.223115|1|v1\_rm500|2|test2|
-
-|6|1|MB-Adult\_TS|0.743373|1|v1\_none17kdropout|3|test2|
-
-|7|1|TFRI\_GBM\_NCL\_TS|0.777685|1|v1\_rm500dropout|4|test2|
++---+---+---+---+---+---+---+---+
+| 'ix' | `sample*ix`|`label`|`pred`|`freq`|`models`|`rank*pred`|`sample_name`|
++===+===+===+===+===+===+===+===+
+| 0 | 0 | BLCA\_TS | 0.268193 | 2|v1\_none17kdropout,v1\_none17k|1|test1|
++===+===+===+===+===+===+===+===+
+| 1 | 0 | LUSC\_TS | 0.573807 | 1|v1\_smotenone17k|2|test1|
++===+===+===+===+===+===+===+===+
+| 2 | 0 | PAAD\_TS | 0.203504 | 1|v1\_rm500|3|test1|
++===+===+===+===+===+===+===+===+
+| 3 | 0 | TFRI\_GBM\_NCL\_TS | 0.552021|1|v1\_rm500dropout|4|test1|
++===+===+===+===+===+===+===+===+
+| 4 | 1 | ESCA\_EAC\_TS | 0.562124 | 2|v1\_smotenone17k,v1\_none17k|1|test2|
++===+===+===+===+===+===+===+===+
+| 5 | 1 | HNSC\_TS | 0.223115 | 1 | v1\_rm500|2|test2|
++===+===+===+===+===+===+===+===+
+| 6 | 1 | MB-Adult\_TS | 0.743373 | 1|v1\_none17kdropout|3|test2|
++===+===+===+===+===+===+===+===+
+| 7 | 1 | TFRI\_GBM\_NCL\_TS | 0.777685|1|v1\_rm500dropout|4|test2|
++===+===+===+===+===+===+===+===+
 
 Here, 2 samples, called *test1* and *test2*, were processed. The top prediction from each model in the ensemble was taken, and aggregated. 
 - For instance, 2 models predicted that 'BLCA\_TS' was the most likely class for *test1*. The column **freq** gives you the count of contributing models for a prediction, and the column **models** lists these models. The other 3 models had a prediction of 'LUSC\_TS', 'PAAD\_TS', and 'TFRI\_GBM\_NCL\_TS' respectively.   

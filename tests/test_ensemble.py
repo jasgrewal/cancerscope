@@ -144,9 +144,9 @@ class testEnsemble(unittest.TestCase):
 		toppreds_df = lmodel.predict(x_input, get_all_predictions=True,get_numeric=False, get_predictions_dict=True)
 		self.assertEqual(len(allpreds_names[0]), 66); self.assertEqual(len(allpreds_names[1]), 66);
 		self.assertEqual(allpreds_values.shape[1],66);
-		self.assertEqual(round(allpreds_values[0][1], 15),round(0.002366576562684, 15))
+		self.assertEqual(round(allpreds_values[0][1], 12),round(0.002366576562684, 12))
 		self.assertEqual(toppreds_names[0], "TFRI_GBM_NCL_TS"); self.assertEqual(toppreds_names[1], "TFRI_GBM_NCL_TS")
-		self.assertEqual(round(toppreds_values[0], 15), round(0.552020792626742, 15)); self.assertEqual(round(toppreds_values[1],12), round(0.7776852808358907,12))
+		self.assertEqual(round(toppreds_values[0], 12), round(0.552020792626742, 12)); self.assertEqual(round(toppreds_values[1],12), round(0.7776852808358907,12))
 		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(round(float(toppreds_df[0][0][1]), 12), round(toppreds_values[0], 12));
 		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(round(float(toppreds_df[1][0][1]), 12), round(toppreds_values[1], 12))
 
