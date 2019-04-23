@@ -73,9 +73,9 @@ def plot_cases(ensembledf_with_samples, plot_df_with_samples, outdir, save_txt=F
 	for s in df_plt.sample_name.unique().tolist():
 		df2 = df_plt[df_plt.sample_name==s]
 		g1 = (ggplot(df2, aes('label_sorted', 'pred', colour='factor(Source)')) + geom_bar(data=labelsize_df, alpha=0.3, colour='white', stat='identity') + geom_point(alpha=0.5, size=0.8, colour="grey") + theme_bw(base_size=12) + facet_grid("tissuestatus~sample_name") + stat_summary() + theme(axis_text_x=element_text(rotation=45, size=8, hjust=1), legend_position=(.5, -.15), legend_direction='horizontal')+ labs(x="Category", y="Confidence (scaled)", color='Organ system') + ggtitle("Grey bars indicate fraction of training samples relative to biggest class\nBlack arrow indicates top-voted class and mean(score) from contributing models") + geom_point(data=ensembledf_with_samples_rank1[ensembledf_with_samples_rank1.sample_name==s], shape=5, colour="black"));
-		g1.save("/".join([outdir, "SCOPE_sample-" + str(s) + "_preds.svg"]), height=6, width=14, units='in', dpi='500')
+		g1.save("/".join([outdir, "SCOPE_sample-" + str(s) + "_predictions.svg"]), height=6, width=14, units='in', dpi='500')
 	if save_txt is True:
-		df_plt.to_csv(outdir + "/SCOPE_predictions_df.txt", sep="\t", index=False)
-		ensembledf_with_samples.to_csv(outdir + "/SCOPE_topPreds_df.txt", sep="\t", index=False)
+		df_plt.to_csv(outdir + "/SCOPE_allPredictions.txt", sep="\t", index=False)
+		ensembledf_with_samples.to_csv(outdir + "/SCOPE_topPredictions.txt", sep="\t", index=False)
 	return
 

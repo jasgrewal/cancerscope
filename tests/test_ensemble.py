@@ -34,9 +34,9 @@ class testEnsemble(unittest.TestCase):
 		### Plot models  
 		plotdir = tempfile.mkdtemp()
 		preds_df_plotted = scope_ensemble_obj.predict(X = test_x, x_features = test_features, x_features_genecode = test_genecode, x_sample_names=test_samples, modelnames=my_models, outdir = plotdir)
-		self.assertEqual(glob.glob(plotdir + "/SCOPE_predictions_df.txt")[0], plotdir + "/SCOPE_predictions_df.txt")
-		self.assertEqual(glob.glob(plotdir + "/SCOPE_topPreds_df.txt")[0], plotdir + "/SCOPE_topPreds_df.txt")
-		preds_df_from_plots = pd.read_csv(glob.glob(plotdir + "/SCOPE_topPreds_df.txt")[0], delimiter="\t")
+		self.assertEqual(glob.glob(plotdir + "/SCOPE_allPredictions.txt")[0], plotdir + "/SCOPE_allPredictions.txt")
+		self.assertEqual(glob.glob(plotdir + "/SCOPE_topPredictions.txt")[0], plotdir + "/SCOPE_topPredictions.txt")
+		preds_df_from_plots = pd.read_csv(glob.glob(plotdir + "/SCOPE_topPredictions.txt")[0], delimiter="\t")
 		self.assertTrue(preds_df_from_xdat[['sample_ix', 'label', 'freq', 'models','rank_pred','sample_name']].equals(preds_df_from_plots[['sample_ix', 'label', 'freq', 'models','rank_pred','sample_name']]))
 		self.assertTrue(preds_df_from_file[['sample_ix', 'label', 'freq', 'models','rank_pred','sample_name']].equals(preds_df_from_plots[['sample_ix', 'label', 'freq', 'models','rank_pred','sample_name']]))
 		self.assertEqual(len(glob.glob(plotdir + "/SCOPE_sample*")), 2)

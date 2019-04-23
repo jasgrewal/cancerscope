@@ -5,20 +5,12 @@
 [![Documentation Status](https://readthedocs.org/projects/cancerscope/badge/?version=latest)](http://cancerscope.readthedocs.io/?badge=latest)
 [![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)    
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)
- 
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/ansicolortags.svg)](https://pypi.python.org/pypi/cancerscope/)  
 
 SCOPE, Supervised Cancer Origin Prediction using Expression, is a method for predicting the tumor type (or matching normal) of an RNA-Seq sample.  
 SCOPE's python package, **cancerscope**, allows users to pass the RPKM values with matching Gene IDs and receive a set of probabilities across 66 different categories (40 tumor types and 26 healthy tissues), that sum to 1. Users can optionally generate plots visualizing each sample's classification as well.  
  
 Since SCOPE is an ensemble-based approach, it is possible to train additional models and include them in the ensemble that SCOPE uses (Instructions forthcoming).  
-
-## This release contains   
-- [x] Setup Tests    
-- [ ] Tutorial   
-- [x] License   
-- [x] Model files setup   
-- [ ] Landscape Code Health
 
 ## Installation   
 Before installing **cancerscope**, you will need to install the correct version of the packages [lasagne](https://lasagne.readthedocs.io/en/latest/) and [theano](https://pypi.org/project/Theano/).  
@@ -44,11 +36,48 @@ cancerscope reads in input from `.txt` files. Columns should be tab-separated, w
 |ENSG000XXXXX| 0.2341 | 9451.2 | .... | 
 
 ### Prediction - Example  
+Prediction can be performed from a pre-formatted input file, or by passing in the data matrix, list of sample names, list of feature names, and the type of gene names (ENSG, HUGO etc). Please refer to the [tutorial](tutorial/README.md) for more information.  
+The commands are as simple as follows:  
+`>>> import cancerscope as cs  
+>>> scope_obj = cs.scope()  
+`
+This will set up the references to the requires SCOPE models.  
+
+Next, you can process the predictions straight from the input file:  
+`>>> predictions_from_file = scope_obj.get_predictions_from_file(filename) `    
+
+...or you can pass in the data matrix, list of sample names, list of feature names, the type of gene names (ENSG, HUGO etc), and optionally, the list of sample names.  
+`>>> predictions = scope_obj.predict(X = numpy_array_X, x_features = list_of_features, x_features_genecode = string_genecode, x_sample_names = list_of_sample_names)`  
+
+The output will look like this:  
+|'ix'|`sample_ix`|`label`|`pred`|`freq`|`models`|`rank_pred`|`sample_name`|
+|---|---|---|---|---|---|---|---|
+|0|0|BLCA\_TS|0.268193|2|v1\_none17kdropout,v1\_none17k|1|test1|
+|1|0|LUSC\_TS|0.573807|1|v1\_smotenone17k|2|test1|
+|2|0|PAAD\_TS|0.203504|1|v1\_rm500|3|test1|
+|3|0|TFRI\_GBM\_NCL\_TS|0.552021|1|v1\_rm500dropout|4|test1|
+|4|1|ESCA\_EAC\_TS|0.562124|2|v1\_smotenone17k,v1\_none17k|1|test2|
+|5|1|HSNC\_TS|0.223115|1|v1\_rm500|2|test2|
+|6|1|MB-Adult\_TS|0.743373|1|v1\_none17kdropout|3|test2|
+|7|1|TFRI\_GBM\_NCL\_TS|0.777685|1|v1\_rm500dropout|4|test2|
+
+Here, 2 samples, called *test1* and *test2*, were processed. The top prediction from each model in the ensemble was taken, and aggregated. 
+- For instance, 2 models predicted that 'BLCA\_TS' was the most likely class for *test1*. The column **freq** gives you the count of contributing models for a prediction, and the column **models** lists these models. The other 3 models had a prediction of 'LUSC\_TS', 'PAAD\_TS', and 'TFRI\_GBM\_NCL\_TS' respectively.   
+- You can use the rank of the predictions, shown in the column **rank\_pred**, to filter out the prediction you want to use for interpretation.  
+- When SCOPE is highly confident in the prediction, you will see **freq** = 5, indicating all models have top-voted for the same class.  
 
 ### Visualizing or exporting results - Example  
+**cancerscope** can also automatically generate plots for each sample, and save the prediction dataframe to file. This is done by passing the output directory to the prediction functions:  
+`>>> predictions_from_file = scope_obj.get_predictions_from_file(filename, outdir = output_folder) `    
+`>>> predictions = scope_obj.predict(X = numpy_array_X, x_features = list_of_features, x_features_genecode = string_genecode, x_sample_names = list_of_sample_names, **outdir = output_folder**)`  
 
-## Folder descriptors  
-All scripts required to run SCOPE are [included](cancerscope).
+This will automatically save the dataframe returned from the prediction functions as `output_folder + /SCOPE_topPredictions.txt`, and the predictions from all models across all classes as `output_folder + /SCOPE_allPredictions.txt`.  
+
+Sample specific plots are also generated automatically in the same directory, and labelled `SCOPE_sample-SAMPLENAME_predictions.svg`.  
+
+<p align="left">
+  <img width="300mm" height="50mm" src="https://github.com/jasgrewal/cancerscope/blob/master/tutorial/sample_output.svg">
+</p>
 
 ## Citing cancerscope  
 If you have used this package for any academic research, it would be great if you could cite the associated paper.  
@@ -57,6 +86,9 @@ A bibtex citation is provided for your ease of use:
 
 ## License  
 cancerscope is distributed under the terms of the [MIT](https://opensource.org/licenses/MIT) license.  
+
+## Feature requests  
+If you wished outputs were slightly (or significantly) easier to use, or want to see additional options for customizing the output, please open up a GitHub issue [here](https://github.com/jasgrewal/cancerscope/issues).  
 
 ## Issues  
 If you encounter any problems, please contact the developer and provide detailed error logs and description [here](https://github.com/jasgrewal/cancerscope/issues).  

@@ -57,7 +57,7 @@ author = u'Jasleen Grewal'
 # built documents.
 #
 # The short X.Y version.
-version = u'0.21'
+version = u'0.25'
 # The full version, including alpha/beta/rc tags.
 release = u'1'
 
@@ -317,7 +317,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'cancerscope', u'cancerscope Documentation',
-     author, 'cancerscope', 'One line description of project.',
+     author, 'cancerscope', 'RNA-Seq based cancer diagnosis in Python',
      'Miscellaneous'),
 ]
 
