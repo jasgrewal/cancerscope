@@ -38,18 +38,23 @@ cancerscope reads in input from `.txt` files. Columns should be tab-separated, w
 ### Prediction - Example  
 Prediction can be performed from a pre-formatted input file, or by passing in the data matrix, list of sample names, list of feature names, and the type of gene names (ENSG, HUGO etc). Please refer to the [tutorial](tutorial/README.md) for more information.  
 The commands are as simple as follows:  
-`>>> import cancerscope as cs  
->>> scope_obj = cs.scope()  
-`
+`>>> import cancerscope as cs`    
+`>>> scope_obj = cs.scope()`   
+
 This will set up the references to the requires SCOPE models.  
 
 Next, you can process the predictions straight from the input file:  
 `>>> predictions_from_file = scope_obj.get_predictions_from_file(filename) `    
 
 ...or you can pass in the data matrix, list of sample names, list of feature names, the type of gene names (ENSG, HUGO etc), and optionally, the list of sample names.  
-`>>> predictions = scope_obj.predict(X = numpy_array_X, x_features = list_of_features, x_features_genecode = string_genecode, x_sample_names = list_of_sample_names)`  
+`>>> predictions = scope_obj.predict(`  
+`	X = numpy_array_X, `  
+`	x_features = list_of_features, `
+`	x_features_genecode = string_genecode, `
+`	x_sample_names = list_of_sample_names)`  
 
 The output will look like this:  
+
 |'ix'|`sample_ix`|`label`|`pred`|`freq`|`models`|`rank_pred`|`sample_name`|
 |---|---|---|---|---|---|---|---|
 |0|0|BLCA\_TS|0.268193|2|v1\_none17kdropout,v1\_none17k|1|test1|
@@ -76,7 +81,7 @@ This will automatically save the dataframe returned from the prediction function
 Sample specific plots are also generated automatically in the same directory, and labelled `SCOPE_sample-SAMPLENAME_predictions.svg`.  
 
 <p align="left">
-  <img width="300mm" height="50mm" src="https://github.com/jasgrewal/cancerscope/blob/master/tutorial/sample_output.svg">
+  <img width="3000mm" height="900mm" src="https://github.com/jasgrewal/cancerscope/blob/master/tutorial/sample_output.svg">
 </p>
 
 ## Citing cancerscope  

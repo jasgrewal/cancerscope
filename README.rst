@@ -64,11 +64,9 @@ Prediction can be performed from a pre-formatted input file, or by passing in th
 
 The commands are as simple as follows:  
 
-`>>> import cancerscope as cs  
+`>>> import cancerscope as cs`    
 
->>> scope_obj = cs.scope()  
-
-`
+`>>> scope_obj = cs.scope()`   
 
 This will set up the references to the requires SCOPE models.  
 
@@ -78,7 +76,15 @@ Next, you can process the predictions straight from the input file:
 
 ...or you can pass in the data matrix, list of sample names, list of feature names, the type of gene names (ENSG, HUGO etc), and optionally, the list of sample names.  
 
-`>>> predictions = scope*obj.predict(X = numpy*array*X, x*features = list*of*features, x*features*genecode = string*genecode, x*sample*names = list*of*sample*names)`  
+`>>> predictions = scope_obj.predict(`  
+
+`	X = numpy*array*X, `  
+
+`	x*features = list*of_features, `
+
+`	x*features*genecode = string_genecode, `
+
+`	x*sample*names = list*of*sample_names)`  
 
 The output will look like this:  
 
@@ -122,7 +128,7 @@ Sample specific plots are also generated automatically in the same directory, an
 
 <p align="left">
 
-  <img width="300mm" height="50mm" src="https://github.com/jasgrewal/cancerscope/blob/master/tutorial/sample_output.svg">
+  <img width="3000mm" height="900mm" src="https://github.com/jasgrewal/cancerscope/blob/master/tutorial/sample_output.svg">
 </p>
 
 # Citing cancerscope
