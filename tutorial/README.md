@@ -1,13 +1,13 @@
 # Tutorial
 
 This tutorial will go through the use of cancerscope to predict the cancer type from a) an input file, or b) from pre-loaded RNA-Seq data.  
-We will using some example RNA-Seq data from SRA. For this, you'll need the [pysradb](https://pypi.org/project/pysradb/) package.  
-We will be using some example RNA-Seq data from TCGA. We will be downloading this data using the [gdc-rnaseq-tool]
+We will be using some example RNA-Seq data from TCGA. You can download the data file which has been pre-collated for you [here](combined_tcga_fpkm.txt).  
 
-[TCGA query](https://portal.gdc.cancer.gov/repository?facetTab=files&filters=%7B%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22%3E%3D%22%2C%22content%22%3A%7B%22field%22%3A%22cases.diagnoses.age_at_diagnosis%22%2C%22value%22%3A%5B6574%5D%7D%7D%2C%7B%22op%22%3A%22%3C%3D%22%2C%22content%22%3A%7B%22field%22%3A%22cases.diagnoses.age_at_diagnosis%22%2C%22value%22%3A%5B7304%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22cases.project.project_id%22%2C%22value%22%3A%5B%22TCGA-HNSC%22%2C%22TCGA-LGG%22%2C%22TCGA-LIHC%22%2C%22TCGA-PCPG%22%2C%22TCGA-SKCM%22%2C%22TCGA-TGCT%22%2C%22TCGA-THCA%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.access%22%2C%22value%22%3A%5B%22open%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.analysis.workflow_type%22%2C%22value%22%3A%5B%22HTSeq%20-%20FPKM%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.data_format%22%2C%22value%22%3A%5B%22TXT%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.data_type%22%2C%22value%22%3A%5B%22Gene%20Expression%20Quantification%22%5D%7D%7D%5D%7D&searchTableTab=files)
 
 ## (Optional) Collating example data yourself  
-The example data used was sourced as follows:  
+You can also prepare this data yourself. Download the data using the [gdc-rnaseq-tool](https://github.com/cpreid2/gdc-rnaseq-tool) and this [TCGA query](https://portal.gdc.cancer.gov/repository?facetTab=files&filters=%7B%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22%3E%3D%22%2C%22content%22%3A%7B%22field%22%3A%22cases.diagnoses.age_at_diagnosis%22%2C%22value%22%3A%5B6574%5D%7D%7D%2C%7B%22op%22%3A%22%3C%3D%22%2C%22content%22%3A%7B%22field%22%3A%22cases.diagnoses.age_at_diagnosis%22%2C%22value%22%3A%5B7304%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22cases.project.project_id%22%2C%22value%22%3A%5B%22TCGA-HNSC%22%2C%22TCGA-LGG%22%2C%22TCGA-LIHC%22%2C%22TCGA-PCPG%22%2C%22TCGA-SKCM%22%2C%22TCGA-TGCT%22%2C%22TCGA-THCA%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.access%22%2C%22value%22%3A%5B%22open%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.analysis.workflow_type%22%2C%22value%22%3A%5B%22HTSeq%20-%20FPKM%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.data_format%22%2C%22value%22%3A%5B%22TXT%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.data_type%22%2C%22value%22%3A%5B%22Gene%20Expression%20Quantification%22%5D%7D%7D%5D%7D&searchTableTab=files)  
+
+The example data used is then sourced as follows:  
 `https://gdc.cancer.gov/access-data/gdc-data-transfer-tool`
 `gdc-client download -m gdc_manifest_age22.txt`  
 
@@ -113,8 +113,17 @@ In some cases, the provided gene names will not map over exactly to the list of 
 The sample index is the order the samples were read in. The 'label' is the predicted class. "\_[N,T]S" indicates a healthy normal (N) or a tumour type (T). The tumor codes follow TCGA naming guidelines. Please refer to the publication for detailed names.  
 The 'pred' is the prediction confidence for the 'label', from the models listed in the column 'models'. The 'freq' is the count of models whose top-prediction was 'label'. The 'freq' column matches the number of columns listed in 'models'.  
 The 'rank_pred' ranks the predictions per sample. In cases where the voting was unanimous, you see that the sample has a single rank (rank_pred = 1), and freq = 5.  
-In a few instances in the example above, the prediction is split between two classes. For example, consider the sample "TCGA_THCA_94cda1d7" (sample_ix = 24). Here, 3 models predicted that the cancertype was LUAD (lung adenocarcinoma), with an average confidence of 0.765155. As a higher number of models predicted this, the rank of prediction is 1 (rank_pred = 1). However, 2 models also predicted the THCA (thyroid carcinoma) tumor type, which is correct. The rank of prediction in this case is 2, because a fewer number of models predicted this (even though the average confidence was much higher, at 0.994180). The two results are provided to the user to facilitate a judgement call.  
-	- For example, in contrast, see the case right above, "TCGA_THCA_7429a1e0". Here, the average confidence *and* the number of models contributing to the call of 'THCA_TS' is higher, than those calling the case 'LUAD_TS'. In such a scenario, the user can simply choose to discard the 2nd ranked prediction, and go only with the 1st one, since both measures of certainty are higher in rank_pred == 1.  
+
+In some instances in the example above, the prediction is split between two classes. The user can pick the highest ranked prediction for each case (rank_pred == 1), or use their better judgement to infer the results.  
+
+#### Why don't I just use the top-ranked prediction?   
+The intrepretation of confidence can be nuanced in some cases.   
+
+	- For example, consider the sample "TCGA_THCA_94cda1d7" (sample_ix = 24). Here, 3 models predicted that the cancertype was LUAD (lung adenocarcinoma), with an average confidence of 0.765155. As a higher number of models predicted this, the rank of prediction is 1 (rank_pred = 1).  
+	
+	- However, 2 models also predicted the THCA (thyroid carcinoma) tumor type, which is correct. The rank of prediction in this case is 2, because a fewer number of models predicted this (even though the average confidence was much higher, at 0.994180). The two results are provided to the user to facilitate a judgement call.     
+	
+	- In contrast, see the case "TCGA_THCA_7429a1e0". Here, the average confidence *and* the number of models contributing to the call of 'THCA_TS' is higher, than those calling the case 'LUAD_TS'. In such a scenario, the user can simply choose to discard the 2nd ranked prediction, and go only with the 1st one, since both measures of certainty are higher in rank_pred == 1.  
 
 ### Plotting the output, or saving the output as txt file  
 If you provide the prediction call with an output directory, it will generate the following:  
