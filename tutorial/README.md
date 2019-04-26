@@ -110,11 +110,13 @@ In some cases, the provided gene names will not map over exactly to the list of 
 ```
 
 ### Interpreting the output   
-The sample index is the order the samples were read in. The 'label' is the predicted class. "\_[N,T]S" indicates a healthy normal (N) or a tumour type (T). The tumor codes follow TCGA naming guidelines. Please refer to the publication for detailed names.  
-The 'pred' is the prediction confidence for the 'label', from the models listed in the column 'models'. The 'freq' is the count of models whose top-prediction was 'label'. The 'freq' column matches the number of columns listed in 'models'.  
-The 'rank_pred' ranks the predictions per sample. In cases where the voting was unanimous, you see that the sample has a single rank (rank_pred = 1), and freq = 5.  
+The sample index is the order the samples were read in. The `label` is the predicted class. `\_[N,T]S` indicates a healthy normal (N) or a tumour type (T). The tumor codes follow TCGA naming guidelines. Please refer to the publication for detailed names.   
 
-In some instances in the example above, the prediction is split between two classes. The user can pick the highest ranked prediction for each case (rank_pred == 1), or use their better judgement to infer the results.  
+The `pred` is the prediction confidence for the `label`, from the models listed in the column `models`. The `freq` is the count of models whose top-prediction was `label`. The `freq` column matches the number of columns listed in `models`.   
+
+The `rank_pred` ranks the predictions per sample. In cases where the voting was unanimous, you see that the sample has a single rank (`rank_pred` == 1), and `freq` == 5.  
+
+In some instances in the example above, the prediction is split between two classes. The user can pick the highest ranked prediction for each case (`rank_pred` == 1), or use their better judgement to infer the results.  
 
 #### Why don't I just use the top-ranked prediction?   
 The intrepretation of confidence can be nuanced in some cases.   
