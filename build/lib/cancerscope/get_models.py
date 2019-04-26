@@ -10,13 +10,14 @@ import shutil, six
 
 modelOptions = cancerscope.getmodelsdict()
 
-def findmodel(expected_pckgdir, model_label, expected_targetdir=None):
+def findmodel(expected_pckgdir, model_label, expected_targetdir=None, verbose=0):
 	expectedFilename = "model_" + model_label + ".txt"
 	modelOptions_local = {}
 	"""First check if the model details file exists in the main cancerscope directory (proof that model download attempt was completed atleast"""
 	if os.path.exists(expected_pckgdir + "/" + expectedFilename):
 		with open(expected_pckgdir + "/" + expectedFilename) as f:
-			sys.stdout.write("\nReading model url and naming criterion for {0}...\n".format(model_label))
+			if verbose > 0:
+				sys.stdout.write("\nReading model url and naming criterion for {0}...\n".format(model_label))
 			for line in f:
 				if line.strip()!= '':
 					modelname_, url_, modeldir = line.strip().split('\t')
@@ -25,16 +26,19 @@ def findmodel(expected_pckgdir, model_label, expected_targetdir=None):
 	else:
 		"""Otherwise, it would appear model wasnt even attempted to be downloaded"""
 		if expected_targetdir is not None:
-			sys.stdout.write("\nModel file {0} proceeding with download...\n".format(model_label))
+			if verbose > 0:
+				sys.stdout.write("\nModel file {0} proceeding with download...\n".format(model_label))
 			dnld_dir = downloadmodel(model_label = model_label, targetdir=expected_targetdir)
 			modelOptions_local[model_label] = dnld_dir + "/" + model_label.split("_")[-1]
 		else:
-			sys.stdout.write("\nExpected model directory {0} does not exist...\n".format(expected_targetdir))
+			if verbose > 0:
+				sys.stdout.write("\nExpected model directory {0} does not exist...\n".format(expected_targetdir))
 			return None
 	
 	if bool(modelOptions_local) is True:
 		if os.path.exists(modelOptions_local[model_label] + "/lasagne_bestparams.npz") is True:
-			sys.stdout.write("Model file found, returning to user...")
+			if verbose > 0:
+				sys.stdout.write("Model file found, returning to user...")
 			return modelOptions_local
 		else:
 			if not os.path.exists(modelOptions_local[model_label]):

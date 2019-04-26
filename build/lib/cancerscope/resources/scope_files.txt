@@ -1,0 +1,6 @@
+v1_rm500	https://zenodo.org/record/2616831/files/v1_rm500.tar.gz	scope_v1Model_rm500	70310d1319e6a7687d13fe1e9cc194df
+v1_rm500dropout	https://zenodo.org/record/2616831/files/v1_rm500dropout.tar.gz	scope_v1Model_rm500dropout	9867c8666034ad47a99964448cdc94d4
+v1_smotenone17k	https://zenodo.org/record/2616831/files/v1_smotenone17k.tar.gz	scope_v1Model_smotenone17k	55cd9257e0c208b64f89e9e7632d2c6a
+v1_none17k	https://zenodo.org/record/2616831/files/v1_none17k.tar.gz	scope_v1Model_none17k.tar.gz	d353023308331a78c50ff3821e67702d
+v1_none17kdropout	https://zenodo.org/record/2616831/files/v1_none17kdropout.tar.gz	scope_v1Model_none17kdropout	76b6f81e9405baed0605ac2b02c7ed3c
+

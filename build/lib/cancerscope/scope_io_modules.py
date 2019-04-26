@@ -33,9 +33,8 @@ def map_train_test_features_x(x_in, training_features, test_features, fillzero=T
 	return(testX_values)
 
 def map_gene_names(features_list, genecode_in, genecode_out):
-	### Options for genecode_in and genecode_out are ENSG, HUGO, GENCODE, GAF
+	### Options for genecode_in and genecode_out are ENSG, HUGO, GENCODE, GAF (and additional options from the resources file below)
 	genedict = pd.read_csv("/".join([os.path.dirname(sys.modules["cancerscope"].__file__), 'resources/scope_features_genenames.txt']), delimiter="\t")
-	
 	try:
 		genecode_in in genedict.columns.tolist()
 		genecode_out in genedict.columns.tolist()
@@ -45,11 +44,10 @@ def map_gene_names(features_list, genecode_in, genecode_out):
 	else:
 		genedict = genedict.set_index(genecode_in) 
 		features_mapped = list(genedict.ix[features_list][genecode_out]) 
-	
 	try:
-		len(features_mapped) == len(features_list)
+		len(set(features_mapped)) == len(features_list)
 	except:
-		sys.stdout.write("\nThe mapping could not be completed accurately")
+		sys.stdout.write("\nWARNING! The mapping could not be completed accurately\n")
 	else:
 		return features_mapped
 	
@@ -80,6 +78,7 @@ def read_input(input_file, sep="\t"):
 		if in_genecode == "GENCODE":
 			sys.stdout.write("\nYour genenames are of format ENSG.version. Truncating to ENSG ID only\n")
 			features_test = [m.split(".")[0] for m in features_test]
+			in_genecode = "ENSEMBL"
 		#sys.stdout.write("\nX shapei s {0} and features len is {1}".format(X.shape, len(features_test)))
 	
 	if(len(samples) == 1):

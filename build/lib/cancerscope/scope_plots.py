@@ -49,7 +49,6 @@ def plot_cases(ensembledf_with_samples, plot_df_with_samples, outdir, save_txt=F
 	### Needs global dfs labelsize_df, codes_disease
 	global labelsize_df, codes_disease
 	## First check if sample names provided, otherwise use sample indices as names
-	
 	if 'sample_name' not in ensembledf_with_samples:
 		sys.stdout.write("\nNo sample names provided, using sample indices\n")
 		ensembledf_with_samples['sample_name'] = ensembledf_with_samples['sample_ix']

@@ -9,7 +9,6 @@ def getmodelsdict():
                 for line in f:
                         if line.strip()!='':
                                 modelname, url, expectedFile, expectedmd5 = line.strip().split('\t')
-
                                 modelOptions[modelname] = (url, expectedFile, expectedmd5)
         return modelOptions
 
@@ -53,7 +52,7 @@ def get_ensemble_score(dict_with_preds, ignorelabs_list=None, x_sample_names=Non
         flat_top_preds_labels = df_matrix[:, :,0, 0].transpose().flatten() # Across all models, across all samples, the 0th ordered (top level) prediction, label
         ## Combine these into a sensible dataframe so as to separate each sample
         topPreds_bymodels_df = pd.DataFrame(np.column_stack([flat_top_preds_labels, flat_top_preds_values, modelnames * num_samples]), columns=['label', 'pred', 'modelname'])
-        topPreds_bymodels_df['sample_ix'] = [np.mod(m/num_models, num_models) for m in topPreds_bymodels_df.index.tolist()]
+        topPreds_bymodels_df['sample_ix'] = [np.divmod(m, num_models)[0] for m in topPreds_bymodels_df.index.tolist()]
         topPreds_bymodels_df[['pred']] = topPreds_bymodels_df[['pred']].astype(float) # dtype conversion for confidence scores
         ## Aggregate based on the predicted labels
         avg_per_label = topPreds_bymodels_df.groupby(['sample_ix', 'label'], as_index=False).mean()
@@ -61,11 +60,13 @@ def get_ensemble_score(dict_with_preds, ignorelabs_list=None, x_sample_names=Non
         modelnames_count = topPreds_bymodels_df.groupby(['sample_ix', 'label'], as_index=False)['modelname'].count().rename(columns={"modelname":"freq"})
         joined_df_list = [avg_per_label, modelnames_count ,modelnames_label]
         df_merged = reduce(lambda  left,right: pd.merge(left,right,on=['sample_ix','label'], how='outer'), joined_df_list)
-        df_merged.sort_values(by=['sample_ix', 'freq', 'pred'], ascending=False).sort_values('sample_ix').reset_index(drop=True)
-        df_merged["rank_pred"] = df_merged.index
-        for s in range(0, num_samples):
-                df_merged.loc[df_merged.sample_ix == s, "rank_pred"] =  range(1, df_merged[df_merged.sample_ix == s].shape[0]  +1)
-        if x_sample_names is not None:
+	df_merged.sort_values(by=['sample_ix', 'freq', 'pred'], ascending=False).reset_index(drop=True)        
+	df_merged = df_merged.sort_values(by=['sample_ix', 'freq', 'pred'], ascending=False).reset_index(drop=True)
+	df_merged["rank_pred"] = df_merged.index
+	for s in range(0, num_samples):
+		df_merged.loc[df_merged.sample_ix == s, "rank_pred"] =  range(1, df_merged[df_merged.sample_ix == s].shape[0]  +1)
+        df_merged = df_merged.sort_values(by=['sample_ix', 'rank_pred'], ascending=True).reset_index(drop=True)
+	if x_sample_names is not None:
                 df_merged['sample_name'] = [x_sample_names[m] for m in df_merged['sample_ix'].tolist()]
         return df_merged
 

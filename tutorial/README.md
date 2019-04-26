@@ -12,98 +12,132 @@ The example data used was sourced as follows:
 `gdc-client download -m gdc_manifest_age22.txt`  
 
 ## Getting started
-Please install cancerscope, and download all files in this directory.  
+Please install cancerscope, and download all files in this directory. Particularly, make sure you have downloaded the file **combined_tcga_fpkm.txt**  
 
-## Preparing Your Data  
-When using cancerscope, you need the following 3 things: list of gene names, corresponding data matrix of gene RPKM or FPKM values, and a list of samples.  
+### Package import and setup   
+Start by importing the package into your python instance.  
+`>>> import cancerscope as cs`  
 
-These can be organized and passed in to cancerscope in two ways:  
-1. They can be organized in a file that cancerscope reads in, like so:  
-
-|ENSEMBL|SAMPLE1|SAMPLE2|Sample\_3\_with\_new\_naming\_style|SAMPLE4....|
-|---|---|---|---|---|
-|ENSG000012314|0.234|121|234|0.9823...|
-|ENSG000058934|10.3452|234.2|2111|0.245...|
-
-
-Here, the GENE\_IDENTIFIER is "ENSEMBL"
-...
-`
-
-If using a file orgnized like thus, the `get_predictions_from_file(filename)` method for the scope object can be used to return a dictionary with the higest voted class from each machine in SCOPE.  
-
-2. They can be organized separately as the data matrix, corresponding gene names list, and the GENE\_IDENTIFIER.  
-- The input matrix has to be organized such that each row is a sample, and each column is a gene (note this is the transpose of the matrix in the file).  
-- The `load_data(filename)` method of the scope object will take in the data file and return **[X\_test, sample\_names\_orderedlist, features\_names\_orderedlist, gene\_code]**   
-The `predict` function in the scope object will take in **X\_test**, **feature names** (gene names, ordered), the **gene identifier** code, and optionally, **x_sample_names**. You can either prepare these data objects yourselves or use the `load_data()` function if the data is formatted as described for `get_predictions_from_file()` (....at which point you might as well use that function instead!).  
+If this is your first time importing **cancerscope**, You will be greeted with the following output:   
  
-## Generating Predictions   
-The SCOPE model can be set up by calling
-`scope_test_obj = cancerscope.scope()`
-This will set up references to the required models.  
+```python   
+Thankyou for using cancerscope. The initial run requires download of dependent model files. Proceeding with download now...
+	Models will be downloaded to /projects/jgrewal_prj/bin/software/devbox/anaconda/envs/scopetest27/lib/python2.7/site-packages/cancerscope/data/
 
-Now you can pass in a test file and receive predictions, like so:  
-`preds_df_from_file = scope_ensemble_obj.get_predictions_from_file(my_test_file)`  
+Downloading model files for v1_rm500dropout 
+	Data Downloaded at: /PATH_TO_PYTHON_LIB/lib/python2.7/site-packages/cancerscope/data/
+Downloading model files for v1_none17kdropout 
+	Data Downloaded at: /PATH_TO_PYTHON_LIB/lib/python2.7/site-packages/cancerscope/data/
+Downloading model files for v1_rm500 
+	Data Downloaded at: /PATH_TO_PYTHON_LIB/lib/python2.7/site-packages/cancerscope/data/
+Downloading model files for v1_smotenone17k 
+	Data Downloaded at: /PATH_TO_PYTHON_LIB/lib/python2.7/site-packages/cancerscope/data/
+Downloading model files for v1_none17k 
+	Data Downloaded at: /PATH_TO_PYTHON_LIB/lib/python2.7/site-packages/cancerscope/data/
+```
 
-Or alternatively, you can load in the data yourself and pass in the required information to `scope_ensemble_obj.predict()`.  
-`preds_df_from_xdat = scope_ensemble_obj.predict(X = test_x, x_features = test_features, x_features_genecode = test_genecode, x_sample_names=test_samples)`   
+### Fitting the models  
 
-Here, the passed objects look as follows:  
-### test\_X  
-`array([[  8.89943429e+00,   3.81203115e+01,   6.83880190e-02, ...,   
-          3.94528696e-01,   3.19967373e+00,   9.45898716e+00],   
-       [  4.73006431e+01,   5.64667745e+01,   1.02590420e+02, ...,   
-          6.84828984e+01,   8.59453759e+00,   1.10575758e+02]])   
-`  
+Set up the predictor...   
+`>>> scope_obj=cs.scope()`     
 
-The shape of test\_X , in this instance, is :  
-`>>> test_X.shape()`
+### Obtaining predictions  
 
-`(2, 19571)`  
+Process data from file...   
+`>>> pfromfile = scope_obj.get_predictions_from_file("/PATH/TO/combined_tcga_fpkm.txt")`   
 
-This means the input had 2 samples, and 19571 genes.  
+You should see the following output:   
 
-### test\_samples  
-`['avg_tcga', 'fake_tcga']`
+```python    
+Your genenames are of format ENSG.version. Truncating to ENSG ID only
 
-These are our two sample names, returned as a list of length 2.  
+Read in sample file /PATH/TO/combined_tcga_fpkm.txt, 
+	Data shape (26, 60483)
+	Number of samples 26
+	Number of genes in input 60483, with gene code ENSEMBL
+...Only 17638 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: rastminmax
+norm result shape (26, 17688)
 
-### test\_features  
-`['HMGB1P1_ENSG00000124097', 'TIMM23_ENSG00000138297', ....]`  
+...Only 17638 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: none
+norm result shape (26, 17688)
 
-This is a list of length 19571, containing feature names corresponding to the respective feature index in test\_X.  
+...Only 17638 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: rastminmax
+norm result shape (26, 17688)
 
-### test\_genecode  
-`SCOPE_ENSG`  
-This is the GENE\_IDENTIFIER used in our example.  
+...Only 17638 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: none
+norm result shape (26, 17688)
 
-### OUTPUT
-The default ouptut from both these functions is the top-voted class, accompanied by the average confidence score and contributing model names. This is a pandas dataframe, as shown:  
+...Only 17638 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: none
+norm result shape (26, 17688)
+```     
 
-|'ix'|`sample_ix`|`label`|`pred`|`freq`|`models`|`rank_pred`|`sample_name`|   
-|---|---|---|---|---|---|---|---|   
-|0|0|BLCA\_TS|0.268193|2|v1\_none17kdropout,v1\_none17k|1|avg\_tcga|   
-|1|0|LUSC\_TS|0.573807|1|v1\_smotenone17k|2|avg\_tcga|   
-|2|0|PAAD\_TS|0.203504|1|v1\_rm500|3|avg\_tcga|   
-|3|0|TFRI\_GBM\_NCL\_TS|0.552021|1|v1\_rm500dropout|4|avg\_tcga|   
-|4|1|ESCA\_EAC\_TS|0.562124|2|v1\_smotenone17k,v1\_none17k|1|fake\_tcga|    
-|5|1|HSNC\_TS|0.223115|1|v1\_rm500|2|fake\_tcga|   
-|6|1|MB-Adult\_TS|0.743373|1|v1\_none17kdropout|3|fake\_tcga|   
-|7|1|TFRI\_GBM\_NCL\_TS|0.777685|1|v1\_rm500dropout|4|fake\_tcga|   
+In some cases, the provided gene names will not map over exactly to the list of gene names used by SCOPE (thankyou 100 different ways of naming a gene). The count of matching genes will be output to you for every model.    
 
-### Tweaking the output format  
-The output from the ensembl function cannot be modified much, unfortunately.   
+**The output object will look like this:**  
 
-Alternatively, you can receive predictions on individual models, where the output can be of the following formats depending on how you set the `get_predictions_dict`, `get_all_predictions` and `get_numeric` flags. By default, all 3 flags are set to **True**.  
+```python
+>>> pfromfile
+    sample_ix    label      pred  freq                                             models  rank_pred             sample_name
+0           0  SKCM_TS  0.977220     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_SKCM_65312630
+1           1  THCA_TS  0.999638     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_b2016510
+2           2  THCA_NS  0.912180     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_ffb8427a
+3           3  TGCT_TS  0.853217     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_TGCT_78264e6b
+4           4  THCA_TS  0.943195     3         v1_rm500dropout,v1_none17kdropout,v1_rm500          1      TCGA_THCA_4869e2a4
+5           4  LUAD_TS  0.570270     2                         v1_smotenone17k,v1_none17k          2      TCGA_THCA_4869e2a4
+6           5  THCA_TS  0.900277     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_73451252
+7           6  HNSC_TS  0.993280     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_HNSC_26019321
+8           7  SKCM_TS  0.915794     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_SKCM_22632bc1
+9           8  PCPG_TS  0.998625     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_PCPG_cf680d44
+10          9  THCA_TS  0.987204     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_34826584
+11         10  THCA_TS  0.994746     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_5fedc450
+12         11  PCPG_TS  0.999457     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_PCPG_4f16b358
+13         12  THCA_TS  0.992644     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_4640600f
+14         13  TGCT_TS  0.821062     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_TGCT_d8ad327f
+15         14  THCA_NS  0.915730     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_e32c7fe0
+16         15  LIHC_TS  0.996771     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_LIHC_abe89868
+17         16  PCPG_TS  0.987906     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_PCPG_1182a295
+18         17  TGCT_TS  0.947846     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_TGCT_a51c7a87
+19         18  SKCM_TS  0.863664     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_SKCM_bcc52bb7
+20         19  THCA_TS  0.856618     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1  TCGA_THCA_NHL_a7229653
+21         20  TGCT_TS  0.824202     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_TGCT_af5c9e80
+22         21  SKCM_TS  0.935001     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_SKCM_074f955e
+23         22   LGG_TS  0.998371     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1       TCGA_LGG_9cd81de0
+24         23  THCA_TS  0.975574     3         v1_rm500dropout,v1_none17kdropout,v1_rm500          1      TCGA_THCA_7429a1e0
+25         23  LUAD_TS  0.691227     2                         v1_smotenone17k,v1_none17k          2      TCGA_THCA_7429a1e0
+26         24  LUAD_TS  0.765155     3       v1_none17kdropout,v1_smotenone17k,v1_none17k          1      TCGA_THCA_94cda1d7
+27         24  THCA_TS  0.994180     2                           v1_rm500dropout,v1_rm500          2      TCGA_THCA_94cda1d7
+28         25   LGG_TS  0.998748     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1       TCGA_LGG_cfd39475
+```
 
-|Expected Output|`get_all_predictions`|`get_numeric`|`get_predictions_dict`|   
-|---|---|---|---|   
-|Name of top-voted class|False|False|False|   
-|Name of all classes|True|False|False|        
-|Score of top-voted class|False|True|False|    
-|Score of all classes|True|True|False|    
-|Dataframe with top-voted classes in order, level 1|True/False|True/False|True|     
+### Interpreting the output   
+The sample index is the order the samples were read in. The 'label' is the predicted class. "\_[N,T]S" indicates a healthy normal (N) or a tumour type (T). The tumor codes follow TCGA naming guidelines. Please refer to the publication for detailed names.  
+The 'pred' is the prediction confidence for the 'label', from the models listed in the column 'models'. The 'freq' is the count of models whose top-prediction was 'label'. The 'freq' column matches the number of columns listed in 'models'.  
+The 'rank_pred' ranks the predictions per sample. In cases where the voting was unanimous, you see that the sample has a single rank (rank_pred = 1), and freq = 5.  
+In a few instances in the example above, the prediction is split between two classes. For example, consider the sample "TCGA_THCA_94cda1d7" (sample_ix = 24). Here, 3 models predicted that the cancertype was LUAD (lung adenocarcinoma), with an average confidence of 0.765155. As a higher number of models predicted this, the rank of prediction is 1 (rank_pred = 1). However, 2 models also predicted the THCA (thyroid carcinoma) tumor type, which is correct. The rank of prediction in this case is 2, because a fewer number of models predicted this (even though the average confidence was much higher, at 0.994180). The two results are provided to the user to facilitate a judgement call.  
+	- For example, in contrast, see the case right above, "TCGA_THCA_7429a1e0". Here, the average confidence *and* the number of models contributing to the call of 'THCA_TS' is higher, than those calling the case 'LUAD_TS'. In such a scenario, the user can simply choose to discard the 2nd ranked prediction, and go only with the 1st one, since both measures of certainty are higher in rank_pred == 1.  
 
+### Plotting the output, or saving the output as txt file  
+If you provide the prediction call with an output directory, it will generate the following:  
+1. A txt file listing the dataframe returned above.  
+2. A txt file listing the prediction confidence from each model, across all 66 classes, for all samples.  
+3. An individual svg file labelled with the sample name, for each sample.  
+
+`>>> pfromfile = scope_obj.get_predictions_from_file("/PATH/TO/combined_tcga_fpkm.txt", outdir="/PATH/TO/DESIRED/OUTPUT/FOLDER/")`  
+
+### Only generating predictions from a subset of models  
+If you find that a single model, or subset of models, is perpetually pushing your results the wrong way / acting as a confounder, you can choose to ignore it.   
+
+`>>> pfromfile = scope_obj.get_predictions_from_file("/PATH/TO/combined_tcga_fpkm.txt", modelnames=[LIST OF MODELS TO KEEP])`
+
+The model names for Version 1.0 of **cancerscope** are as follows:  
+v1_rm500  
+v1_rm500dropout  
+v1_smotenone17k  
+v1_none17k  
+v1_none17kdropout  
+
+Please refer to the supplementary data in the publication for details on each model.  
+ 
 ### FAQs  
 What is the GENE\_IDENTIFIER?
 The Gene Identifier has to be uniform across the list (don't provide a mix of ENSG, HUGO, and ENTREZ ids, for example). If passing in a file, the column name for the first column ('GENE\_IDENTIFIER') should indicate the type of genenames. Options are as follows:  

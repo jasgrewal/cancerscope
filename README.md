@@ -12,6 +12,8 @@ SCOPE's python package, **cancerscope**, allows users to pass the RPKM values wi
  
 Since SCOPE is an ensemble-based approach, it is possible to train additional models and include them in the ensemble that SCOPE uses (Instructions forthcoming).  
 
+# The current PyPi release does not support Python 3.x due to issues with plotting library support.  
+
 ## Installation   
 Before installing **cancerscope**, you will need to install the correct version of the packages [lasagne](https://lasagne.readthedocs.io/en/latest/) and [theano](https://pypi.org/project/Theano/).  
 `pip install --upgrade https://github.com/Theano/Theano/archive/master.zip`  
@@ -28,15 +30,9 @@ To get started with SCOPE, launch a python instance and run:
 
 Incase the download was unsuccessful at the time of package install, the first time you import cancerscope, the package will attempt to set up a local download of the models needed for prediction. Please be patient as this will take a while (3-10 minutes).    
 
-### Data import  
-cancerscope reads in input from `.txt` files. Columns should be tab-separated, with unique sample IDs. The first column is always the Gene identifier (Official HUGO ID, Ensemble Gene ID, or Gencode). An example is shown with the first 3 rows of input.  
-
-| Gene Name | Sample 1 | Sample 2 | ... |  
-|---|---|---|---|
-|ENSG000XXXXX| 0.2341 | 9451.2 | .... | 
-
 ### Prediction - Example  
-Prediction can be performed from a pre-formatted input file, or by passing in the data matrix, list of sample names, list of feature names, and the type of gene names (ENSG, HUGO etc). Please refer to the [tutorial](tutorial/README.md) for more information.  
+Prediction can be performed from a pre-formatted input file, or by passing in the data matrix.  Please refer to the [tutorial](tutorial/README.md) and [detailed documentation](DETAILED_EXPL.md.md) for more information.     
+
 The commands are as simple as follows:  
 `>>> import cancerscope as cs`    
 `>>> scope_obj = cs.scope()`   
@@ -45,6 +41,11 @@ This will set up the references to the requires SCOPE models.
 
 Next, you can process the predictions straight from the input file:  
 `>>> predictions_from_file = scope_obj.get_predictions_from_file(filename) `    
+Here, the input file should be prepared as follows. Columns should be tab-separated, with unique sample IDs. The first column is always the Gene identifier (Official HUGO ID, Ensemble Gene ID, or Gencode). An example is shown with the first 2 rows of input.    
+ 
+| ENSEMBL | Sample 1 | Sample 2 | ... |
+|---|---|---|---|
+|ENSG000XXXXX| 0.2341 | 9451.2 | .... |
 
 ...or you can pass in the data matrix, list of sample names, list of feature names, the type of gene names (ENSG, HUGO etc), and optionally, the list of sample names.  
 `>>> predictions = scope_obj.predict(`  
@@ -81,7 +82,7 @@ This will automatically save the dataframe returned from the prediction function
 Sample specific plots are also generated automatically in the same directory, and labelled `SCOPE_sample-SAMPLENAME_predictions.svg`.  
 
 <p align="left">
-  <img width="3000mm" height="900mm" src="https://github.com/jasgrewal/cancerscope/blob/master/tutorial/sample_output.svg">
+  <img width="3000mm" height="700mm" src="https://github.com/jasgrewal/cancerscope/blob/master/tutorial/sample_output.svg">
 </p>
 
 ## Citing cancerscope  

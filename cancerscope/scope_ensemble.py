@@ -28,11 +28,9 @@ if os.path.isdir(SCOPEMODELS_DATADIR) is False:
 	"""If not already downloaded to pckg site, retrieve the models"""
 	print("Thankyou for using cancerscope. The initial run requires download of dependent model files. Proceeding with download now...\n\tModels will be downloaded to {0}".format(SCOPEMODELS_DATADIR))
 	cancerscope.downloadmodel(targetdir=SCOPEMODELS_DATADIR)
-
-### Collate the directories of all the models
-modeldirs_dict = cancerscope.getmodel()
-
-print("Models are downloaded at {0}".format(modeldirs_dict))
+	### Collate the directories of all the models
+	modeldirs_dict = cancerscope.getmodel()
+	print("Models are downloaded at {0}".format(modeldirs_dict))
 
 class scope(object):
 	def __init__(self):
@@ -55,11 +53,9 @@ class scope(object):
 			lmodel = cancerscope.scopemodel(self.downloaded_models_dict[k_model])
 			lmodel.fit()
 			## Map training features to the genecode in the input
-			mapped_model_features = map_gene_names(lmodel.features, genecode_in = "SCOPE", genecode_out = x_features_genecode)
-			feat_subset_x = map_train_test_features_x(X, mapped_model_features, x_features) ## This function will reorder the input based on the training features order, and if missing some genes, will set those to 0)
+			mapped_model_features = map_gene_names(lmodel.features, genecode_out = x_features_genecode, genecode_in = "SCOPE")
+			feat_subset_x = map_train_test_features_x(X, training_features = mapped_model_features, test_features = x_features, fillzero=True, defaultvalue=0.0)
 			self.predict_dict[k_model] = lmodel.predict(feat_subset_x, get_predictions_dict=True)
-			if outdir is not None:
-				sys.stdout.write("\nWriting predictions to output directory\n")
 			### GC to free up memory
 			lmodel = None
 			for i in range(0,3):

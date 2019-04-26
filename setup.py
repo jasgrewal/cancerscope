@@ -4,6 +4,7 @@ Setup script for SCOPE (Python package: 'cancerscope')
 from setuptools import setup, find_packages
 import os, sys
 import re
+from tests import *
 
 """Identify basic variables needd for setup"""
 pckg_dir = os.path.abspath(os.path.dirname(__file__))
@@ -34,7 +35,7 @@ setup(name='cancerscope',
 	packages=find_packages(exclude=['tests*']), 
 	license='MIT', 
 	#dependency_links=['https://github.com/Lasagne/Lasagne/tarball/master#egg=lasagne-0.2.dev1', 'https://github.com/Theano/Theano/tarball/master#egg=theano-0.8'],
-	python_requires='>=2.6, <=3.5',
+	python_requires='>=2.6,<3.0',
 	install_requires=requirements, 
 	include_package_data=True, zip_safe=False, 
 	test_suite='nose.collector', tests_require=['nose'], 
