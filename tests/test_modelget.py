@@ -10,7 +10,7 @@ class testModel(unittest.TestCase):
 	def test_listModel(self):
 		"""Test if the models web-address file is read properly"""
 		modelOptions = {}
-		with open(os.path.join(os.path.dirname(cancerscope.get_models.__file__), 'scope_files.txt'), 'r') as f:
+		with open(os.path.join(os.path.dirname(cancerscope.get_models.__file__), 'resources/scope_files.txt'), 'r') as f:
 			for line in f:
 				if line.strip()!= '':
 					modelname, url, expectedFile, expectedmd5 = line.strip().split('\t')

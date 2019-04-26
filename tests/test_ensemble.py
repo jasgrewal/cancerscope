@@ -9,7 +9,7 @@ from numbers import Number
 import glob
 
 pckg_dir = os.path.dirname(sys.modules["cancerscope"].__file__)
-SCOPEMODELS_LIST = os.path.join(pckg_dir, "/scope_files.txt")
+SCOPEMODELS_LIST = os.path.join(pckg_dir, "/resources/scope_files.txt")
 
 class testEnsemble(unittest.TestCase):
 	def test_ensemblewith2models(self):
