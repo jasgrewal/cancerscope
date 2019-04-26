@@ -113,7 +113,7 @@ class testEnsemble(unittest.TestCase):
 		self.assertEqual(allpreds_values.shape[1],66); 
 		self.assertEqual(round(allpreds_values[0][1], 15), round(0.003065253372039,15))
 		self.assertEqual(toppreds_names[0], "PAAD_TS"); self.assertEqual(toppreds_names[1], "HNSC_TS")
-		self.assertEqual(round(toppreds_values[0],15), round(0.208874390780809,15)); self.assertEqual(round(toppreds_values[1],15), round(0.444162763077693,15))
+		self.assertEqual(round(toppreds_values[0],12), round(0.208874390780809,12)); self.assertEqual(round(toppreds_values[1],12), round(0.444162763077693,12))
 		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(round(float(toppreds_df[0][0][1]), 12), round(toppreds_values[0], 12)); 
 		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(round(float(toppreds_df[1][0][1]), 12), round(toppreds_values[1], 12))
 	
