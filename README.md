@@ -86,9 +86,26 @@ Sample specific plots are also generated automatically in the same directory, an
 </p>
 
 ## Citing cancerscope  
-If you have used this package for any academic research, it would be great if you could cite the associated paper.  
-A bibtex citation is provided for your ease of use:  
-`(paper currently embargoed)`
+If you have used this package for any academic research, it would be great if you could cite the [associated paper](https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2731678).  
+Full citation:  
+**Grewal JK, Tessier-Cloutier B, Jones M, et al. Application of a Neural Network Whole Transcriptome–Based Pan-Cancer Method for Diagnosis of Primary and Metastatic Cancers. JAMA Netw Open. 2019;2(4):e192597. doi:10.1001/jamanetworkopen.2019.2597**  
+
+A bibtex citation is provided for your ease of use:   
+@article{jgscope2019,  
+    author = {Grewal, Jasleen K. and Tessier-Cloutier, Basile and Jones, Martin and Gakkhar, Sitanshu and Ma, Yussanne and Moore, Richard and Mungall, Andrew J. and Zhao, Yongjun and Taylor, Michael D. and Gelmon, Karen and Lim, Howard and Renouf, Daniel and Laskin, Janessa and Marra, Marco and Yip, Stephen and Jones, Steven J. M.},  
+    title = "{Application of a Neural Network Whole Transcriptome–Based Pan-Cancer Method for Diagnosis of Primary and Metastatic CancersAssessment of a Machine Learning–Based Method for Diagnosing Primary and Metastatic CancersAssessment of a Machine Learning–Based Method for Diagnosing Primary and Metastatic Cancers}",  
+    journal = {JAMA Network Open},  
+    volume = {2},  
+    number = {4},  
+    pages = {e192597-e192597},  
+    year = {2019},  
+    month = {04},  
+    issn = {2574-3805},  
+    doi = {10.1001/jamanetworkopen.2019.2597},  
+    url = {https://doi.org/10.1001/jamanetworkopen.2019.2597},  
+    eprint = {https://jamanetwork.com/journals/jamanetworkopen/articlepdf/2731678/grewal\_2019\_oi\_190114.pdf},  
+}
+
 
 ## License  
 cancerscope is distributed under the terms of the [MIT](https://opensource.org/licenses/MIT) license.  
