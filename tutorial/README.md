@@ -22,7 +22,7 @@ If this is your first time importing **cancerscope**, You will be greeted with t
  
 ```python   
 Thankyou for using cancerscope. The initial run requires download of dependent model files. Proceeding with download now...
-	Models will be downloaded to /projects/jgrewal_prj/bin/software/devbox/anaconda/envs/scopetest27/lib/python2.7/site-packages/cancerscope/data/
+	Models will be downloaded to /PATH_TO_PTYHON_LIB/lib/python2.7/site-packages/cancerscope/data/
 
 Downloading model files for v1_rm500dropout 
 	Data Downloaded at: /PATH_TO_PYTHON_LIB/lib/python2.7/site-packages/cancerscope/data/
