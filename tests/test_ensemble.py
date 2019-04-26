@@ -23,12 +23,13 @@ class testEnsemble(unittest.TestCase):
 		### Compare to getting output from the x data object itself  
 		test_x, test_samples, test_features, test_genecode = scope_ensemble_obj.load_data(my_test_file)
 		preds_df_from_xdat = scope_ensemble_obj.predict(X = test_x, x_features = test_features, x_features_genecode = test_genecode, x_sample_names=test_samples, modelnames=my_models)
-		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].label.tolist(), ['PAAD_TS', 'HNSC_TS'])
-		self.assertEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].label.tolist(), ['PAAD_TS', 'HNSC_TS'])
-		self.assertEqual(round(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[0],12), 0.203503872494)
-		self.assertEqual(round(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1],12), 0.22311548345)
-		self.assertEqual(round(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[1],12), 0.22311548345)
-		self.assertEqual(round(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[0],12), 0.203503872494)
+		print(preds_df_from_xdat); print(round(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1],12))
+		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].label.tolist(), ['TFRI_GBM_NCL_TS', 'TFRI_GBM_NCL_TS'])
+		self.assertEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].label.tolist(), ['TFRI_GBM_NCL_TS', 'TFRI_GBM_NCL_TS'])
+		self.assertEqual(round(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[0],12), 0.576824542222)
+		self.assertEqual(round(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1],12), 0.516448831323)
+		self.assertEqual(round(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[1],12), 0.516448831323)
+		self.assertEqual(round(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[0],12), 0.576824542222)
 		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[0], preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[0])
 		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1], preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[1])
 		### Plot models  
@@ -110,9 +111,9 @@ class testEnsemble(unittest.TestCase):
 		toppreds_df = lmodel.predict(x_input, get_all_predictions=True,get_numeric=False, get_predictions_dict=True)
 		self.assertEqual(len(allpreds_names[0]), 66); self.assertEqual(len(allpreds_names[1]), 66); 
 		self.assertEqual(allpreds_values.shape[1],66); 
-		self.assertEqual(round(allpreds_values[0][1], 15), round(0.0030981730794109289,15))
+		self.assertEqual(round(allpreds_values[0][1], 15), round(0.003065253372039,15))
 		self.assertEqual(toppreds_names[0], "PAAD_TS"); self.assertEqual(toppreds_names[1], "HNSC_TS")
-		self.assertEqual(round(toppreds_values[0],15), round(0.20350387249421389,15)); self.assertEqual(round(toppreds_values[1],15), round(0.22311548345007168,15))
+		self.assertEqual(round(toppreds_values[0],15), round(0.208874390780809,15)); self.assertEqual(round(toppreds_values[1],15), round(0.444162763077693,15))
 		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(round(float(toppreds_df[0][0][1]), 12), round(toppreds_values[0], 12)); 
 		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(round(float(toppreds_df[1][0][1]), 12), round(toppreds_values[1], 12))
 	
@@ -144,9 +145,9 @@ class testEnsemble(unittest.TestCase):
 		toppreds_df = lmodel.predict(x_input, get_all_predictions=True,get_numeric=False, get_predictions_dict=True)
 		self.assertEqual(len(allpreds_names[0]), 66); self.assertEqual(len(allpreds_names[1]), 66);
 		self.assertEqual(allpreds_values.shape[1],66);
-		self.assertEqual(round(allpreds_values[0][1], 12),round(0.002366576562684, 12))
+		self.assertEqual(round(allpreds_values[0][1], 12),round(0.001936952939 , 12))
 		self.assertEqual(toppreds_names[0], "TFRI_GBM_NCL_TS"); self.assertEqual(toppreds_names[1], "TFRI_GBM_NCL_TS")
-		self.assertEqual(round(toppreds_values[0], 12), round(0.552020792626742, 12)); self.assertEqual(round(toppreds_values[1],12), round(0.7776852808358907,12))
+		self.assertEqual(round(toppreds_values[0], 12), round(0.576824542222, 12)); self.assertEqual(round(toppreds_values[1],12), round(0.516448831323,12))
 		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(round(float(toppreds_df[0][0][1]), 12), round(toppreds_values[0], 12));
 		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(round(float(toppreds_df[1][0][1]), 12), round(toppreds_values[1], 12))
 
