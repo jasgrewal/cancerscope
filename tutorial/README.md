@@ -136,7 +136,7 @@ If you provide the prediction call with an output directory, it will generate th
 `>>> pfromfile = scope_obj.get_predictions_from_file("/PATH/TO/combined_tcga_fpkm.txt", outdir="/PATH/TO/DESIRED/OUTPUT/FOLDER/")`  
 
 ### Only generating predictions from a subset of models  
-If you find that a single model, or subset of models, is perpetually pushing your results the wrong way / acting as a confounder, you can choose to ignore it.   
+If you like to play favorites, or generally dislike the sound of a particular model, you can tell SCOPE which models to consider when assessing an input.  
 
 `>>> pfromfile = scope_obj.get_predictions_from_file("/PATH/TO/combined_tcga_fpkm.txt", modelnames=[LIST OF MODELS TO KEEP])`
 
