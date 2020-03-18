@@ -25,7 +25,9 @@ You may also need the following:
 `pip install mkl-service`
 
 ### Automated Install   
-Once you have the latest lasagne and theano python packages installed, you can set up **cancerscope** using the command `pip install cancerscope`.  
+Make sure you have all other required libraries installed (only needed if using Theano/lasagne backend).
+
+You can set up **cancerscope** using the command `pip install cancerscope`.  
 
 At initial install, cancerscope will attempt to download the models needed for prediction. This may take a while depending on your internet connection (3-10 minutes). Please ensure you have a reliable internet connection and atleast 5 GB of space before proceeding with install.   
 
@@ -84,7 +86,7 @@ Here, 2 samples, called *test1* and *test2*, were processed. The top prediction 
 
 This will automatically save the dataframe returned from the prediction functions as `output_folder + /SCOPE_topPredictions.txt`, and the predictions from all models across all classes as `output_folder + /SCOPE_allPredictions.txt`.  
 
-Sample specific plots are also generated automatically in the same directory, and labelled `SCOPE_sample-SAMPLENAME_predictions.svg`.  
+Sample specific plots could also generated automatically in the same directory, and labelled `SCOPE_sample-SAMPLENAME_predictions.svg`. As of version 0.30 onwards, this option has been deprecated, but plots can still be generated from the dataframes provided (SCOPE_allPredictions.txt).  
 
 <p align="left">
   <img width="3000mm" height="700mm" src="https://github.com/jasgrewal/cancerscope/blob/master/tutorial/sample_output.svg">
