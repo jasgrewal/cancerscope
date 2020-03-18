@@ -21,7 +21,7 @@ def _calcMD5(filename):
 # From: https://stackoverflow.com/questions/32763720/timeout-a-file-download-with-python-urllib
 def _downloadFile(url, filename, timeout=180):
 	request = requests.get(url, timeout=10, stream=True)
-	with open(filename, 'w') as fh:
+	with open(filename, 'wb') as fh:
 		## Walk through request response in chunks of 1024*1024 bytes
 		for chunk in request.iter_content(1024*10240):
 			fh.write(chunk)
