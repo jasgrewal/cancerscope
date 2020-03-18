@@ -1,14 +1,14 @@
 """
 Setup file for models required by SCOPE
 """
-from config import SCOPEMODELS_DATADIR, SCOPEMODELS_LIST, SCOPEMODELS_FILELIST_DIR
+from .config import SCOPEMODELS_DATADIR, SCOPEMODELS_LIST, SCOPEMODELS_FILELIST_DIR, getmodelsdict
 import cancerscope
 import os, sys
 import tempfile
 import shutil, six
 ## Get detailed list of models and source files
 
-modelOptions = cancerscope.getmodelsdict()
+modelOptions = getmodelsdict() #cancerscope.getmodelsdict()
 
 def findmodel(expected_pckgdir, model_label, expected_targetdir=None, verbose=0):
 	expectedFilename = "model_" + model_label + ".txt"

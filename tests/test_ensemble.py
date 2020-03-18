@@ -1,5 +1,7 @@
 import os, sys
+#from cancerscope import *
 import cancerscope
+#from cancerscope import cancerscope
 import tempfile
 import unittest
 import gc
@@ -7,6 +9,7 @@ import numpy as np
 import pandas as pd
 from numbers import Number
 import glob
+import pkgutil
 
 pckg_dir = os.path.dirname(sys.modules["cancerscope"].__file__)
 SCOPEMODELS_LIST = os.path.join(pckg_dir, "/resources/scope_files.txt")
@@ -22,25 +25,26 @@ class testEnsemble(unittest.TestCase):
 		preds_df_from_file = scope_ensemble_obj.get_predictions_from_file(my_test_file, modelnames=my_models)
 		### Compare to getting output from the x data object itself  
 		test_x, test_samples, test_features, test_genecode = scope_ensemble_obj.load_data(my_test_file)
-		preds_df_from_xdat = scope_ensemble_obj.predict(X = test_x, x_features = test_features, x_features_genecode = test_genecode, x_sample_names=test_samples, modelnames=my_models)
-		print(preds_df_from_xdat); print(round(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1],12))
+		preds_df_from_xdat = scope_ensemble_obj.predict(X = test_x, x_features = test_features, x_features_genecode = test_genecode, x_sample_names=test_samples, modelnames=my_models, get_preds_dict=False, return_plotdf=False)
 		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].label.tolist(), ['TFRI_GBM_NCL_TS', 'TFRI_GBM_NCL_TS'])
 		self.assertEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].label.tolist(), ['TFRI_GBM_NCL_TS', 'TFRI_GBM_NCL_TS'])
-		self.assertEqual(round(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[0],12), 0.576824542222)
-		self.assertEqual(round(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1],12), 0.516448831323)
-		self.assertEqual(round(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[1],12), 0.516448831323)
-		self.assertEqual(round(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[0],12), 0.576824542222)
+		self.assertAlmostEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[0], 0.57673988661300002)
+		self.assertAlmostEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1], 0.51645878766999997)
+		self.assertAlmostEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[1], 0.51645878766999997)
+		self.assertAlmostEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[0], 0.57673988661300002)
 		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[0], preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[0])
 		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1], preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[1])
 		### Plot models  
 		plotdir = tempfile.mkdtemp()
-		preds_df_plotted = scope_ensemble_obj.predict(X = test_x, x_features = test_features, x_features_genecode = test_genecode, x_sample_names=test_samples, modelnames=my_models, outdir = plotdir)
+		preds_df_plotted = scope_ensemble_obj.predict(X = test_x, x_features = test_features, x_features_genecode = test_genecode, x_sample_names=test_samples, modelnames=my_models, outdir = plotdir, get_preds_dict=False, return_plotdf=False)
 		self.assertEqual(glob.glob(plotdir + "/SCOPE_allPredictions.txt")[0], plotdir + "/SCOPE_allPredictions.txt")
 		self.assertEqual(glob.glob(plotdir + "/SCOPE_topPredictions.txt")[0], plotdir + "/SCOPE_topPredictions.txt")
 		preds_df_from_plots = pd.read_csv(glob.glob(plotdir + "/SCOPE_topPredictions.txt")[0], delimiter="\t")
+		print("PREDS DF FROM XDAT IS"); print(preds_df_from_xdat)
+		print("PREDS DF FROM PLOTS IS"); print(preds_df_from_plots)
 		self.assertTrue(preds_df_from_xdat[['sample_ix', 'label', 'freq', 'models','rank_pred','sample_name']].equals(preds_df_from_plots[['sample_ix', 'label', 'freq', 'models','rank_pred','sample_name']]))
 		self.assertTrue(preds_df_from_file[['sample_ix', 'label', 'freq', 'models','rank_pred','sample_name']].equals(preds_df_from_plots[['sample_ix', 'label', 'freq', 'models','rank_pred','sample_name']]))
-		self.assertEqual(len(glob.glob(plotdir + "/SCOPE_sample*")), 2)
+		self.assertEqual(len(glob.glob(plotdir + "/SCOPE_*")), 2)
 		
 	def localtest_samplefilereading(self):
 		my_test_file = "/".join([os.path.dirname(sys.modules["cancerscope"].__file__), "../tests/data/test_tcga.txt"]) #read_ensg_input.txt"])
@@ -56,18 +60,17 @@ class testEnsemble(unittest.TestCase):
 		preds_df_from_xdat = scope_ensemble_obj.predict(X = test_x, x_features = test_features, x_features_genecode = test_genecode, x_sample_names=test_samples)
 		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].label.tolist(), ['BLCA_TS', 'ESCA_EAC_TS'])
 		self.assertEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].label.tolist(), ['BLCA_TS', 'ESCA_EAC_TS'])
-		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[0], 0.26819298484099996)
-		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1], 0.562124497548)
-		self.assertEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[1], 0.562124497548)
-		self.assertEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[0], 0.26819298484099996)
+		self.assertAlmostEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[0], 0.26819298484099996)
+		self.assertAlmostEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1], 0.562124497548)
+		self.assertAlmostEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[1], 0.562124497548)
+		self.assertAlmostEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[0], 0.26819298484099996)
 	
 	def test_downloadAllModels(self):
 		"""Test if all models are downloaded locally properly"""
-		modelOptions = cancerscope.getmodelsdict()
+		modelOptions = cancerscope.config.getmodelsdict() ## MODIFIED FROM cancerscope.getmodelsdict() on March 17 2020
 		assert len(modelOptions.keys()) == 5
-		scope_ensemble_obj = cancerscope.scope()
+		scope_ensemble_obj = cancerscope.scope_ensemble.scope() ## MODIFIED FROM cancerscope.scope() on March 17 2020
 		#my_downloaded_models = cancerscope.get_models.getmodel() ## This should retrieve all models
-		#print(my_downloaded_models)
 		my_downloaded_models = scope_ensemble_obj.downloaded_models_dict
 		assert len(my_downloaded_models.keys()) == 5
 		for k_model in my_downloaded_models.keys():
@@ -111,9 +114,10 @@ class testEnsemble(unittest.TestCase):
 		toppreds_df = lmodel.predict(x_input, get_all_predictions=True,get_numeric=False, get_predictions_dict=True)
 		self.assertEqual(len(allpreds_names[0]), 66); self.assertEqual(len(allpreds_names[1]), 66); 
 		self.assertEqual(allpreds_values.shape[1],66); 
-		self.assertEqual(round(allpreds_values[0][1], 15), round(0.003065253372039,15))
+		self.assertAlmostEqual(allpreds_values[0][1], 0.003065253372039)
 		self.assertEqual(toppreds_names[0], "PAAD_TS"); self.assertEqual(toppreds_names[1], "HNSC_TS")
-		self.assertEqual(round(toppreds_values[0],12), round(0.208874390780809,12)); self.assertEqual(round(toppreds_values[1],12), round(0.444162763077693,12))
+		self.assertAlmostEqual(toppreds_values[0],0.20889836023919614); self.assertAlmostEqual(toppreds_values[1], 0.44416348623870444)
+		#self.assertEqual(round(toppreds_values[0],12), round(0.208874390780809,12)); self.assertEqual(round(toppreds_values[1],12), round(0.444162763077693,12))
 		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(round(float(toppreds_df[0][0][1]), 12), round(toppreds_values[0], 12)); 
 		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(round(float(toppreds_df[1][0][1]), 12), round(toppreds_values[1], 12))
 	
@@ -145,9 +149,9 @@ class testEnsemble(unittest.TestCase):
 		toppreds_df = lmodel.predict(x_input, get_all_predictions=True,get_numeric=False, get_predictions_dict=True)
 		self.assertEqual(len(allpreds_names[0]), 66); self.assertEqual(len(allpreds_names[1]), 66);
 		self.assertEqual(allpreds_values.shape[1],66);
-		self.assertEqual(round(allpreds_values[0][1], 12),round(0.001936952939 , 12))
+		self.assertAlmostEqual(allpreds_values[0][1],0.001936952939)
 		self.assertEqual(toppreds_names[0], "TFRI_GBM_NCL_TS"); self.assertEqual(toppreds_names[1], "TFRI_GBM_NCL_TS")
-		self.assertEqual(round(toppreds_values[0], 12), round(0.576824542222, 12)); self.assertEqual(round(toppreds_values[1],12), round(0.516448831323,12))
+		self.assertAlmostEqual(toppreds_values[0],0.57673988661329467); self.assertAlmostEqual(toppreds_values[1],0.51645878767048425)
 		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(round(float(toppreds_df[0][0][1]), 12), round(toppreds_values[0], 12));
 		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(round(float(toppreds_df[1][0][1]), 12), round(toppreds_values[1], 12))
 

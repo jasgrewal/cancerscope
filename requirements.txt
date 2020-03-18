@@ -2,9 +2,8 @@ coverage
 numpy
 scikit-learn>=0.18
 scipy
-plotnine
 requests
+pandas
 pyyaml
-matplotlib<=2.2.2
+matplotlib>=2.2.2
 pysocks==1.6.8
-

@@ -12,12 +12,13 @@ SCOPE's python package, **cancerscope**, allows users to pass the RPKM values wi
  
 Since SCOPE is an ensemble-based approach, it is possible to train additional models and include them in the ensemble that SCOPE uses (Instructions forthcoming).  
 
-# The current PyPi release does not support Python 3.x due to issues with plotting library support.  
-
 ## Installation   
 Before installing **cancerscope**, you will need to install the correct version of the packages [lasagne](https://lasagne.readthedocs.io/en/latest/) and [theano](https://pypi.org/project/Theano/).  
 `pip install --upgrade https://github.com/Theano/Theano/archive/master.zip`  
 `pip install --upgrade https://github.com/Lasagne/Lasagne/archive/master.zip`  
+
+You may also need the following:
+`pip install mkl-service`
 
 ### Automated Install   
 Once you have the latest lasagne and theano python packages installed, you can set up **cancerscope** using the command `pip install cancerscope`.  
@@ -125,4 +126,7 @@ Theano is a bit finicky when working with the cudnn backend, and may sometimes t
 pkg_resources.VersionConflict: (pandas xxxx (/path/to/sitepckgs/), Requirement.parse('pandas>=0.23.4'))  
 - This error may arise because you have an older version of pandas installed, which conflicts with the plotting library we use (plotnine, this package needs pandas >=0.23.4)  
 - You can either manually install plotnine ('pip install plotnine') or update your pandas library ('pip update pandas')  
+
+The following required packages cannot be built: freetype, png
+- You need to install these dependencies for matplotlib. If using conda, run the following: `conda install freetype; conda install libpng; conda install matplotlib`. Otherwise, running `pip install matplootlib` should resolve the issue.  
 

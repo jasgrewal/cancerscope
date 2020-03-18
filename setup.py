@@ -18,6 +18,9 @@ with open(os.path.join(pckg_dir, 'requirements.txt'), 'r') as f:
 with open(os.path.join(pckg_dir, 'README.md'), 'r') as f:
 	longdescription = f.read()
 
+"""Current DIR updates to resolve issues with python3.5"""
+CURRENT_DIR = os.path.dirname(__file__)
+
 """ Post-setup script to download models 
 As per answer posted at https://stackoverflow.com/questions/20288711/post-install-script-with-python-setuptools
 """ 
@@ -35,7 +38,7 @@ setup(name='cancerscope',
 	packages=find_packages(exclude=['tests*']), 
 	license='MIT', 
 	#dependency_links=['https://github.com/Lasagne/Lasagne/tarball/master#egg=lasagne-0.2.dev1', 'https://github.com/Theano/Theano/tarball/master#egg=theano-0.8'],
-	python_requires='>=2.6,<3.0',
+	python_requires='>=3.5',
 	install_requires=requirements, 
 	include_package_data=True, zip_safe=False, 
 	test_suite='nose.collector', tests_require=['nose'], 

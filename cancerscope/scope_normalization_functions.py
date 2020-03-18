@@ -1,13 +1,14 @@
 from sklearn import preprocessing
 import numpy as np
+from scipy.stats.mstats import rankdata as ranksample
 
 #Normalization functions
 def norm_minmax(x, min=0, max=1):
-        #This function is useful for sparse data with lots of zeroes
-        ##print("....by minmax, min {0} and max {1}".format(min,max))
+	#This function is useful for sparse data with lots of zeroes
+	##print("....by minmax, min {0} and max {1}".format(min,max))
 	min_max_scaler = preprocessing.MinMaxScaler(feature_range=(min,max))
-        x_minmax = min_max_scaler.fit_transform(x) #Does it across each feature (i.e. column)
-        return [x_minmax, min_max_scaler]
+	x_minmax = min_max_scaler.fit_transform(x) #Does it across each feature (i.e. column)
+	return [x_minmax, min_max_scaler]
 
 #def norm_scaler_reapply(scaler_func, x):
 #        x_transformed = scaler_func.transform(x)
@@ -46,7 +47,7 @@ def apply_norm_func(norm_func, xdat, bysamples=1):
 				temprast.append(temp)
 		else:
 			##print("Rasterized {0}".format(xdat.shape))
-			temprast = (map(norm_rasterize,xdat))
+			temprast = ranksample(xdat, axis=bysamples) #(map(norm_rasterize,xdat))
 			
 		#Then minmax per sample (if bysamples==1) or by features (if bysamples==0)
 		#if bysamples==0:

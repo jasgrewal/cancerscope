@@ -21,7 +21,7 @@ def map_train_test_features_x(x_in, training_features, test_features, fillzero=T
 	test_keys_orderedix = [i[0] for i in sorted(reorder_test.items(), key=operator.itemgetter(1))]
 	
 	num_testfeats_mapping_to_trainingfeats = len(test_keys_orderedix)
-	assert(test_features[test_keys_orderedix[0]] == training_features[0])
+	#assert(test_features[test_keys_orderedix[0]] == training_features[0])
 	
 	testX_values = np.apply_along_axis(lambda x: x[test_keys_orderedix], 1,x)
 	if num_testfeats_mapping_to_trainingfeats != len(training_features):
@@ -35,6 +35,9 @@ def map_train_test_features_x(x_in, training_features, test_features, fillzero=T
 def map_gene_names(features_list, genecode_in, genecode_out):
 	### Options for genecode_in and genecode_out are ENSG, HUGO, GENCODE, GAF (and additional options from the resources file below)
 	genedict = pd.read_csv("/".join([os.path.dirname(sys.modules["cancerscope"].__file__), 'resources/scope_features_genenames.txt']), delimiter="\t")
+	if genecode_in == genecode_out:
+		sys.stdout.write("\nWARNING! You passed the same genecode for input and output, does not need mapping")
+		return features_list
 	try:
 		genecode_in in genedict.columns.tolist()
 		genecode_out in genedict.columns.tolist()
@@ -43,7 +46,7 @@ def map_gene_names(features_list, genecode_in, genecode_out):
 		sys.stdout.write("Genecode should be one of {0}\n".format(genedict.columns.tolist()))
 	else:
 		genedict = genedict.set_index(genecode_in) 
-		features_mapped = list(genedict.ix[features_list][genecode_out]) 
+		features_mapped = list(genedict.loc[features_list][genecode_out]) 
 	try:
 		len(set(features_mapped)) == len(features_list)
 	except:

@@ -9,12 +9,12 @@ import lasagne
 import theano
 import theano.tensor as T
 #from scope_io_modules import *
-from scope_io_modules import read_input, map_train_test_features_x, map_gene_names
-from scope_normalization_functions import *
-from scope_ensemble_functions import getmodelsdict, get_ensemble_score, build_custom_mlp
-from scope_plots import *
+from .scope_io_modules import read_input, map_train_test_features_x, map_gene_names
+from .scope_normalization_functions import *
+from .scope_ensemble_functions import getmodelsdict, get_ensemble_score, build_custom_mlp
+from .scope_plots import *
 import cancerscope
-from config import SCOPEMODELS_DATADIR, SCOPEMODELS_LIST, SCOPEMODELS_FILELIST_DIR
+from .config import SCOPEMODELS_DATADIR, SCOPEMODELS_LIST, SCOPEMODELS_FILELIST_DIR
 import heapq
 import copy
 import gc
@@ -42,7 +42,7 @@ class scope(object):
 		x_dat, x_samples, x_features, x_features_genecode = read_input(X_file)
 		sys.stdout.write("\nRead in sample file {0}, \n\tData shape {1}\n\tNumber of samples {2}\n\tNumber of genes in input {3}, with gene code {4}".format(X_file, x_dat.shape, len(x_samples), len(x_features), x_features_genecode))
 		return [x_dat, x_samples, x_features, x_features_genecode]
-	def predict(self, X, x_features, x_features_genecode, x_sample_names=None, outdir=None, modelnames=None):
+	def predict(self, X, x_features, x_features_genecode, x_sample_names=None, outdir=None, modelnames=None, get_preds_dict=False, return_plotdf=False):
 		self.predict_dict = {}
 		my_model_list = self.model_names
 		if modelnames is not None:
@@ -60,19 +60,25 @@ class scope(object):
 			lmodel = None
 			for i in range(0,3):
 				gc.collect()
-		## Do something to process output for ensemble score  
-		ens_df = get_ensemble_score(self.predict_dict)
-		if x_sample_names is not None:
-			ens_df['sample_name'] = [x_sample_names[m] for m in ens_df['sample_ix'].tolist()]
-		if outdir is not None:
-			sys.stdout.write("\nOutdir provided, so writing prediction dataframe and plotting background data to files\n\tAlso generating per-sample plots at {0}".format(outdir))
-			plot_bg_df = get_plotting_df(self.predict_dict, x_sample_names = x_sample_names)
-			plot_cases(ens_df, plot_bg_df, outdir, save_txt=True)
+		if get_preds_dict is True:
+			return self.predict_dict
+		if return_plotdf is True:
+			ens_df = cancerscope.scope_plots.get_plotting_df(self.predict_dict, x_sample_names = x_sample_names)
+		else:
+			## Do something to process output for ensemble score  
+			ens_df = get_ensemble_score(self.predict_dict)
+			if x_sample_names is not None:
+				ens_df['sample_name'] = [x_sample_names[m] for m in ens_df['sample_ix'].tolist()]
+			if outdir is not None:
+				sys.stdout.write("\nOutdir provided, so writing prediction dataframe and plotting background data to files\n\tAlso generating per-sample plots at {0}".format(outdir))
+				plot_bg_df = cancerscope.scope_plots.get_plotting_df(self.predict_dict, x_sample_names = x_sample_names)
+				cancerscope.scope_plots.plot_cases(ens_df, plot_bg_df, outdir=outdir, save_txt=True)
 		return ens_df
-	def get_predictions_from_file(self, X_file, outdir=None, modelnames=None):
+	
+	def get_predictions_from_file(self, X_file, outdir=None, modelnames=None, get_preds_dict=False, return_plotdf=False):
 		x_input, x_samples, x_features, x_features_genecode = self.load_data(X_file)
-		prediction_dict = self.predict(X=x_input, x_features = x_features, x_features_genecode = x_features_genecode, x_sample_names=x_samples, outdir=outdir, modelnames=modelnames)
-		return(prediction_dict)
+		prediction_df = self.predict(X=x_input, x_features = x_features, x_features_genecode = x_features_genecode, x_sample_names=x_samples, outdir=outdir, modelnames=modelnames, get_preds_dict=get_preds_dict, return_plotdf=return_plotdf)
+		return(prediction_df)
 
 class scopemodel(object):
 	def __init__(self, modeldir):
@@ -95,7 +101,7 @@ class scopemodel(object):
 			with(open(in_labdict)) as f:
 				self.numtolabel = dict((int(v.rstrip()), k.rstrip()) for k,v in (line.split('\t') for line in f))
 		except ValueError:
-			 with(open(in_labdict)) as f:
+			with(open(in_labdict)) as f:
 				self.numtolabel = dict((int(k.rstrip()), v.rstrip()) for k,v in (line.split('\t') for line in f))
 		input_var= T.matrix('inputs')
 		network = build_custom_mlp(input_var=input_var, is_image=False, n_out=n_class, num_features=n_in, depth=n_hiddenlayers, width=n_hidden, drop_hidden=0, drop_input=0)
@@ -139,7 +145,8 @@ class scopemodel(object):
 		self.pred_max_fn = model_loaded[2]
 	def get_params(self):
 		in_args = glob.glob(self.in_modeldir + "/argparse_args.txt")[0]
-		myargs = yaml.load(open(in_args), Loader=yaml.BaseLoader)
+		with open(in_args) as f:
+			myargs = yaml.safe_load(f) #March 17 2020 change from yaml.load(open(in_args), Loader=yaml.BaseLoader)
 		return(myargs)
 	def get_normalized_input(self,X):
 		print("...Normalization function being applied: {0}".format(self.normalization_input))
@@ -163,7 +170,8 @@ class scopemodel(object):
 def remove_extra_submats(bigmat):
 	#As the theano jacobian calculation appends null matrices at the non-diagonals, this function returns a stacked set of (output_nodes * number samples) x (input_nodes) as a 2d matrix, from a 3d matrix returned by the jacobian gradient function in theano
 	in_samples = bigmat.shape[1]
-	out_nodes = bigmat.shape[0] / in_samples
+	out_nodes = int(bigmat.shape[0] / in_samples)
+	print("BIGMAT SHAPE IS"); print(bigmat.shape)
 	mymat = bigmat[0:out_nodes,0,:]
 	for i in range(1, in_samples):
 		mymat =np.append(mymat, bigmat[(0 + out_nodes*i):(out_nodes + out_nodes*i), i, :], axis=0)
