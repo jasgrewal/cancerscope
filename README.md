@@ -4,6 +4,7 @@
 [![build_status](https://travis-ci.org/jasgrewal/cancerscope.svg?branch=master)](https://travis-ci.org/jasgrewal/cancerscope)
 [![Documentation Status](https://readthedocs.org/projects/cancerscope/badge/?version=latest)](http://cancerscope.readthedocs.io/?badge=latest)
 [![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)    
+[![downloads](https://img.shields.io/pypi/dw/cancerscope)](https://img.shields.io/pypi/dw/cancerscope)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/ansicolortags.svg)](https://pypi.python.org/pypi/cancerscope/)  
 
@@ -15,7 +16,7 @@ Since SCOPE is an ensemble-based approach, it is possible to train additional mo
 ## Installation   
 
 ### Using theano and lasagne backend  
-Version 0.41 is the last compatible version (py2.7-py3.7 supported)  
+All releases pre-Version 1.00 are theano and lasagne compatible (py2.7-py3.7 supported)  
 
 Before installing **cancerscope**, you will need to install the correct version of the packages [lasagne](https://lasagne.readthedocs.io/en/latest/) and [theano](https://pypi.org/project/Theano/).  
 `pip install --upgrade https://github.com/Theano/Theano/archive/master.zip`  

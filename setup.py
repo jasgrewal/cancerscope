@@ -4,7 +4,7 @@ Setup script for SCOPE (Python package: 'cancerscope')
 from setuptools import setup, find_packages
 import os, sys
 import re
-from tests import *
+#from tests import *
 
 """Identify basic variables needd for setup"""
 pckg_dir = os.path.abspath(os.path.dirname(__file__))
@@ -42,7 +42,7 @@ setup(name='cancerscope',
 	install_requires=requirements, 
 	include_package_data=True, zip_safe=False, 
 	test_suite='nose.collector', tests_require=['nose'], 
-	classifiers = ['Programming Language :: Python :: 2.7', 'Topic :: Scientific/Engineering :: Artificial Intelligence', 'Development Status :: 5 - Production/Stable', 'Intended Audience :: Healthcare Industry', 'Topic :: Scientific/Engineering :: Medical Science Apps.', 'Topic :: Scientific/Engineering :: Bio-Informatics'], 
+	classifiers = ['Programming Language :: Python :: 2.7', 'Programming Language :: Python :: 3', 'Topic :: Scientific/Engineering :: Artificial Intelligence', 'Development Status :: 5 - Production/Stable', 'Intended Audience :: Healthcare Industry', 'Topic :: Scientific/Engineering :: Medical Science Apps.', 'Topic :: Scientific/Engineering :: Bio-Informatics'], 
 	package_data = {'cancerscope': ['resources/*.txt', '*.rst']} 
 )
 
