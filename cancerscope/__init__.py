@@ -22,8 +22,6 @@ from .scope_ensemble import scopemodel, scope
 
 if sys.version_info < (2, 7):
 	raise ImportError("Cancerscope module requires Python 2.7*")
-#elif sys.version_info > (3, 0):
-#	raise ImportError("Cancerscope is not yet configured for Python 3.0 or higher")
-__version__ = '0.40'
+__version__ = '0.41'
 
 

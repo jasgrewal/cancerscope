@@ -2,13 +2,19 @@ import os, sys
 import glob, yaml, gzip
 import numpy as np
 import pandas as pd
-### Set theano flag to cpu to prevent cudnn issues with other users
-os.environ['THEANO_FLAGS'] = "device=cpu" 
-###
+
+###DEPRECATED lasagne + theano dependences
 import lasagne
 import theano
 import theano.tensor as T
-#from scope_io_modules import *
+### Set theano flag to cpu to prevent cudnn issues with other users
+os.environ['THEANO_FLAGS'] = "device=cpu"
+#Change default theano GC for memory optimization
+theano.config.allow_gc = True
+theano.config.allow_pre_alloc = False
+theano.config.scan.allow_gc = True
+#END#OF#DEPRECATED lasagne + theano dependences
+
 from .scope_io_modules import read_input, map_train_test_features_x, map_gene_names
 from .scope_normalization_functions import *
 from .scope_ensemble_functions import getmodelsdict, get_ensemble_score, build_custom_mlp
@@ -18,10 +24,6 @@ from .config import SCOPEMODELS_DATADIR, SCOPEMODELS_LIST, SCOPEMODELS_FILELIST_
 import heapq
 import copy
 import gc
-#Change default theano GC for memory optimization
-theano.config.allow_gc = True
-theano.config.allow_pre_alloc = False
-theano.config.scan.allow_gc = True
 
 ### Check if models have been downloaded already, and if not, do it!
 if os.path.isdir(SCOPEMODELS_DATADIR) is False:

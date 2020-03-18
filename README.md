@@ -13,6 +13,10 @@ SCOPE's python package, **cancerscope**, allows users to pass the RPKM values wi
 Since SCOPE is an ensemble-based approach, it is possible to train additional models and include them in the ensemble that SCOPE uses (Instructions forthcoming).  
 
 ## Installation   
+
+### Using theano and lasagne backend  
+Version 0.41 is the last compatible version (py2.7-py3.7 supported)  
+
 Before installing **cancerscope**, you will need to install the correct version of the packages [lasagne](https://lasagne.readthedocs.io/en/latest/) and [theano](https://pypi.org/project/Theano/).  
 `pip install --upgrade https://github.com/Theano/Theano/archive/master.zip`  
 `pip install --upgrade https://github.com/Lasagne/Lasagne/archive/master.zip`  
