@@ -1,0 +1,34 @@
+.. cancerscope documentation master file, created by
+   sphinx-quickstart on Thu Mar 19 12:10:37 2020.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to cancerscope's documentation!
+=======================================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+
+Cancerscope can be used to obtain quantitative diagnosis for cancer sequencing data using RNA sequencing information (gene expression profiles). You can obtain predictions from gene expression profiles stored in a text file, in 3 easy steps. Here's the code, assuming each row is a samples and each column is a gene:
+```
+import cancerscope as cs
+scope_obj=cs.scope()
+preds_from_file = scope_obj.get_predictions_from_file("path/to/my/file_with_geneexpression.txt")
+```
+
+You can also load the data into the sample (row) * gene (column) form in python first, and then obtain predictions as follows:
+```
+import cancerscope as cs
+scope_obj=cs.scope()
+preds_df_from_xdat = scope_obj.predict(X = test_x, x_features = test_features, x_features_genecode = test_genecode, x_sample_names=test_samples)
+```
+Notice that with this approach, you'll need to provide other information like a list of gene names (*test_features*), a string indicating the type of gene name used (*test_genecode*), and optionally, a list of sample names (*test_samples*).  
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
