@@ -2,6 +2,7 @@
 source=cancerscope
 [report]
 omit =
+    *numpy*
     */python?.?/*
     */site-packages/nose/*
     *__init__*
