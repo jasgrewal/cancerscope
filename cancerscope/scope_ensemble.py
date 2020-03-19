@@ -3,17 +3,11 @@ import glob, yaml, gzip
 import numpy as np
 import pandas as pd
 
-###DEPRECATED lasagne + theano dependences
-import lasagne
-import theano
-import theano.tensor as T
-### Set theano flag to cpu to prevent cudnn issues with other users
-os.environ['THEANO_FLAGS'] = "device=cpu"
-#Change default theano GC for memory optimization
-theano.config.allow_gc = True
-theano.config.allow_pre_alloc = False
-theano.config.scan.allow_gc = True
-#END#OF#DEPRECATED lasagne + theano dependences
+import keras
+from keras.optimizers import SGD
+from keras.utils import to_categorical
+from keras import backend as K
+import h5py, csv
 
 from .scope_io_modules import read_input, map_train_test_features_x, map_gene_names
 from .scope_normalization_functions import *
@@ -105,11 +99,17 @@ class scopemodel(object):
 		except ValueError:
 			with(open(in_labdict)) as f:
 				self.numtolabel = dict((int(k.rstrip()), v.rstrip()) for k,v in (line.split('\t') for line in f))
-		input_var= T.matrix('inputs')
-		network = build_custom_mlp(input_var=input_var, is_image=False, n_out=n_class, num_features=n_in, depth=n_hiddenlayers, width=n_hidden, drop_hidden=0, drop_input=0)
-		lasagne.layers.set_all_param_values(network, model_params)
-		test_fn = theano.function([input_var], lasagne.layers.get_output(network, deterministic=True), allow_input_downcast=True)
-		test_max_fn = theano.function([input_var], T.argmax(lasagne.layers.get_output(network, deterministic=True), axis=1), allow_input_downcast=True)
+		network = build_custom_mlp(n_out=n_class, num_features=n_in, depth=n_hiddenlayers, width=n_hidden, drop_hidden=0, drop_input=0)
+		if len(model_params)==4:
+			network.set_weights([model_params[0], model_params[1], model_params[2], model_params[3]])
+		else:
+			network.set_weights([model_params[0], model_params[1], model_params[2], model_params[3], model_params[4], model_params[5]])
+		network.compile(loss="categorical_crossentropy", optimizer=SGD(lr=0.001))
+		
+		## GET PREDICTIONS
+		test_fn= K.function([network.layers[0].input],[network.layers[-1].output])
+		test_max_fn = K.function([network.layers[0].input], [K.argmax([network.layers[-1].output])])
+		#test_max_fn = np.argmax(network,predict())
 		return([network, test_fn, test_max_fn])	
 	def prepare_input_featorders(self, X, x_features_genecode, x_features):
 		#### Map training features to the genecode in the input
@@ -121,8 +121,10 @@ class scopemodel(object):
 		if X.shape[1] != len(self.features):
 			sys.stdout.write("\nReminder...Did you use the scopemodel.prepare_input_featorders(X, x_features_genecode, x_features) function before predict()?")
 		X_normed = self.get_normalized_input(X)
-		all_predicted = self.pred_fn(X_normed)
-		max_predicted_classnum = self.pred_max_fn(X_normed)
+		all_predicted = self.pred_fn([X_normed])[0]
+		max_predicted_classnum = self.pred_max_fn([X_normed])[0][0]
+		#print("ALL PREDICTED {0}".format(all_predicted))
+		#print("max_predicted_classnum {0}".format(max_predicted_classnum))
 		if get_predictions_dict is True:
 			prediction_labs = [[self.numtolabel[i] for i,j in enumerate(m)] for m in all_predicted]
 			sorted_list_of_lab_preds_sublists = [sorted(m, key=lambda x:x[1], reverse=True) for m in [zip(a,b) for a,b in zip(prediction_labs, all_predicted)]]
@@ -156,27 +158,9 @@ class scopemodel(object):
 		return(x_test)
 	def get_jacobian(self,X_test):
 		X_normed = self.get_normalized_input(X_test)
-		input_var = T.matrix('inputs')
-		layers = lasagne.layers.get_all_layers(self.network)
-		outputs = lasagne.layers.get_output(layers, input_var)
-		output_final = T.flatten(outputs[-1])
-		output_hidden = outputs[-2]
-		output_initial = outputs[0]
-		jacobian = theano.gradient.jacobian(output_final, output_initial)
-		run = theano.function([input_var], jacobian, allow_input_downcast=True)
-		outjac=run(X_normed)
-		#As this tensor is padded with zero matrices on the non-diagnols, convert it to a stacked set of per_sample_per_output x input Jacobians
-		outjac=remove_extra_submats(outjac)
+		listVarsTensors = self.network.trainable_weights
+		jacobian = K.gradients(self.network.output, listVarsTensors) # Needs outputTensor, list of Variable Tensors
+		run = K.function([self.network.layers[0].input], jacobian)
+		outjac = run([X_normed])[0]
 		return(outjac)
 
-def remove_extra_submats(bigmat):
-	#As the theano jacobian calculation appends null matrices at the non-diagonals, this function returns a stacked set of (output_nodes * number samples) x (input_nodes) as a 2d matrix, from a 3d matrix returned by the jacobian gradient function in theano
-	in_samples = bigmat.shape[1]
-	out_nodes = int(bigmat.shape[0] / in_samples)
-	print("BIGMAT SHAPE IS"); print(bigmat.shape)
-	mymat = bigmat[0:out_nodes,0,:]
-	for i in range(1, in_samples):
-		mymat =np.append(mymat, bigmat[(0 + out_nodes*i):(out_nodes + out_nodes*i), i, :], axis=0)
-	return(mymat)
-
- 

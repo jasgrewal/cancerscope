@@ -1,8 +1,11 @@
 import copy
 import pandas as pd
 import numpy as np
-import lasagne
 import functools
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+from keras import backend as K
 #from numpy import divmod as numpydivmod
 
 ### List of models
@@ -74,22 +77,13 @@ def get_ensemble_score(dict_with_preds, ignorelabs_list=None, x_sample_names=Non
         return df_merged
 
 ### Function to set up a custom network
-def build_custom_mlp(n_out, num_features, depth, width, drop_input, drop_hidden, input_var=None, is_image=False):
-        n_out = int(n_out); num_features=int(num_features); depth=int(depth); width=int(width); 
-        if is_image:
-                network = lasagne.layers.InputLayer(shape=(None, 1, num_features,1), input_var=input_var)
-        else:
-                network = lasagne.layers.InputLayer(shape=(None,num_features), input_var=input_var)
-        if drop_input:
-                network = lasagne.layers.dropout(network, p=drop_input)
-        nonlin = lasagne.nonlinearities.tanh
-        for _ in range(depth):
-                network=lasagne.layers.DenseLayer(network, width, nonlinearity=nonlin)
-                if drop_hidden:
-                        network = lasagne.layers.dropout(network, p=drop_hidden)
+def build_custom_mlp(n_out, num_features, depth, width, drop_input, drop_hidden):
+        n_out = int(n_out); num_features=int(num_features); depth=int(depth); width=int(width);
+        network =  Sequential()
+        network.add(Dense(width, input_shape=(num_features,), activation='tanh'))
+        for _ in range(depth-1):
+                network.add(keras.layers.Dense(width, activation='tanh')) # hidden layer #1  
         #Final output layer is softmax, for multiclass output
-        softmax = lasagne.nonlinearities.softmax
-        network = lasagne.layers.DenseLayer(network, n_out, nonlinearity=softmax)
+        network.add(keras.layers.Dense(n_out, activation='softmax')) # Output layer
         return network
-
 

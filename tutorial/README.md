@@ -55,19 +55,19 @@ Read in sample file /PATH/TO/combined_tcga_fpkm.txt,
 	Data shape (26, 60483)
 	Number of samples 26
 	Number of genes in input 60483, with gene code ENSEMBL
-...Only 17638 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: rastminmax
+...Only 17645 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: rastminmax
 norm result shape (26, 17688)
 
-...Only 17638 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: none
+...Only 17645 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: none
 norm result shape (26, 17688)
 
-...Only 17638 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: rastminmax
+...Only 17645 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: rastminmax
 norm result shape (26, 17688)
 
-...Only 17638 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: none
+...Only 17645 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: none
 norm result shape (26, 17688)
 
-...Only 17638 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: none
+...Only 17645 of input features mapped to expected number of features. Setting the rest to 0.0...Normalization function being applied: none
 norm result shape (26, 17688)
 ```     
 
@@ -78,35 +78,35 @@ In some cases, the provided gene names will not map over exactly to the list of 
 ```python
 >>> pfromfile
     sample_ix    label      pred  freq                                             models  rank_pred             sample_name
-0           0  SKCM_TS  0.977220     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_SKCM_65312630
-1           1  THCA_TS  0.999638     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_b2016510
-2           2  THCA_NS  0.912180     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_ffb8427a
-3           3  TGCT_TS  0.853217     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_TGCT_78264e6b
-4           4  THCA_TS  0.943195     3         v1_rm500dropout,v1_none17kdropout,v1_rm500          1      TCGA_THCA_4869e2a4
-5           4  LUAD_TS  0.570270     2                         v1_smotenone17k,v1_none17k          2      TCGA_THCA_4869e2a4
-6           5  THCA_TS  0.900277     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_73451252
-7           6  HNSC_TS  0.993280     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_HNSC_26019321
-8           7  SKCM_TS  0.915794     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_SKCM_22632bc1
-9           8  PCPG_TS  0.998625     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_PCPG_cf680d44
-10          9  THCA_TS  0.987204     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_34826584
-11         10  THCA_TS  0.994746     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_5fedc450
-12         11  PCPG_TS  0.999457     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_PCPG_4f16b358
-13         12  THCA_TS  0.992644     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_4640600f
-14         13  TGCT_TS  0.821062     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_TGCT_d8ad327f
-15         14  THCA_NS  0.915730     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_e32c7fe0
-16         15  LIHC_TS  0.996771     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_LIHC_abe89868
-17         16  PCPG_TS  0.987906     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_PCPG_1182a295
-18         17  TGCT_TS  0.947846     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_TGCT_a51c7a87
-19         18  SKCM_TS  0.863664     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_SKCM_bcc52bb7
-20         19  THCA_TS  0.856618     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1  TCGA_THCA_NHL_a7229653
-21         20  TGCT_TS  0.824202     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_TGCT_af5c9e80
-22         21  SKCM_TS  0.935001     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_SKCM_074f955e
-23         22   LGG_TS  0.998371     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1       TCGA_LGG_9cd81de0
-24         23  THCA_TS  0.975574     3         v1_rm500dropout,v1_none17kdropout,v1_rm500          1      TCGA_THCA_7429a1e0
-25         23  LUAD_TS  0.691227     2                         v1_smotenone17k,v1_none17k          2      TCGA_THCA_7429a1e0
-26         24  LUAD_TS  0.765155     3       v1_none17kdropout,v1_smotenone17k,v1_none17k          1      TCGA_THCA_94cda1d7
-27         24  THCA_TS  0.994180     2                           v1_rm500dropout,v1_rm500          2      TCGA_THCA_94cda1d7
-28         25   LGG_TS  0.998748     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1       TCGA_LGG_cfd39475
+0           0  SKCM_TS  0.977178     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_SKCM_65312630
+1           1  THCA_TS  0.999639     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_b2016510
+2           2  THCA_NS  0.909720     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_ffb8427a
+3           3  TGCT_TS  0.853214     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_TGCT_78264e6b
+4           4  THCA_TS  0.943202     3         v1_rm500dropout,v1_none17kdropout,v1_rm500          1      TCGA_THCA_4869e2a4
+5           4  LUAD_TS  0.570298     2                         v1_smotenone17k,v1_none17k          2      TCGA_THCA_4869e2a4
+6           5  THCA_TS  0.900357     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_73451252
+7           6  HNSC_TS  0.993321     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_HNSC_26019321
+8           7  SKCM_TS  0.915901     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_SKCM_22632bc1
+9           8  PCPG_TS  0.998648     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_PCPG_cf680d44
+10          9  THCA_TS  0.987237     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_34826584
+11         10  THCA_TS  0.994749     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_5fedc450
+12         11  PCPG_TS  0.999465     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_PCPG_4f16b358
+13         12  THCA_TS  0.992660     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_4640600f
+14         13  TGCT_TS  0.821080     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_TGCT_d8ad327f
+15         14  THCA_NS  0.915354     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_THCA_e32c7fe0
+16         15  LIHC_TS  0.996797     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_LIHC_abe89868
+17         16  PCPG_TS  0.987895     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_PCPG_1182a295
+18         17  TGCT_TS  0.947827     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_TGCT_a51c7a87
+19         18  SKCM_TS  0.863788     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_SKCM_bcc52bb7
+20         19  THCA_TS  0.856415     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1  TCGA_THCA_NHL_a7229653
+21         20  TGCT_TS  0.824165     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_TGCT_af5c9e80
+22         21  SKCM_TS  0.935106     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1      TCGA_SKCM_074f955e
+23         22   LGG_TS  0.998421     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1       TCGA_LGG_9cd81de0
+24         23  THCA_TS  0.975626     3         v1_rm500dropout,v1_none17kdropout,v1_rm500          1      TCGA_THCA_7429a1e0
+25         23  LUAD_TS  0.691465     2                         v1_smotenone17k,v1_none17k          2      TCGA_THCA_7429a1e0
+26         24  LUAD_TS  0.765275     3       v1_none17kdropout,v1_smotenone17k,v1_none17k          1      TCGA_THCA_94cda1d7
+27         24  THCA_TS  0.994200     2                           v1_rm500dropout,v1_rm500          2      TCGA_THCA_94cda1d7
+28         25   LGG_TS  0.998769     5  v1_rm500dropout,v1_none17kdropout,v1_rm500,v1_...          1       TCGA_LGG_cfd39475
 ```
 
 ### Interpreting the output   

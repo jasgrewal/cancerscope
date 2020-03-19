@@ -4,12 +4,12 @@
 [![build_status](https://travis-ci.org/jasgrewal/cancerscope.svg?branch=master)](https://travis-ci.org/jasgrewal/cancerscope)
 [![Documentation Status](https://readthedocs.org/projects/cancerscope/badge/?version=latest)](http://cancerscope.readthedocs.io/?badge=latest)
 [![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)    
-[![downloads](https://img.shields.io/pypi/dw/cancerscope)](https://img.shields.io/pypi/dw/cancerscope)
+[![downloads](https://img.shields.io/pypi/dw/cancerscope)](https://pypistats.org/packages/cancerscope)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/ansicolortags.svg)](https://pypi.python.org/pypi/cancerscope/)  
 
 SCOPE, Supervised Cancer Origin Prediction using Expression, is a method for predicting the tumor type (or matching normal) of an RNA-Seq sample.  
-SCOPE's python package, **cancerscope**, allows users to pass the RPKM values with matching Gene IDs and receive a set of probabilities across 66 different categories (40 tumor types and 26 healthy tissues), that sum to 1. Users can optionally generate plots visualizing each sample's classification as well.  
+SCOPE's python package, **cancerscope**, allows users to pass the RPKM values with matching Gene IDs and receive a set of probabilities across 66 different categories (40 tumor types and 26 healthy tissues), that sum to 1. Users can optionally evaluate the impact of various pathways on classification outcome using the 'PIE' pathway impact evaluation extension.   
  
 Since SCOPE is an ensemble-based approach, it is possible to train additional models and include them in the ensemble that SCOPE uses (Instructions forthcoming).  
 
@@ -49,7 +49,7 @@ This will set up the references to the requires SCOPE models.
 
 Next, you can process the predictions straight from the input file:  
 `>>> predictions_from_file = scope_obj.get_predictions_from_file(filename) `    
-Here, the input file should be prepared as follows. Columns should be tab-separated, with unique sample IDs. The first column is always the Gene identifier (Official HUGO ID, Ensemble Gene ID, or Gencode). An example is shown with the first 2 rows of input.    
+Here, the input file should be prepared as follows. Columns should be tab-separated, with unique sample IDs. The first column is always the Gene identifier (Official HUGO ID, Ensemble Gene ID, or Gencode). Each cell is the RPKM value of the corresponding gene, sample pair. An example is shown with the first 2 rows of input.    
  
 | ENSEMBL | Sample 1 | Sample 2 | ... |
 |---|---|---|---|

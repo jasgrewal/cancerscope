@@ -28,10 +28,10 @@ class testEnsemble(unittest.TestCase):
 		preds_df_from_xdat = scope_ensemble_obj.predict(X = test_x, x_features = test_features, x_features_genecode = test_genecode, x_sample_names=test_samples, modelnames=my_models, get_preds_dict=False, return_plotdf=False)
 		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].label.tolist(), ['TFRI_GBM_NCL_TS', 'TFRI_GBM_NCL_TS'])
 		self.assertEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].label.tolist(), ['TFRI_GBM_NCL_TS', 'TFRI_GBM_NCL_TS'])
-		self.assertAlmostEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[0], 0.57673988661300002)
-		self.assertAlmostEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1], 0.51645878766999997)
-		self.assertAlmostEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[1], 0.51645878766999997)
-		self.assertAlmostEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[0], 0.57673988661300002)
+		self.assertAlmostEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[0], 0.57673988661300002, 6, 0.000001)
+		self.assertAlmostEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1], 0.51645878766999997, 6, 0.000001)
+		self.assertAlmostEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[1], 0.51645878766999997, 6, 0.000001)
+		self.assertAlmostEqual(preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[0], 0.57673988661300002, 6, 0.000001)
 		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[0], preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[0])
 		self.assertEqual(preds_df_from_file[preds_df_from_file["rank_pred"]==1].pred.tolist()[1], preds_df_from_xdat[preds_df_from_xdat["rank_pred"]==1].pred.tolist()[1])
 		### Plot models  
@@ -116,10 +116,10 @@ class testEnsemble(unittest.TestCase):
 		self.assertEqual(allpreds_values.shape[1],66); 
 		self.assertAlmostEqual(allpreds_values[0][1], 0.003065253372039)
 		self.assertEqual(toppreds_names[0], "PAAD_TS"); self.assertEqual(toppreds_names[1], "HNSC_TS")
-		self.assertAlmostEqual(toppreds_values[0],0.20889836023919614); self.assertAlmostEqual(toppreds_values[1], 0.44416348623870444)
+		self.assertAlmostEqual(toppreds_values[0],0.20889836023919614, 6, 0.000001); self.assertAlmostEqual(toppreds_values[1], 0.44416348623870444, 6, 0.000001)
 		#self.assertEqual(round(toppreds_values[0],12), round(0.208874390780809,12)); self.assertEqual(round(toppreds_values[1],12), round(0.444162763077693,12))
-		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(round(float(toppreds_df[0][0][1]), 12), round(toppreds_values[0], 12)); 
-		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(round(float(toppreds_df[1][0][1]), 12), round(toppreds_values[1], 12))
+		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertAlmostEqual(float(toppreds_df[0][0][1]), toppreds_values[0]); 
+		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertAlmostEqual(float(toppreds_df[1][0][1]), toppreds_values[1])
 	
 	def test_rm500dropout(self):
 		"""Test if all models can be downloaded correctly"""
@@ -151,9 +151,12 @@ class testEnsemble(unittest.TestCase):
 		self.assertEqual(allpreds_values.shape[1],66);
 		self.assertAlmostEqual(allpreds_values[0][1],0.001936952939)
 		self.assertEqual(toppreds_names[0], "TFRI_GBM_NCL_TS"); self.assertEqual(toppreds_names[1], "TFRI_GBM_NCL_TS")
-		self.assertAlmostEqual(toppreds_values[0],0.57673988661329467); self.assertAlmostEqual(toppreds_values[1],0.51645878767048425)
-		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  self.assertEqual(round(float(toppreds_df[0][0][1]), 12), round(toppreds_values[0], 12));
-		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); self.assertEqual(round(float(toppreds_df[1][0][1]), 12), round(toppreds_values[1], 12))
+		self.assertAlmostEqual(toppreds_values[0],0.57673988661329467, 6, 0.000001) 
+		self.assertAlmostEqual(toppreds_values[1],0.51645878767048425, 6, 0.000001)
+		self.assertEqual(toppreds_df[0][0][0], toppreds_names[0]);  
+		self.assertAlmostEqual(float(toppreds_df[0][0][1]), toppreds_values[0]);
+		self.assertEqual(toppreds_df[1][0][0], toppreds_names[1]); 
+		self.assertAlmostEqual(float(toppreds_df[1][0][1]), toppreds_values[1])
 
 if __name__ == '__main__':
 	unittest.main()
