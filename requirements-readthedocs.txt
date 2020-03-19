@@ -1,7 +1,6 @@
 numpy
 scikit-learn>=0.18
 scipy
-tensorflow
 keras
 requests
 pandas
