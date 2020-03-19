@@ -1,6 +1,7 @@
 coverage
 numpy
 scikit-learn>=0.18
+tensorflow
 keras
 scipy
 requests
