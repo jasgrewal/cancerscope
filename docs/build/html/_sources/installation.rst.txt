@@ -1,5 +1,5 @@
 Installation
---------
+-------------
 
 Cancerscope is available through pip. It supports all Python versions upwards of Python 2.7. It has been developed and tested with Python 2.7.14, 3.4, 3.5, 3.6, and 3.7.  
 
@@ -7,7 +7,7 @@ Cancerscope is available through pip. It supports all Python versions upwards of
     pip install cancerscope  
 
 Installing previous releases
---------
+-----------------------------
 
 To upgrade to a newer release, simply run the following bash command:
 .. code:: bash
@@ -18,16 +18,15 @@ To install a previous release, for example, v.0.42 (last supported release that 
     pip install cancerscope=0.42
 
 Installing bleeding edge release  
---------
+---------------------------------
 To install the latest release instead of the most recent stable release, you can install from source. Use the following bash commands:
 
-.. code-block:: bash 
-    git clone https://github.com/jasgrewal/cancerscope.git
-    cd cancerscope
-    python setup.py install
+>>> git clone https://github.com/jasgrewal/cancerscope.git
+>>> cd cancerscope
+>>> python setup.py install
 
 Major version changes
---------
+---------------------
 Model setup using theano and lasagne
 .. versionchanged:: 0.42
 

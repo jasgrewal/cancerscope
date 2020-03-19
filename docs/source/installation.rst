@@ -21,10 +21,9 @@ Installing bleeding edge release
 ---------------------------------
 To install the latest release instead of the most recent stable release, you can install from source. Use the following bash commands:
 
-.. code-block:: bash 
-    git clone https://github.com/jasgrewal/cancerscope.git
-    cd cancerscope
-    python setup.py install
+>>> git clone https://github.com/jasgrewal/cancerscope.git
+>>> cd cancerscope
+>>> python setup.py install
 
 Major version changes
 ---------------------
