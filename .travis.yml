@@ -5,8 +5,6 @@ python:
  - "3.7"
 
 install:
- - travis_wait pip install --upgrade https://github.com/Theano/Theano/archive/master.zip
- - travis_wait pip install --upgrade https://github.com/Lasagne/Lasagne/archive/master.zip
  - travis_wait pip install .
  - travis_wait pip install nose coverage
  - pip install coveralls
