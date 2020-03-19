@@ -34,7 +34,6 @@
 \usepackage{hypcap}% it must be loaded after hyperref.
 % Set up styles of URL: it should be placed after hyperref.
 \urlstyle{same}
-\addto\captionsenglish{\renewcommand{\contentsname}{Contents:}}
 
 \addto\captionsenglish{\renewcommand{\figurename}{Fig.\@ }}
 \makeatletter
@@ -75,34 +74,90 @@
 \phantomsection\label{\detokenize{index::doc}}
 
 
-Cancerscope can be used to obtain quantitative diagnosis for cancer sequencing data using RNA sequencing information (gene expression profiles). You can obtain predictions from gene expression profiles stored in a text file, in 3 easy steps. Here’s the code, assuming each row is a samples and each column is a gene:
-\sphinxcode{\sphinxupquote{{}`
-import cancerscope as cs
-scope\_obj=cs.scope()
-preds\_from\_file = scope\_obj.get\_predictions\_from\_file("path/to/my/file\_with\_geneexpression.txt")
-{}`}}
+
+\chapter{Installation}
+\label{\detokenize{installation:installation}}\label{\detokenize{installation::doc}}
+Cancerscope is available through pip. It supports all Python versions upwards of Python 2.7. It has been developed and tested with Python 2.7.14, 3.4, 3.5, 3.6, and 3.7.
+
+
+\chapter{Installing previous releases}
+\label{\detokenize{installation:installing-previous-releases}}
+To upgrade to a newer release, simply run the following bash command:
+.. code:: bash
+\begin{quote}
+
+pip install \textendash{}upgrade cancerscope
+\end{quote}
+
+To install a previous release, for example, v.0.42 (last supported release that used theano and lasagne):
+.. code:: bash
+\begin{quote}
+
+pip install cancerscope=0.42
+\end{quote}
+
+
+\chapter{Installing bleeding edge release}
+\label{\detokenize{installation:installing-bleeding-edge-release}}
+To install the latest release instead of the most recent stable release, you can install from source. Use the following bash commands:
+
+
+\chapter{Major version changes}
+\label{\detokenize{installation:major-version-changes}}
+Model setup using theano and lasagne
+.. versionchanged:: 0.42
+
+Model setup using keras
+.. versionadded:: 1.0
+
+Plotting option available for python 2.7
+.. versionadded:: 0.0
+
+Plotting option removed
+.. versionchanged:: 0.31
+
+Once you have installed cancerscope, you’re set!
+
+Start by importing cancerscope into a python session like so (from command-line):
+.. code:: bash
+\begin{quote}
+
+python
+\end{quote}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{cancerscope} \PYG{k}{as} \PYG{n+nn}{cs}
+\end{sphinxVerbatim}
+
+
+\chapter{Tutorial with example file}
+\label{\detokenize{quickstart:tutorial-with-example-file}}\label{\detokenize{quickstart::doc}}
+There is a tutorial with sample code, that walks through a small example of obtaining predictions directly from a file containing gene expression profiles. It’s available on \sphinxtitleref{Github \textless{}https://github.com/jasgrewal/cancerscope/tree/master/tutorial\textgreater{}} and is useful for understanding how the various data objects need to be structured in order to retrieve predictions from cancerscope.
+
+Predictions from cancerscope can be of two types. You can get the highest predicted category for each sample, with the accompanying confidence in prediction. You can also obtain a more granular decomposition of the prediction by retrieving a detailed view of the predictions. This view will enumerate the predicted cancer type(s) for each sample, alongwith the confidence for each category. It is useful if the machines in the ensemble are not in agreement about the highest predicted category.
+
+You can obtain predictions from gene expression profiles stored in a text file, in 3 easy steps. Here’s the code, assuming each row is a samples and each column is a gene:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{cancerscope} \PYG{k}{as} \PYG{n+nn}{cs}
+\PYG{n}{scope\PYGZus{}obj}\PYG{o}{=}\PYG{n}{cs}\PYG{o}{.}\PYG{n}{scope}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{preds\PYGZus{}from\PYGZus{}file} \PYG{o}{=} \PYG{n}{scope\PYGZus{}obj}\PYG{o}{.}\PYG{n}{get\PYGZus{}predictions\PYGZus{}from\PYGZus{}file}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{path/to/my/file\PYGZus{}with\PYGZus{}geneexpression.txt}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\end{sphinxVerbatim}
 
 You can also load the data into the sample (row) * gene (column) form in python first, and then obtain predictions as follows:
-\sphinxcode{\sphinxupquote{{}`
-import cancerscope as cs
-scope\_obj=cs.scope()
-preds\_df\_from\_xdat = scope\_obj.predict(X = test\_x, x\_features = test\_features, x\_features\_genecode = test\_genecode, x\_sample\_names=test\_samples)
-{}`}}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{cancerscope} \PYG{k}{as} \PYG{n+nn}{cs}
+\PYG{n}{scope\PYGZus{}obj}\PYG{o}{=}\PYG{n}{cs}\PYG{o}{.}\PYG{n}{scope}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{preds\PYGZus{}df\PYGZus{}from\PYGZus{}xdat} \PYG{o}{=} \PYG{n}{scope\PYGZus{}obj}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{X} \PYG{o}{=} \PYG{n}{test\PYGZus{}x}\PYG{p}{,} \PYG{n}{x\PYGZus{}features} \PYG{o}{=} \PYG{n}{test\PYGZus{}features}\PYG{p}{,} \PYG{n}{x\PYGZus{}features\PYGZus{}genecode} \PYG{o}{=} \PYG{n}{test\PYGZus{}genecode}\PYG{p}{,} \PYG{n}{x\PYGZus{}sample\PYGZus{}names}\PYG{o}{=}\PYG{n}{test\PYGZus{}samples}\PYG{p}{)}
+\end{sphinxVerbatim}
+
 Notice that with this approach, you’ll need to provide other information like a list of gene names (\sphinxstyleemphasis{test\_features}), a string indicating the type of gene name used (\sphinxstyleemphasis{test\_genecode}), and optionally, a list of sample names (\sphinxstyleemphasis{test\_samples}).
 
 
-\chapter{Indices and tables}
-\label{\detokenize{index:indices-and-tables}}\begin{itemize}
-\item {} 
-\DUrole{xref,std,std-ref}{genindex}
-
-\item {} 
-\DUrole{xref,std,std-ref}{modindex}
-
-\item {} 
-\DUrole{xref,std,std-ref}{search}
-
-\end{itemize}
+\chapter{Overview}
+\label{\detokenize{index:overview}}\label{\detokenize{index:home}}
+Cancerscope is a library for cancer diagnosis. You can use it to obtain quantitative diagnosis for cancer sequencing data using RNA sequencing information (gene expression profiles).
 
 
 

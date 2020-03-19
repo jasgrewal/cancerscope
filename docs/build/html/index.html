@@ -16,6 +16,7 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -36,27 +37,10 @@
 <h1>Welcome to cancerscope’s documentation!<a class="headerlink" href="#welcome-to-cancerscope-s-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<p>Cancerscope can be used to obtain quantitative diagnosis for cancer sequencing data using RNA sequencing information (gene expression profiles). You can obtain predictions from gene expression profiles stored in a text file, in 3 easy steps. Here’s the code, assuming each row is a samples and each column is a gene:
-<code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">import</span> <span class="pre">cancerscope</span> <span class="pre">as</span> <span class="pre">cs</span>
-<span class="pre">scope_obj=cs.scope()</span>
-<span class="pre">preds_from_file</span> <span class="pre">=</span> <span class="pre">scope_obj.get_predictions_from_file(&quot;path/to/my/file_with_geneexpression.txt&quot;)</span>
-<span class="pre">`</span></code></p>
-<p>You can also load the data into the sample (row) * gene (column) form in python first, and then obtain predictions as follows:
-<code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">import</span> <span class="pre">cancerscope</span> <span class="pre">as</span> <span class="pre">cs</span>
-<span class="pre">scope_obj=cs.scope()</span>
-<span class="pre">preds_df_from_xdat</span> <span class="pre">=</span> <span class="pre">scope_obj.predict(X</span> <span class="pre">=</span> <span class="pre">test_x,</span> <span class="pre">x_features</span> <span class="pre">=</span> <span class="pre">test_features,</span> <span class="pre">x_features_genecode</span> <span class="pre">=</span> <span class="pre">test_genecode,</span> <span class="pre">x_sample_names=test_samples)</span>
-<span class="pre">`</span></code>
-Notice that with this approach, you’ll need to provide other information like a list of gene names (<em>test_features</em>), a string indicating the type of gene name used (<em>test_genecode</em>), and optionally, a list of sample names (<em>test_samples</em>).</p>
+<div class="section" id="overview">
+<span id="home"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Cancerscope is a library for cancer diagnosis. You can use it to obtain quantitative diagnosis for cancer sequencing data using RNA sequencing information (gene expression profiles).</p>
 </div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
-</ul>
 </div>
 
 
@@ -76,11 +60,20 @@ Notice that with this approach, you’ll need to provide other information like 
 
 
 <h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#installing-previous-releases">Installing previous releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#installing-bleeding-edge-release">Installing bleeding edge release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#major-version-changes">Major version changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Tutorial with example file</a></li>
+</ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="installation.html" title="next chapter">Installation</a></li>
   </ul></li>
 </ul>
 </div>
